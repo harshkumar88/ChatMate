@@ -1,11 +1,14 @@
 import React,{useState} from 'react'
 import './Form.css'
-const Register = () => {
+import bcrypt from 'bcryptjs';
 
+const Register = () => {
+    
     const [formData,setData]=useState({
         username:"",
         email:"",
-        password:""
+        password:"",
+        confirmpass:"",
     });
 
     const getData=(e)=>{
@@ -13,16 +16,45 @@ const Register = () => {
          setData({...formData,[name]:value});
     }
 
-    const registerUser=(e)=>{
-           e.preventDefault();
-           console.log(formData);
-           alert("Done Registeration");
-           setData({
-            username:"",
-            email:"",
-            password:""
+    const registerUser= async(e)=>{
+        e.preventDefault();
+        const {username,email,password,confirmpass}=formData;
+         
+        if(password!==confirmpass){
+           alert("password must be same" )
+           return;
+        }
+        
+        const res=await fetch("/registerData",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+               username,email,password,confirmpass
+           })
         })
-           document.getElementById("labelClick").click();
+        const data=await res.json();
+        
+        if(data.error==="emailrejected"){
+            alert("Invalid Email")
+        }
+        else if(data.error==="UserExist"){
+            alert("User Already Exist")
+        }
+        else if(data.error==="passwordrejected"){
+           alert("Your Password must be minimum of 8 length and must include 1 uppercase letter,1 lowercase charcter,1 special character as well as one 1 number ")
+       }
+        else{
+            alert("Successfull Registration")
+            setData({username:"",email:"",password:"",confirmpass:""})
+            document.getElementById("labelClick").click();
+            
+        }
+    
+    
+     return ;
+          
     }
 
     return (
@@ -61,6 +93,17 @@ const Register = () => {
                     required
                     className='form-control'
                     value={formData.password}
+                    onChange={getData}
+                />
+            </div>
+            <div className='w-75 mx-auto'>
+                <input
+                    type="password"
+                    name="confirmpass"
+                    placeholder="Password"
+                    required
+                    className='form-control'
+                    value={formData.confirmpass}
                     onChange={getData}
                 />
             </div>

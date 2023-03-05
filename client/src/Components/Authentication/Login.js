@@ -13,9 +13,35 @@ const Login = () => {
         setData({ ...formData, [name]: value });
     }
     
-    const loginUser=(e)=>{
+    const loginUser=async(e)=>{
         e.preventDefault();
-        alert("all Done")
+        const {username,email,password}=formData;
+        const res=await fetch("/LoginData",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+               username,email,password
+                })
+        })
+        const data=await res.json();
+        console.log(data)
+        if(data.error==="passwordincorrect"){
+            alert("Password Incorrect")
+        }
+        else if( data.error==="UserNotFound"){
+           alert("User Not Found");
+        }
+        else{
+            alert("Successfull Login")
+            setData({username:"",email:"",password:""})
+
+           alert("successfull login")
+        }
+    
+   
+     return ;
     }
     return (
         <div>
