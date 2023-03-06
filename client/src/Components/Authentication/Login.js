@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import './Form.css'
+import Swal from 'sweetalert2'
+
 const Login = () => {
 
     const [formData, setData] = useState({
@@ -28,20 +30,23 @@ const Login = () => {
         const data=await res.json();
         console.log(data)
         if(data.error==="passwordincorrect"){
-            alert("Password Incorrect")
+            Swal.fire('Not an Authentic User')
         }
         else if( data.error==="UserNotFound"){
-           alert("User Not Found");
+           Swal.fire("User Not Found");
         }
         else{
-            alert("Successfull Login")
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Login Successfully',
+                showConfirmButton: false,
+                timer: 1500
+              })
             setData({username:"",email:"",password:""})
-
-           alert("successfull login")
         }
     
-   
-     return ;
+          return ;
     }
     return (
         <div>

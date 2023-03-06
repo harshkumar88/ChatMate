@@ -1,6 +1,6 @@
 import React,{useState} from 'react'
 import './Form.css'
-import bcrypt from 'bcryptjs';
+import Swal from 'sweetalert2'
 
 const Register = () => {
     
@@ -21,7 +21,7 @@ const Register = () => {
         const {username,email,password,confirmpass}=formData;
          
         if(password!==confirmpass){
-           alert("password must be same" )
+            Swal.fire('Password Must be Same')
            return;
         }
         
@@ -37,16 +37,22 @@ const Register = () => {
         const data=await res.json();
         
         if(data.error==="emailrejected"){
-            alert("Invalid Email")
+            Swal.fire('Inavalid email')
         }
         else if(data.error==="UserExist"){
-            alert("User Already Exist")
+            Swal.fire('User Already Exist')
         }
         else if(data.error==="passwordrejected"){
-           alert("Your Password must be minimum of 8 length and must include 1 uppercase letter,1 lowercase charcter,1 special character as well as one 1 number ")
+            Swal.fire("Your Password must be in Format eg. Abc12@ min 8 chars ")
        }
         else{
-            alert("Successfull Registration")
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Succesfully Registered',
+                showConfirmButton: false,
+                timer: 1500
+              })
             setData({username:"",email:"",password:"",confirmpass:""})
             document.getElementById("labelClick").click();
             
@@ -100,7 +106,7 @@ const Register = () => {
                 <input
                     type="password"
                     name="confirmpass"
-                    placeholder="Password"
+                    placeholder="ConfirmPassword"
                     required
                     className='form-control'
                     value={formData.confirmpass}
