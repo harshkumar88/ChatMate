@@ -1,0 +1,10 @@
+.heightDisplay{
+    height: 86vh;
+   }
+   .sizeIcon{
+    width: 30px;
+    font-size: 30px;
+    color:rgb(81, 47, 81);
+    cursor: pointer;
+    margin-top: -0.5%;
+}

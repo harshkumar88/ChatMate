@@ -1,0 +1,83 @@
+.sidebarWidth1{
+    width:35vw;
+    min-height: 100vh;
+    border-right: 1px solid grey;
+}
+.sidebarWidth2{
+    width:100vw;
+    min-height: 100vh;
+}
+.sizeIcon{
+    width: 30px;
+    font-size: 30px;
+    color:rgb(81, 47, 81);
+    cursor: pointer;
+}
+.inputWidth{
+    width: 90%
+}
+.formWidth{
+    width: 80%
+}
+.searchWidth{
+    width: 10%;
+}
+
+.heightSide1{
+    height: 15vh;
+}
+.heightSide2{
+    height: 75vh;
+}
+.scrollChats1{
+  overflow: scroll;  
+  height: 80vh;
+  margin-top: 8%;
+  margin-bottom: 25%;
+}
+.scrollChats2{
+    overflow: scroll;  
+    height: 75vh;
+    margin-top: 15%;
+   
+  }
+  .pointer{
+    cursor: pointer;
+  }
+.setImage{
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+
+}
+::-webkit-scrollbar {
+    width: 20px;
+    height: 20px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
