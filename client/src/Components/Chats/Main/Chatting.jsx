@@ -1,19 +1,17 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import Display from './Display'
 import Info from './Info'
-import SendMsg from './SendMsg'
+import { Navigate,useNavigate } from 'react-router-dom'
+
 import './Main.css'
 
-const Chatting = () => {
+const Chatting = ({change}) => { 
   return (
-    <div className='bg-light w-75'>
+    <div className={change==false?'bg-light w-75':'bg-light w-100'}>
     <Info/>
     <div className='d-flex flex-column justify-content-between heightDisplay'>
-    <Display/>
-    <SendMsg/>
+    <Display change={change}/>
     </div>
-    
-    
     </div>
   )
 }

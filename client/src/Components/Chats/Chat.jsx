@@ -26,10 +26,14 @@ const Chat = () => {
   }, [])
 
   return (
-   
+    <div>
+   {change==false?
     <div className='d-flex'>
-     <SidebarChat/>
-     <Chatting/>
+     <SidebarChat change={change}/>
+     <Chatting change={change}/>
+    </div>
+    :<div><SidebarChat change={change}/></div>}
+
     </div>
   )
 }

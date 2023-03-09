@@ -6,27 +6,7 @@ import Addperson from './Addperson';
 import Users from './Users';
 
 
-const SidebarChat = () => {
-
-  const [change, setChange] = useState(false);
-
-  const setWidth = () => {
-    const w = window.innerWidth
-    if (w < 600) {
-      setChange(true);
-    }
-    else {
-      setChange(false)
-    }
-  }
-
-  window.onresize = function () {
-    setWidth()
-  }
-
-  useEffect(() => {
-    setWidth();
-  }, [])
+const SidebarChat = ({change}) => {
 
   return (
     <div className={change == true ? 'sideWidth2 bg-light' : "sidebarWidth1 bg-light"}>

@@ -1,5 +1,5 @@
 .sidebarWidth1{
-    width:35vw;
+    width:50vw;
     min-height: 100vh;
     border-right: 1px solid grey;
 }
@@ -38,7 +38,7 @@
 .scrollChats2{
     overflow: scroll;  
     height: 75vh;
-    margin-top: 15%;
+    margin-top: 13%;
    
   }
   .pointer{

@@ -1,11 +1,16 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
+import { Routes,Route } from "react-router-dom";
 import Form from "./Components/Authentication/Form.js";
 import Chat from "./Components/Chats/Chat.jsx";
+import Chatting from "./Components/Chats/Main/Chatting.jsx";
 
 function App() {
   return (
     <div>
-    <Chat/> 
+    <Routes>
+     <Route exact path='/' element={<Chat/>}/>
+     <Route exact path='/Chatting' element={<Chatting/>}/>
+    </Routes>
     </div>
   );
 }
