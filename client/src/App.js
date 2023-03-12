@@ -9,13 +9,9 @@ function App() {
   return (
     <div>
     <Routes>
-<<<<<<< HEAD
-     <Route exact path='/' element={<Form/>}/>
-=======
       <Route exact path="/Form" element={<Form/>}/>
-     <Route exact path='/' element={<Chat/>}/>
->>>>>>> b16eb255d56a241873bf8a52c1194dfe8fa3256a
-     <Route exact path='/Chatting' element={<Chatting/>}/>
+      <Route exact path='/' element={<Chat/>}/>
+      <Route exact path='/Chatting' element={<Chatting/>}/>
     </Routes>
     </div>
   );

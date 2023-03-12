@@ -17,8 +17,12 @@
     width: 90%
 }
 .formWidth{
-    width: 80%
+    width: 80%;
+    /* outline: none !important; */
 }
+*:focus{
+  border: transparent !important;
+  }
 .searchWidth{
     width: 10%;
 }
@@ -38,11 +42,15 @@
 .scrollChats2{
     overflow: scroll;  
     height: 75vh;
-    margin-top: 13%;
+    margin-top: 15%;
    
   }
   .pointer{
     cursor: pointer;
+  }
+
+  .searchMargin{
+    margin-top: -3%;
   }
 .setImage{
     background-size: 100% 100%;
