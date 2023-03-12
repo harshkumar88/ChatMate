@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './Form.css'
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
 
@@ -9,11 +10,12 @@ const Login = () => {
         email: "",
         password: ""
     });
-
+    const navigate=useNavigate()
     const getData = (e) => {
         const { name, value } = e.target;
         setData({ ...formData, [name]: value });
     }
+
     
     const loginUser=async(e)=>{
         e.preventDefault();
@@ -45,7 +47,7 @@ const Login = () => {
               })
             setData({username:"",email:"",password:""})
         }
-    
+        navigate("/")
           return ;
     }
     return (
