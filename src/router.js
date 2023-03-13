@@ -11,6 +11,9 @@ const { Register } = require("./Collections.js")
 const cookieParser = require('cookie-parser');
 router.use(cookieParser());
 
+router.post("/",(req,res)=>{
+    console.log("cookies"+req.cookies.jwt)
+})
 
 router.post("/registerData", async (req, res) => {
     const { username, email, password, confirmpass } = req.body;
@@ -75,12 +78,12 @@ router.post("/LoginData", async (req, res) => {
                         let token = await finduser.generateAuthToken();
 
                         res.cookie("jwt", token, {
-                            expires: new Date(Date.now() + 5000),
+                            expires: new Date(Date.now() + 50000),
                             httpOnly: true
                         });
         
-                        console.log(req.cookies.jwt)
                         
+
                         return res.status(201).json({ message: "Success" });
                     }
                     else {

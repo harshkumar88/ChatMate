@@ -21,8 +21,23 @@ const Form = () => {
     setWidth()
    }
    
+   const fetchCookies=async()=>{
+         
+    try{
+        await fetch("/",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            }
+        })
+    }
+    catch(e){
+
+    }
+   }
     useEffect(() => {
        setWidth();
+       fetchCookies();
     }, [])
 
    

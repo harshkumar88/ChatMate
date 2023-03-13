@@ -18,7 +18,7 @@
     overflow: auto;
 }
 .marginTop{
-    margin-top: 2.1%;
+    margin-top: 0%;
 }
 .borderR{
     border-radius: 20%;
@@ -60,4 +60,7 @@
     position: fixed;
     bottom: 0.3%;
     width: 95%;
+}
+.heightSet{
+    height: 40px;
 }
