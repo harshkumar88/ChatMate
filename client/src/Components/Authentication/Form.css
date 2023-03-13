@@ -8,11 +8,12 @@
   display: flex;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(to bottom, #5746f0, #a3e0ce, #56568b);
+  background-color: rgb(223, 207, 190);
 }
 .FormMargin{
   margin-top: 5%;
 }
+
 .main {
   height: 500px;
   overflow: hidden;
@@ -40,40 +41,48 @@
   position: relative;
   width: 100%;
   height: 100%;
+  background-color: rgb(152, 180, 212);
 }
 
 label {
-  color: #fff;
-  font-size: 2.3em;
+  color:black;
+  font-size: 2em;
   justify-content: center;
   display: flex;
-  margin: 58px;
+  margin-top: 4%;
+  /* margin-top: 5%; */
   font-weight: bold;
   cursor: pointer;
   transition: 0.5s ease-in-out;
 }
-input {
+
+/* .input {
   
-  background: #e0dede;
+ 
   justify-content: center;
-  margin: 20px auto;
+  width: 100%;
+  margin: 1.7%;
   padding: 10px;
   border: none;
   outline: none;
   border-radius: 5px;
-}
+  
+} */
+
+
 
 button {
-  width: 60%;
+  
+
+  width: fit-content;
   height: 40px;
-  margin: 10px auto;
-  justify-content: center;
-  display: block;
+  /* padding: 10%; */
+  /* margin: 10px auto; */
   color: #fff;
-  background: #5746f0;
+  background: red;
   font-size: 1em;
   font-weight: bold;
-  margin-top: 20px;
+  margin-top: 10%;
   outline: none;
   border: none;
   border-radius: 5px;
@@ -86,20 +95,23 @@ button:hover {
 }
 
 .login {
-  height: 460px;
-  background: rgb(100, 86, 224);
+  height: 100%;
+  /* width: 100%; */
+  /* position: relative; */
+  background-color: #ebeb9d;
+  /* color: #000; */
   border-radius: 60% / 10%;
-  /* display: flex; */
-  /* justify-content: center; */
-  transform: translateY(-160px);
+  display: block;
+  justify-content: center;
+  transform: translateY(-80px);
   transition: 0.8s ease-in-out;
 }
 .login label {
-  color: white;
+  color: black;
   transform: scale(0.6);
 }
 #chk:checked ~ .login {
-  transform: translateY(-500px);
+  transform: translateY(-420px);
 }
 #chk:checked ~ .login label {
   transform: scale(1);
@@ -108,8 +120,8 @@ button:hover {
   transform: scale(0.6);
 }
 
-.home {
+/* .home {
   text-decoration: none;
   color: darkcyan;
   padding: 3%;
-}
+} */

@@ -34,9 +34,10 @@ const Form = () => {
                     <div className="signup">
                         <Register/>
                     </div>
-                    <div className="login w-100">
+                    <div className="login ">
                          <Login/>
                     </div>
+                    
                 </div>
             </div>
         </div>

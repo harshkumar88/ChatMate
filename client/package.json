@@ -12,8 +12,12 @@
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.2",
+<<<<<<< HEAD
+    "react-scripts": "^5.0.1",
+=======
     "react-scripts": "5.0.1",
     "sweetalert": "^2.1.2",
+>>>>>>> 3b280f2150adc7e0a2c87c611631068b4cdca692
     "sweetalert2": "^11.7.3",
     "web-vitals": "^2.1.4"
   },
