@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   min-height: 100vh;
-  background-color: rgb(223, 207, 190);
+  background-color: rgb(141, 107, 70);
 }
 .FormMargin{
   margin-top: 5%;
@@ -49,7 +49,7 @@ label {
   font-size: 2em;
   justify-content: center;
   display: flex;
-  margin-top: 4%;
+  margin-top: 0%;
   /* margin-top: 5%; */
   font-weight: bold;
   cursor: pointer;
@@ -72,7 +72,6 @@ label {
 
 
 button {
-  
 
   width: fit-content;
   height: 40px;
@@ -82,7 +81,7 @@ button {
   background: red;
   font-size: 1em;
   font-weight: bold;
-  margin-top: 10%;
+  /* margin-top: 10%; */
   outline: none;
   border: none;
   border-radius: 5px;
@@ -100,7 +99,7 @@ button:hover {
   /* position: relative; */
   background-color: #ebeb9d;
   /* color: #000; */
-  border-radius: 60% / 10%;
+  border-radius: 60% / 8%;
   display: block;
   justify-content: center;
   transform: translateY(-80px);

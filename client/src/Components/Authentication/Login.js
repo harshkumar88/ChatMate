@@ -56,7 +56,7 @@ const Login = () => {
                 <label htmlFor="chk" aria-hidden="true">
                     Login
                 </label>
-                <div className='w-75 mx-auto'>
+                <div className='w-75 mt-5 mx-auto'>
                     <input
                         type="text"
                         name="username"
@@ -67,7 +67,7 @@ const Login = () => {
                         onChange={getData}
                     />
                 </div>
-                <div className='w-75 mx-auto'>
+                <div className='w-75 mt-3 mx-auto'>
                     <input
                         type="email"
                         name="email"
@@ -78,7 +78,7 @@ const Login = () => {
                         onChange={getData}
                     />
                 </div>
-                <div className='w-75 mx-auto'>
+                <div className='w-75 mt-3 mx-auto'>
                     <input
                         type="password"
                         name="password"
@@ -89,7 +89,7 @@ const Login = () => {
                         onChange={getData}
                     />
                 </div>
-                <button>Login</button>
+                <button className='mt-3'>Login</button>
             </form></div>
     )
 }
