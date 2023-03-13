@@ -12,7 +12,6 @@ function App() {
       <Route exact path="/Form" element={<Form/>}/>
       <Route exact path='/' element={<Chat/>}/>
       <Route exact path='/Chatting' element={<Chatting/>}/>
->>>>>>> 3b280f2150adc7e0a2c87c611631068b4cdca692
     </Routes>
     </div>
   );
