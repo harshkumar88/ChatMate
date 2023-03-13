@@ -6,7 +6,7 @@ import './sidechat.css'
 
 const SearchChat = () => {
   return (
-    <div>
+    <div className='searchMargin'>
     <InputGroup className="mb-3 mx-auto bg-light inputWidth">
       <Form.Control
         placeholder="Search Chat"
@@ -14,7 +14,7 @@ const SearchChat = () => {
         aria-describedby="basic-addon2"
         className='formWidth bg-light'
       />
-      <Button variant="outline-secondary" id="button-addon2" className='searchWidth'>
+      <Button id="button-addon2" className='searchWidth'>
       <i class="bi bi-search"></i>
       </Button>
     </InputGroup>
