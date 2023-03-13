@@ -9,8 +9,8 @@ function App() {
   return (
     <div>
     <Routes>
-      <Route exact path="/Form" element={<Form/>}/>
-      <Route exact path='/' element={<Chat/>}/>
+      <Route exact path="/" element={<Form/>}/>
+      <Route exact path='/Form' element={<Chat/>}/>
       <Route exact path='/Chatting' element={<Chatting/>}/>
     </Routes>
     </div>

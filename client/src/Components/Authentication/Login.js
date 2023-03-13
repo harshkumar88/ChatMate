@@ -31,10 +31,10 @@ const Login = () => {
         })
         const data=await res.json();
         console.log(data)
-        if(data.error==="passwordincorrect"){
+        if(data.error==="notAuthorize"){
             Swal.fire('Not an Authentic User')
         }
-        else if( data.error==="UserNotFound"){
+        else if( data.error==="userNotFound"){
            Swal.fire("User Not Found");
         }
         else{
