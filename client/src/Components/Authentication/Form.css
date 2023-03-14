@@ -91,12 +91,13 @@ button {
 }
 
 button:hover {
-  background:  ;
+
   color:black
 }
 
 .login {
   height: 100%;     
+  /* border-top: 5px solid  purple; */
   /* width: 100%; */
   /* position: relative; */
   background-color:  white;
