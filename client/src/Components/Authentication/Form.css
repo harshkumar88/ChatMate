@@ -1,4 +1,5 @@
 .App {
+  color: white;
   font-family: BlinkMacSystemFont, Segoe UI, "Roboto", Oxygen, Ubuntu,
     "Cantarell", "Open Sans", "Helvetica Neue", sans-serif;
   text-align: center;
@@ -41,7 +42,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: white;
 }
 
 label {
@@ -94,20 +95,12 @@ button:hover {
   color:black
 }
 
-.signup {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(27, 18, 45, 0.95);
-}
-
-
 .login {
   height: 100%;     
   /* border-top: 5px solid  purple; */
   /* width: 100%; */
   /* position: relative; */
-  background-color:  black;
+  background-color:  white;
   /* color: #000; */
   border-radius: 60% / 8%;
   display: block;
@@ -121,9 +114,6 @@ button:hover {
 }
 #chk:checked ~ .login {
   transform: translateY(-420px);
-}
-#chk:checked ~ .signup{
-  background-color: rgba(27, 18, 45, 0.95);
 }
 #chk:checked ~ .login label {
   transform: scale(1);
@@ -273,4 +263,3 @@ button:hover {
   }
 
 }
-
