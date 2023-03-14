@@ -19,7 +19,7 @@
   },
   "proxy": "http://localhost:5000",
   "devServer": {
-    "historyApiFallback": true
+    "historyApiFallback": true   
   },
   "browser": {
     "crypto": false
