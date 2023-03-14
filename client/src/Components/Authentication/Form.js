@@ -42,20 +42,7 @@ const Form = () => {
 
    
     return (
-        <div className="App container-fluid area">
-                <ul className="circles">
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                </ul>
-
+        <div className="App container-fluid bg-light">
             <div className={change==false?"mt-5 outerWidth":"mt-5 outerWidth2"}>
                 <div className="main mx-auto innerWidth">
                     <input type="checkbox" id="chk" aria-hidden="true" />
