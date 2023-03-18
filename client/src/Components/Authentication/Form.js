@@ -13,7 +13,7 @@ const Form = () => {
            setChange(true);
         }
         else{
-            setChange(false);
+            setChange(false)
         }
    }
 

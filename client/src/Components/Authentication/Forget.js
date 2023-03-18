@@ -58,7 +58,7 @@ const Forget = () => {
                 </ul>
 
             <div className={change==false?"mt-5 outerWidth":"mt-5 outerWidth2"}>
-                <div className="main mx-auto innerWidth App">
+                <div className="main mx-auto innerWidth ">
                        <ForgetPage/>
                 </div>
         </div>
