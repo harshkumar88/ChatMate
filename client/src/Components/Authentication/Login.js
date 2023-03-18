@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './Form.css'
 import Swal from 'sweetalert2'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 const Login = () => {
 
@@ -89,7 +89,11 @@ const Login = () => {
                         onChange={getData}
                     />
                 </div>
+                <div className='text-end w-75 mx-auto'>
+                    <NavLink to='/forget' className='text-muted'> Forget Password</NavLink>
+                </div>
                 <button className='mt-3'>Login</button>
+
             </form></div>
     )
 }

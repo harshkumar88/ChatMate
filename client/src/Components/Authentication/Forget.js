@@ -2,9 +2,10 @@ import React,{useState,useEffect} from 'react'
 import './Form.css'
 import Login from './Login';
 import Register from './Register';
+import ForgetPage from './ForgetPage'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Form = () => {
+const Forget = () => {
     const [change,setChange]=useState(false);
 
     const setWidth=()=>{
@@ -13,7 +14,7 @@ const Form = () => {
            setChange(true);
         }
         else{
-            setChange(false);
+            setChange(false)
         }
    }
 
@@ -57,19 +58,12 @@ const Form = () => {
                 </ul>
 
             <div className={change==false?"mt-5 outerWidth":"mt-5 outerWidth2"}>
-                <div className="main mx-auto innerWidth">
-                    <input type="checkbox" id="chk" aria-hidden="true" />
-                    <div className="signup">
-                        <Register/>
-                    </div>
-                    <div className="login ">
-                         <Login/>
-                    </div>
-                    
+                <div className="main mx-auto innerWidth App">
+                       <ForgetPage/>
                 </div>
-            </div>
+        </div>
         </div>
     )
 }
 
-export default Form
+export default Forget
