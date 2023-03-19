@@ -1,23 +1,175 @@
-import React from 'react'
+import React,{useState} from 'react'
+import Swal from 'sweetalert2'
 
 const ForgetPage = () => {
-  return (
-    <div className='mt-3'>
-     <h2>Forget</h2>
-    <form className='mt-3'>
-        <div className='w-75 mt-3 mx-auto'>
-            <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                required=""
-                className='form-control'
-            />
-        </div>
-    
-        <button className='mt-3'>Forget</button>
+  const [flipPage,setPage]=useState(false);
+  const [Resend,setResend]=useState(false);
+  const [min,setMin]=useState(1);
+  const [sec,setSec]=useState(30);
+  const [email,setEmail]=useState("");
+  const [otp,setotp]=useState();
+  const [enterOTP,setOTP]=useState();
+  const [changePass,setPass]=useState(false);
 
-    </form></div>
+  const otpTimer=()=>{
+       
+       let m=1;
+       let s=30;
+
+       const cset=setInterval(()=>{
+           s--;
+           if(s==0){
+            m--;
+           }
+           setMin(m);
+           setSec(s);
+
+           if(m==0 && s==0){
+            clearInterval(cset);
+            setResend(true);
+            const ot=generateRandomNumber();
+            setotp(ot);
+           }
+       },1000)
+  }
+
+  function generateRandomNumber() {
+    var minm = 100000;
+    var maxm = 999999;
+    return Math.floor(Math
+    .random() * (maxm - minm + 1)) + minm;
+}
+
+  const EmailSend=()=>{
+      
+    const ot=generateRandomNumber();
+    setotp(ot);
+    const config={
+      SecureToken:"b9949762-47b6-4393-aff5-6e4a07ed7de1",
+      To : email,
+      From : "tmate9353@gmail.com",
+      Subject : "One Time Password",
+      Body : `<h1>${ot}</h1>`
+    }
+
+     if(window.Email){
+           window.Email.send(config).then((res)=>{ 
+            Swal.fire('OTP Sent Successfully')
+           .then((result) => {
+             if(result) {
+               setPage(true);
+               otpTimer();
+             } 
+       
+           })})
+    }
+  }
+
+  const ResendOTP=()=>{
+    setResend(false);
+    setMin(1);
+    setSec(30);
+    otpTimer()
+    EmailSend();
+  }
+  
+
+  const forgetPassword=(e)=>{
+    e.preventDefault();
+    EmailSend();   
+}
+
+const checkOTP=(e)=>{
+    e.preventDefault();
+
+    if(enterOTP==otp){
+      Swal.fire('Verification Successfull')
+           .then((result) => {
+             if(result) {
+               setPass(true);
+             } 
+       
+        })
+    }
+    else{
+      Swal.fire('Not Verified');
+      setOTP("");
+    }
+}
+  return (
+    <div>
+    {changePass==false?
+    <div>
+    {flipPage==false?<div className='pt-1'>
+      <form className='mt-3' onSubmit={forgetPassword}>
+        <div className='w-75 mt-3 mx-auto'>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            required
+            className='form-control'
+            onChange={(e)=>setEmail(e.target.value)}
+            value={email}
+          />
+          <span className='text-muted'>We'll never share your email with anyone else.</span>
+        </div>
+        <button className='mt-4 w-25'>Forget</button>
+      </form>
+    </div>
+:
+    <div className='pt-1'>
+    <div className='text-start w-75 mx-auto'>
+      <p className='ForgetHeader' style={{fontWeight:"bold"}}>Note: <span className='text-danger'>OTP expires in <span style={{fontSize:"1.3rem"}}>{min}:{sec}</span></span></p>
+      </div>
+      <form className='mt-3' onSubmit={checkOTP}>
+        <div className='w-75 mt-3 mx-auto'>
+          <input
+            type="text"
+            name="otp"
+            placeholder="Enter your OTP"
+            required
+            className='form-control'
+            onChange={(e)=>setOTP(e.target.value)}
+            value={enterOTP}
+          />
+          <div className='text-end w-100 mx-auto '>
+          {Resend==false?<span className='text-muted ForgetHeader'>Resend OTP</span>
+          :<span className='ForgetHeader' style={{fontWeight:"bold",cursor:"pointer"}} onClick={ResendOTP}>Resend OTP</span>}
+          </div>
+        </div>
+        <button className='mt-4 w-25'>Submit</button>
+      </form>
+    </div>
+  }
+    </div>:<div>
+    <form className='mt-3' onSubmit={forgetPassword}>
+      <div className='w-75 mt-3 mx-auto'>
+        <input
+          type="password"
+          name="password"
+          placeholder="new password"
+          required
+          className='form-control'
+          
+        />
+        
+      </div>
+      <div className='w-75 mt-2 mx-auto'>
+        <input
+          type="password"
+          name="confirmpassword"
+          placeholder="confirm password"
+          required
+          className='form-control'
+          
+        />
+        <span className='text-muted'>your password is encrypted end to end</span>
+      </div>
+      <button className='mt-4' >Change Password</button>
+    </form>
+  </div>}
+    </div>
   )
 }
 
