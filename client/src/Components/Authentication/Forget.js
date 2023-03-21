@@ -55,9 +55,9 @@ const Forget = () => {
                 <li></li>
             </ul>
 
-            <div className={change == false ? "mt-5 pt-5 outerWidth" : "mt-5 outerWidth2 pt-5"}>
-                <div className="mainForget mx-auto innerWidth">
-                    <div className="signup">
+            <div className={change == false ? "mt-5 pt-5 outerWidth" : "mt-5 outerWidth2 pt-5"} >
+                <div className="mainForget mx-auto innerWidth" style={{minHeight:"270px"}}>
+                    <div className="signup" >
                     <h2 className='ForgetHeader pt-3'>Forget</h2>
                         <ForgetPage/>
                     </div>

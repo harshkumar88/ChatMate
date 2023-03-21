@@ -9,10 +9,13 @@ router.use(bp.urlencoded({ extended: true }));
 require("./database.js");
 const { Register } = require("./Collections.js")
 const cookieParser = require('cookie-parser');
+const cors=require("cors");
 router.use(cookieParser());
+router.use(cors());
 
 router.post("/",(req,res)=>{
-    console.log("cookies"+req.cookies.jwt)
+    // console.log("cookies"+req.cookies.jwt)
+    return res.json({cookies:req.cookies.jwt})
 })
 
 router.post("/registerData", async (req, res) => {
@@ -104,20 +107,27 @@ router.post("/LoginData", async (req, res) => {
         return res.status(422).json("");
     }
 })
+
 router.post("/verifyEmail",async(req,res)=>{
+    try{
     const {email}=req.body;
-    console.log(email);
-    const userdata = await Register.findOne({email:email})
-   
-    if (!userdata) {
-        return res.status(422).json({ message: 'UserNotFound' })
+    const userdata = await Register.find({});
+
+    const findUser=userdata.find((ele)=>{
+        return ele.email===email;
+    })
+
+    if (!findUser) {
+        return res.json({ message: 'UserNotFound' })
     }
     else{
-       
         return res.status(201).json({message:"User Found"})
     }
+    
 
-
-
+}
+catch(e){
+    console.log("error")
+}
 })
 module.exports = router;

@@ -24,7 +24,7 @@ const Form = () => {
    const fetchCookies=async()=>{
          
     try{
-        await fetch("/",{
+        const res=await fetch("/",{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
