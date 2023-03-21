@@ -1,4 +1,5 @@
 import React,{useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
 const ForgetPage = () => {
@@ -10,7 +11,7 @@ const ForgetPage = () => {
   const [otp,setotp]=useState();
   const [enterOTP,setOTP]=useState();
   const [changePass,setPass]=useState(false);
-
+  const navigate=useNavigate();
   const otpTimer=()=>{
        
        let m=1;
@@ -41,7 +42,7 @@ const ForgetPage = () => {
 }
 
   const EmailSend=()=>{
-      
+      alert('h')
     const ot=generateRandomNumber();
     setotp(ot);
     const config={
@@ -74,9 +75,35 @@ const ForgetPage = () => {
   }
   
 
-  const forgetPassword=(e)=>{
+  const forgetPassword=async (e)=>{
     e.preventDefault();
-    EmailSend();   
+    console.log(email)
+    // console.log(data);
+    const res=await fetch("/verifyEmail",{
+      method:"POST",
+      headers:{
+          "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+           email
+          })
+  })
+  
+  const data=await res.json();
+ 
+  if( data.message==="UserNotFound"){
+    Swal.fire("User Not Found").then(()=>{
+      navigate("/")
+    });
+ }
+
+
+    else{ 
+      console.log("x")
+      EmailSend();  
+    
+    }
+    return
 }
 
 const checkOTP=(e)=>{

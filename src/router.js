@@ -104,4 +104,20 @@ router.post("/LoginData", async (req, res) => {
         return res.status(422).json("");
     }
 })
+router.post("/verifyEmail",async(req,res)=>{
+    const {email}=req.body;
+    console.log(email);
+    const userdata = await Register.findOne({email:email})
+   
+    if (!userdata) {
+        return res.status(422).json({ message: 'UserNotFound' })
+    }
+    else{
+       
+        return res.status(201).json({message:"User Found"})
+    }
+
+
+
+})
 module.exports = router;
