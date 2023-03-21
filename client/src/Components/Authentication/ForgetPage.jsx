@@ -10,7 +10,10 @@ const ForgetPage = () => {
   const [email, setEmail] = useState("");
   const [otp, setotp] = useState();
   const [enterOTP, setOTP] = useState('');
-  const [changePass, setPass] = useState(true);
+  const [changePass, setPass] = useState(false);
+  const [password,setpassword]=useState("");
+  const [confirmpassword,setconfirmpassword]=useState("");
+
   const navigate = useNavigate();
   const otpTimer = () => {
   //  alert(min+" "+sec)
@@ -124,6 +127,32 @@ const ForgetPage = () => {
       setOTP("");
     }
   }
+  const updatePassword=async(e)=>{
+    e.preventDefault();
+    if(password!==confirmpassword){
+      alert("Both Password must be same")
+      return;
+    }
+    const res = await fetch("/changepassword", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ confirmpassword,password,email })
+    })
+
+    const data = await res.json();
+    if(data.error==='passwordrejected'){
+      alert("Your Password must be in Format eg. Abc12@ min 8 chars ")
+    }
+    if(data.message=="Success"){
+      Swal.fire("Password Changed Successfully").then((result) => {
+        if (result) {
+             navigate('/')
+        }
+      });
+    }
+  }
   return (
     <div>
       {changePass == false ?
@@ -171,7 +200,7 @@ const ForgetPage = () => {
             </div>
           }
         </div> : <div >
-          <form className='mt-3 ' onSubmit={forgetPassword}>
+          <form className='mt-3 ' onSubmit={updatePassword}>
             <div className='w-75 mt-3 mx-auto'>
               <input
                 type="password"
@@ -179,7 +208,8 @@ const ForgetPage = () => {
                 placeholder="new password"
                 required
                 className='form-control'
-
+                value={password}
+                onChange={(e)=>{setpassword(e.target.value)}}
               />
 
             </div>
@@ -190,6 +220,8 @@ const ForgetPage = () => {
                 placeholder="confirm password"
                 required
                 className='form-control'
+                value={confirmpassword}
+                onChange={(e)=>{setconfirmpassword(e.target.value)}}
 
               />
               <span className='text-muted'>your password is encrypted end to end</span>

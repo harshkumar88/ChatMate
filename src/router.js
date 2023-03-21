@@ -130,4 +130,31 @@ catch(e){
     console.log("error")
 }
 })
+router.post("/changepassword",async(req,res)=>{
+    
+        const{password,confirmpassword,email}=req.body
+        console.log(password+" "+confirmpassword+" "+ email)
+        if ( password !== "" && confirmpassword !== "") {
+
+            try {
+                const hashedpassword = bcrypt.hashSync(password, 10)
+                
+                if (!validator.isStrongPassword(password)) {
+                    return res.status(422).json({ error: "passwordrejected" });
+                }
+                const userdata=await Register.findOne({email:email});
+                const data=await userdata.updateOne({
+                    hashedpassword:hashedpassword
+                  })
+                // const finduser =await Register.findOne({email:email})
+                console.log(data)
+                 
+                return res.status(201).json({message:"Success"})
+            }
+            catch (e) {
+                res.send(e);
+            }
+    
+    } 
+})
 module.exports = router;
