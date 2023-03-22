@@ -191,7 +191,7 @@ const ForgetPage = () => {
                     value={enterOTP}
                   />
                   <div className='text-end w-100 mx-auto '>
-                    {Resend == false ? <span className='text-muted ForgetHeader'>Resend OTP</span>
+                    {Resend == false ? <div><span className='text-muted ForgetHeader'  style={{marginRight:"45%",}}>Check your spam folder</span><span className='text-muted ForgetHeader'>Resend OTP</span></div>
                       : <span className='ForgetHeader' style={{ fontWeight: "bold", cursor: "pointer" }} onClick={ResendOTP}>Resend OTP</span>}
                   </div>
                 </div>

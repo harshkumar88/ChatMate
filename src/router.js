@@ -25,7 +25,7 @@ router.post("/registerData", async (req, res) => {
         try {
             const hashedpassword = bcrypt.hashSync(password, 10)
             if (!validator.isEmail(email)) {
-                return res.status(422).json({ error: "emailrejected" });
+                return res.status(422).json({ error: "emailrejected"});
             }
             if (!validator.isStrongPassword(password)) {
                 return res.status(422).json({ error: "passwordrejected" });

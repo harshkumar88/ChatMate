@@ -11,7 +11,7 @@ function App() {
     <div>
     <Routes>
       <Route exact path="/" element={<Form/>}/>
-      <Route exact path='/form' element={<Chat/>}/>
+      <Route exact path='/Chat' element={<Chat/>}/>
       <Route exact path='/Chatting' element={<Chatting/>}/>
       <Route exact path='/forget' element={<Forget/>}/>
     </Routes>
