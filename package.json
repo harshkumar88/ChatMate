@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "description": "Realtime Chat Application",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "node server.js"
   },
