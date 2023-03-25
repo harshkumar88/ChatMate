@@ -1,9 +1,11 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Addperson = () => {
+    const naigate=useNavigate();
 
     const showPage=()=>{
-         alert("ji")
+          naigate('/Adduser')
     }
     return (
         <div >

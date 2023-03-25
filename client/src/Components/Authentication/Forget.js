@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './Form.css'
 import ForgetPage from './ForgetPage'
-// import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const Forget = () => {
     const [change, setChange] = useState(false);
