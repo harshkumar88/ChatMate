@@ -8,9 +8,9 @@ app.use(registerRouter)
 
 
 if (process.env.NODE_ENV === 'production') {
-    // app.use(express.static(path.join(__dirname, 'Client', 'build')));
+    app.use(express.static(path.join(__dirname, 'Client', 'build')));
     app.get('/*', (req, res) => {
-      res.send("ju")
+      res.sendFile(path.join(__dirname, 'Client', 'build', 'index.html'));
     })
   }
 
