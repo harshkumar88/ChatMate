@@ -4,7 +4,7 @@
   "description": "Realtime Chat Application",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node server.js"
   },
   "build:deploy": "cross-env NODE_ENV=production webpack",
   "author": "Team",
