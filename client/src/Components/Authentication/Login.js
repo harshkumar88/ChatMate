@@ -46,8 +46,12 @@ const Login = () => {
                 timer: 1500
               })
             setData({username:"",email:"",password:""})
+            setTimeout(()=>{
+                navigate("/Chat")
+            },1500)
+           
         }
-        navigate("/")
+       
           return ;
     }
     return (

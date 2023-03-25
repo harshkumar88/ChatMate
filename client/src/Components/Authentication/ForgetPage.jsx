@@ -64,7 +64,7 @@ const ForgetPage = () => {
 
     if (window.Email) {
       window.Email.send(config).then((res) => {
-        Swal.fire('OTP Sent Successfully')
+        Swal.fire('OTP Sent Successfully',`<span style="color:red">Check your spam also<span/>`)
           .then((result) => {
             if (result) {
               setPage(true);
@@ -190,11 +190,13 @@ const ForgetPage = () => {
                     onChange={(e) => setOTP(e.target.value)}
                     value={enterOTP}
                   />
+                 
                   <div className='text-end w-100 mx-auto '>
-                    {Resend == false ? <div><span className='text-muted ForgetHeader'  style={{marginRight:"45%",}}>Check your spam folder</span><span className='text-muted ForgetHeader'>Resend OTP</span></div>
+                    {Resend == false ? <div><span className='text-muted ForgetHeader'>Resend OTP</span></div>
                       : <span className='ForgetHeader' style={{ fontWeight: "bold", cursor: "pointer" }} onClick={ResendOTP}>Resend OTP</span>}
                   </div>
                 </div>
+              
                 <button className='mt-4 w-25'>Submit</button>
               </form>
             </div>
@@ -211,7 +213,6 @@ const ForgetPage = () => {
                 value={password}
                 onChange={(e)=>{setpassword(e.target.value)}}
               />
-
             </div>
             <div className='w-75 mt-3 mx-auto'>
               <input
@@ -222,7 +223,6 @@ const ForgetPage = () => {
                 className='form-control'
                 value={confirmpassword}
                 onChange={(e)=>{setconfirmpassword(e.target.value)}}
-
               />
               <span className='text-muted'>your password is encrypted end to end</span>
             </div>

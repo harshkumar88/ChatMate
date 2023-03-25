@@ -147,7 +147,7 @@ router.post("/changepassword",async(req,res)=>{
                     hashedpassword:hashedpassword
                   })
                 // const finduser =await Register.findOne({email:email})
-                console.log(data)
+                
                  
                 return res.status(201).json({message:"Success"})
             }
