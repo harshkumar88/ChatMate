@@ -41,7 +41,7 @@ const Forget = () => {
 
 
     return (
-        <div className="App container-fluid area">
+        <div className="App container-fluid areaApp">
             <ul className="circles">
                 <li></li>
                 <li></li>

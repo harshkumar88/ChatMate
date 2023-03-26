@@ -19,8 +19,6 @@
   height: 500px;
   overflow: hidden;
   justify-content: center;
-  /* background: url("https://doc-08-2c-docs.googleusercontent.com/docs/securesc/68c90smiglihng9534mvqmq1946dmis5/fo0picsp1nhiucmc0l25s29respgpr4j/1631524275000/03522360960922298374/03522360960922298374/1Sx0jhdpEpnNIydS4rnN4kHSJtU1EyWka?e=view&authuser=0&nonce=gcrocepgbb17m&user=03522360960922298374&hash=tfhgbs86ka6divo3llbvp93mg4csvb38")
-    no-repeat center/ cover; */
   border-radius: 10px;
   box-shadow: 5px 20px 50px #000;
 }
@@ -56,20 +54,6 @@ label {
   cursor: pointer;
   transition: 0.5s ease-in-out;
 }
-
-/* .input {
-  
- 
-  justify-content: center;
-  width: 100%;
-  margin: 1.7%;
-  padding: 10px;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  
-} */
-
 
 
 button {
@@ -123,9 +107,6 @@ button:hover {
 }
 
 
-/* Animation Code */
-
-
 .context {
   width: 100%;
   position: absolute;
@@ -140,13 +121,11 @@ button:hover {
 }
 
 
-.area{
-  background:rgb(81, 47, 81);  
-  /* background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);   */
+.areaApp{
+  background-color:rgb(81, 47, 81);  
   width: 100%;
   height:100vh;
-  
- 
+
 }
 
 .circles{
@@ -246,18 +225,17 @@ button:hover {
   animation-duration: 11s;
 }
 
-
-/* FOrgetPAge CSS */
-
 .BgforgetPage{
   width: 100%;
   height: 100%;
   background-color: white;
 }
+
 .ForgetHeader{
   color:rgb(81, 47, 81);
 
 }
+
 .mainForget{
   height: 250px;
   overflow: hidden;
