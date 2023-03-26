@@ -4,7 +4,7 @@
   "description": "Realtime Chat Application",
   "main": "index.js",
   "scripts": {
-    "test": "node server.js"
+    "test": "node index.js"
   },
   "build:deploy": "cross-env NODE_ENV=production webpack",
   "author": "Team",
