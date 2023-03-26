@@ -7,11 +7,12 @@ require("./src/router.js")
 app.use(registerRouter)
 
 
-
-  app.use(express.static(path.join(__dirname, 'Client', 'build')));
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'client', 'build')));
   app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'Client', 'build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
   })
+}
 
 app.listen(port,(res,req)=>{
     console.log("I am running on port "+port)
