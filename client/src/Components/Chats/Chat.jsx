@@ -2,10 +2,12 @@ import React,{useState,useEffect} from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SidebarChat from './SideBar/SidebarChat'
 import Chatting from './Main/Chatting';
+import { useLocation } from 'react-router-dom';
 
 const Chat = () => {
 
   const [change, setChange] = useState(false);
+  const location=useLocation();
 
   const setWidth = () => {
     const w = window.innerWidth
@@ -22,7 +24,7 @@ const Chat = () => {
   }
 
   useEffect(() => {
-    setWidth();
+    setWidth();   
   }, [])
 
   return (

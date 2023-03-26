@@ -11,7 +11,7 @@ const Info = () => {
                     <span className='text-muted'>Last seen 2 min ago</span>
                 </div>
             </div>
-            <div className='mt-3 d-flex'> <div className='mx-2'> <i class="bi bi-three-dots"></i></div> </div>
+            <div className='mt-3 d-flex'> <div className='mx-2'> <i className="bi bi-three-dots"></i></div> </div>
         </div>
     )
 }

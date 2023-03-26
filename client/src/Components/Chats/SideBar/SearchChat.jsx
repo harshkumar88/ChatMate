@@ -15,7 +15,7 @@ const SearchChat = () => {
         className='formWidth bg-light'
       />
       <Button id="button-addon2" className='searchWidth bg-outline-none'>
-      <i class="bi bi-search"></i>
+      <i className="bi bi-search"></i>
       </Button>
     </InputGroup>
     </div>
