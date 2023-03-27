@@ -2,7 +2,6 @@ import React,{useState,useEffect} from 'react'
 import './Form.css'
 import Login from './Login';
 import Register from './Register';
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Form = () => {
     const [change,setChange]=useState(false);
@@ -42,7 +41,7 @@ const Form = () => {
 
    
     return (
-        <div className="App container-fluid area">
+        <div className="App container-fluid areaApp">
                 <ul className="circles">
                         <li></li>
                         <li></li>

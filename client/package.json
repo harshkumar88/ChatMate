@@ -21,9 +21,6 @@
   "devServer": {
     "historyApiFallback": true   
   },
-  "browser": {
-    "crypto": false
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
