@@ -66,5 +66,41 @@
 }
 
 
+.tooltiptxt{
+    position: absolute;
+    left: 50%;
+    top: -130%;
+    transform: translateX(-50%);
+    background-color: #000;
+    color: #fff;
+    white-space: nowrap;
+    padding: 5px 7px;
+    /* border: 10px solid; */
+    /* border-radius: 20px; */
+    visibility: visible;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+  
+  }
+  .tooltiptxt::before{
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    border: 10px solid;
+    /* border-radius: 10px; */
+    border-color: #000 #0000 #0000 #0000;
+  
+  }
+
+  .inp:hover .tooltiptxt{
+    top:-130%;
+    visibility: visible;
+    opacity: 1;
+    /* border-radius: 2%; */
+  }
+  
+
 /* reactions emojis */
 
