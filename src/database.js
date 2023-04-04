@@ -1,6 +1,6 @@
 const mongoose=require("mongoose");
 require('dotenv').config();
-const DB="mongodb+srv://Nakul:recipeapp@cluster0.xx7nb6c.mongodb.net/ChatApp?retryWrites=true&w=majority";
+const DB=process.env.SECRETKEY;
 mongoose.set('strictQuery', true)
 mongoose.connect(DB,{
     useNewUrlParser: true,
