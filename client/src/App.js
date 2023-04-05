@@ -6,12 +6,14 @@ import Chatting from "./Components/Chats/Main/Chatting.jsx";
 import Form from "./Components/Authentication/Form.js";
 import Forget from "./Components/Authentication/Forget.js";
 import Adduser from "./Components/Chats/AddCreate/Adduser.js";
+import Home from "./Components/HomePage/Home.jsx";
 
 function App() {
   return (
     <div>
     <Routes>
-      <Route exact path="/" element={<Form/>}/>
+      <Route exact path="/" element={<Home/>}/>
+      <Route exact path="/Form" element={<Form/>}/>
       <Route exact path='/Chat' element={<Chat/>}/>
       <Route exact path='/Chatting' element={<Chatting/>}/>
       <Route exact path='/forget' element={<Forget/>}/>
