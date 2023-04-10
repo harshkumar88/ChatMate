@@ -6,7 +6,8 @@ import Form from "./Components/Authentication/Form.js";
 import Forget from "./Components/Authentication/Forget.js";
 import Adduser from "./Components/Chats/AddCreate/Adduser.js";
 import Home from "./Components/HomePage/Home.jsx";
-//learn hi
+
+//Given All Routes here"
 function App() {
   return (
     <div>
