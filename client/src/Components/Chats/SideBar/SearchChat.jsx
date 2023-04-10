@@ -14,9 +14,13 @@ const SearchChat = () => {
         aria-describedby="basic-addon2"
         className='formWidth bg-light'
       />
+      
+      <span className ='tooltiptxt'>Search</span>
+      
       <Button id="button-addon2" className='searchWidth bg-outline-none'>
-      <i className="bi bi-search"></i>
+        <i className="bi bi-search"></i>
       </Button>
+      
     </InputGroup>
     </div>
   )
