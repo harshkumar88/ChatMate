@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 router.use(bp.json());
 router.use(bp.urlencoded({ extended: true }));
 require("./database.js");
-const { Register } = require("./Collections.js")
+const { Register, FriendList } = require("./Collections.js")
 const cookieParser = require('cookie-parser');
 const cors=require("cors");
 router.use(cookieParser());
@@ -15,6 +15,11 @@ router.use(cors());
 
 router.post("/",(req,res)=>{
     // console.log("cookies"+req.cookies.jwt)
+    return res.json({cookies:req.cookies.jwt})
+})
+
+router.post("/getID",(req,res)=>{
+
     return res.json({cookies:req.cookies.jwt})
 })
 
@@ -56,6 +61,7 @@ router.post("/registerData", async (req, res) => {
         return res.status(422).json("");
     }
 })
+
 router.post("/LoginData", async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -80,8 +86,8 @@ router.post("/LoginData", async (req, res) => {
                     if (isMatch) {
                         let token = await finduser.generateAuthToken();
 
-                        res.cookie("jwt", token, {
-                            expires: new Date(Date.now() + 50000),
+                        res.cookie("jwt", {token,email}, {
+                            expires: new Date(Date.now() + 50000000000000),
                             httpOnly: true
                         });
         
@@ -156,5 +162,28 @@ router.post("/changepassword",async(req,res)=>{
             }
     
     } 
+})
+
+router.post("/getAllUsers",async(req,res)=>{
+
+    try{
+        const {email}=req.body;
+        const users=await Register.find({});
+        
+        const FList=await FriendList.find({userId:email});
+        const FriendArr=FList.Friends;
+        const allUsers=users.filter((ele)=>{
+            if(FriendArr!=undefined)
+                  return ele.email!=email && FriendArr.indexof(ele.email)==-1;
+
+            return ele.email!=email
+        })
+        // console.log(allUsers)
+        return res.status(201).json({users:allUsers})
+    }     
+    catch(e){
+        return res.send("error");
+    }
+   
 })
 module.exports = router;
