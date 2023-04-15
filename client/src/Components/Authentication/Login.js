@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { createContext, useState } from 'react'
 import './Form.css'
 import Swal from 'sweetalert2'
 import { NavLink, useNavigate } from 'react-router-dom'
 
-const Login = () => {
 
+const Login = () => {
+    
     const [formData, setData] = useState({
         username: "",
         email: "",
@@ -16,7 +17,6 @@ const Login = () => {
         setData({ ...formData, [name]: value });
     }
 
-    
     const loginUser=async(e)=>{
         e.preventDefault();
         const {username,email,password}=formData;
@@ -55,6 +55,8 @@ const Login = () => {
           return ;
     }
     return (
+       
+       
         <div>
             <form onSubmit={loginUser}>
                 <label htmlFor="chk" aria-hidden="true">
@@ -98,7 +100,10 @@ const Login = () => {
                 </div>
                 <button className='mt-3'>Login</button>
 
-            </form></div>
+            </form>
+            
+            </div>
+           
     )
 }
 

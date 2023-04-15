@@ -1,13 +1,15 @@
-import React,{useState,useEffect} from 'react'
+import React, { useState, useEffect, createContext } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SidebarChat from './SideBar/SidebarChat'
 import Chatting from './Main/Chatting';
 import { useLocation } from 'react-router-dom';
 
+export  const uniqueId=createContext();
 const Chat = () => {
 
   const [change, setChange] = useState(false);
-  const location=useLocation();
+  const location = useLocation();
+  const [userId,setUserId]=useState();
 
   const setWidth = () => {
     const w = window.innerWidth
@@ -23,20 +25,35 @@ const Chat = () => {
     setWidth()
   }
 
+  const getID = async () => {
+    const res = await fetch("/getID", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+
+    const data=await res.json();
+    setUserId(data.cookies.email)    
+  }
+
   useEffect(() => {
-    setWidth();   
+    setWidth();
+    getID();
   }, [])
 
   return (
+    <uniqueId.Provider value={userId}>
     <div>
-   {change==false?
-    <div className='d-flex'>
-     <SidebarChat change={change}/>
-     <Chatting change={change}/>
-    </div>
-    :<div><SidebarChat change={change}/></div>}
+      {change == false ?
+        <div className='d-flex'>
+          <SidebarChat change={change} />
+          <Chatting change={change} />
+        </div>
+        : <div><SidebarChat change={change} /></div>}
 
     </div>
+    </uniqueId.Provider>
   )
 }
 

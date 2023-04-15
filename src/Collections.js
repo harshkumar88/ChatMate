@@ -31,6 +31,25 @@ const RegisterSchema=new mongoose.Schema({
         }
     ]
 })
+const FriendListSchema=new mongoose.Schema({
+    userId:{
+        type:String,
+        unique:true
+    },
+    Friends:{
+        type:Array
+    }
+})
+
+const NotificationListSchema=new mongoose.Schema({
+    userId:{
+        type:String,
+        unique:true
+    },
+    Notifications:{
+        type:Array
+    }
+})
 
 //generating token 
 RegisterSchema.methods.generateAuthToken= async function(){
@@ -45,8 +64,10 @@ RegisterSchema.methods.generateAuthToken= async function(){
         console.log(err)
     }
 }
-
 const Register=mongoose.model("Register",RegisterSchema);
+const FriendList=mongoose.model("FriendList",FriendListSchema);
+const NotificationList=mongoose.model("NotificationList",NotificationListSchema);
+
 module.exports={
-    Register
+    Register,FriendList,NotificationList
 };
