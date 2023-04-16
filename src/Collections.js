@@ -22,6 +22,9 @@ const RegisterSchema=new mongoose.Schema({
         trim:true,
         minlength:7,
     },
+    pic:{
+        type:String
+    },
     tokens:[
         {
             token:{

@@ -2,24 +2,44 @@ import React,{useState} from 'react'
 import './Form.css'
 import Swal from 'sweetalert2'
 
+
+
 const Register = () => {
+    // console.log(c)
     
     const [formData,setData]=useState({
         username:"",
         email:"",
         password:"",
         confirmpass:"",
+        pic:""
     });
+    const [file,setFile]=useState();
 
     const getData=(e)=>{
          const {name,value}=e.target;
          setData({...formData,[name]:value});
     }
+    const getPic=async(e)=>{
+          const file=e.target.files[0];
+          if(file.type==="image/jpeg" || file.type==="image/png" || file.type==="image/jpg"){
+            const formdata=new FormData();
+            formdata.append('myImage',file);
+            const res=await fetch("/upload-image",{
+                method:"post",
+                body:formdata
+            });
+
+            const data=await res.json();
+            const img=data.url
+            setData({...formData,pic:img});
+            setFile(img);
+          }
+    }
 
     const registerUser= async(e)=>{
         e.preventDefault();
-        const {username,email,password,confirmpass}=formData;
-         
+        const {username,email,password,confirmpass,pic}=formData;
         if(password!==confirmpass){
             Swal.fire('Password Must be Same')
            return;
@@ -31,7 +51,7 @@ const Register = () => {
                 "Content-Type":"application/json"
             },
             body:JSON.stringify({
-               username,email,password,confirmpass
+               username,email,password,confirmpass,pic
            })
         })
         const data=await res.json();
@@ -113,6 +133,15 @@ const Register = () => {
                     onChange={getData}
                 />
             </div>
+
+            <div className='w-75 mt-3 mx-auto'>
+            <input
+                type="file"  
+                className='form-control'
+                onChange={getPic}   
+                     
+            />
+        </div>
             <button className='mt-3'>Sign up</button>
             
         </form>
