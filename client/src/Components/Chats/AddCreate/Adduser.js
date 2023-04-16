@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './Adduser.css'
 import Swal from 'sweetalert2'
 import { uniqueId } from '../../Authentication/Login'
 let FixeduserList;
-const Adduser = () => {
 
+const Adduser = () => {
+  
     const [userId, setUserId] = useState();
     const navigate = useNavigate();
     const [change, setChange] = useState(false);
@@ -23,27 +26,17 @@ const Adduser = () => {
         }
     }
 
-    const getID = async () => {
-        const res = await fetch("/getID", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
+    
 
-        const data = await res.json();
-        setUserId(data.cookies.email)
-        console.log(data.cookies.email)
-    }
-
-    const getAllUsers = async () => {
+    const getAllUsers = async (id) => {
+        // console.log(userId)
         const res = await fetch("/getAllUsers", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email: userId
+                email: id
             })
         })
 
@@ -58,13 +51,51 @@ const Adduser = () => {
         //  console.log(users)
     }
 
+    const getID = async () => {
+        const res = await fetch("/getID", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        const data = await res.json();
+        setUserId(data.cookies.email)
+        getAllUsers(data.cookies.email);
+    }
+
+//Sent Notifications
+   const NotificationSent=async(Id)=>{
+        //   console.log(Id,userId)
+        const AddNotification= await fetch("/SendNotification", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                userId: userId,
+                FriendId:Id
+            })
+        });
+        const info=await AddNotification.json();
+        console.log(info.msg)
+        getAllUsers(userId);
+        toast('Notification Sent', {
+            position: 'top-right',
+            autoClose: 2000,
+           
+          })
+
+    }
+
     window.onresize = function () {
         setWidth()
     }
     useEffect(() => {
-        setWidth()
+        setWidth();
         getID();
-        getAllUsers();
+        
+        
     }, [])
 
 
@@ -148,7 +179,7 @@ const Adduser = () => {
                                             <span className='text-dark'>{ele.username}</span>
                                         </div>
                                         <div className=' ms-auto'>
-                                            <span className='text-dark'></span>
+                                        <div className='sizeIcon bg-light' onClick={()=>NotificationSent(ele.email)}><div className='bi bi-plus-circle-fill'></div></div>
                                         </div>
                                     </div>
                                 )
@@ -169,7 +200,7 @@ const Adduser = () => {
                 </div>
             </div>
 
-
+            <ToastContainer className="my-toast-container"/>
 
 
         </div>

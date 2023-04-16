@@ -13,13 +13,14 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.8.2",
     "react-scripts": "^5.0.1",
+    "react-toastify": "^9.1.2",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.7.3",
     "web-vitals": "^2.1.4"
   },
   "proxy": "http://localhost:5000",
   "devServer": {
-    "historyApiFallback": true   
+    "historyApiFallback": true
   },
   "scripts": {
     "start": "react-scripts start",

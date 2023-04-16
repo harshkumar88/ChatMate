@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 router.use(bp.json());
 router.use(bp.urlencoded({ extended: true }));
 require("./database.js");
-const { Register, FriendList } = require("./Collections.js")
+const { Register, FriendList, NotificationRecieve,NotificationSent } = require("./Collections.js")
 const cookieParser = require('cookie-parser');
 const cors=require("cors");
 router.use(cookieParser());
@@ -170,16 +170,72 @@ router.post("/getAllUsers",async(req,res)=>{
         const {email}=req.body;
         const users=await Register.find({});
         
-        const FList=await FriendList.find({userId:email});
-        const FriendArr=FList.Friends;
-        const allUsers=users.filter((ele)=>{
-            if(FriendArr!=undefined)
-                  return ele.email!=email && FriendArr.indexof(ele.email)==-1;
+        const FList=await FriendList.findOne({userId:email});
+        const MyList=await NotificationSent.findOne({userId:email});
+        let list=[-1];
+        if(MyList)
+          list=MyList.Notifications;
+     
+        let FriendArr=[-1];
+        if(FList)
+          FriendArr=FList.Friends;
 
-            return ele.email!=email
+
+          
+        const allUsers=users.filter((ele)=>{
+            return ele.email!=email && list.indexOf(ele.email)=="-1" && FriendArr.indexOf(ele.email)=="-1"
+           
         })
-        // console.log(allUsers)
+        // console.log("ji"+allUsers)
         return res.status(201).json({users:allUsers})
+    }     
+    catch(e){
+        return res.send("error");
+    }
+   
+})
+
+router.post("/SendNotification",async(req,res)=>{
+
+    try{
+        const {userId,FriendId}=req.body;
+        //Recive Notifications
+        const Notifi=await NotificationRecieve.findOne({userId:FriendId});
+       
+         let arr=[];
+      
+        if(Notifi){
+            arr=Notifi.Notifications;
+            const deleteUser=await NotificationRecieve.findOneAndDelete({userId:FriendId});
+        }
+        if(arr.indexOf(userId)==-1)
+        arr.push(userId);
+        const newNotificationRecieve=new NotificationRecieve({
+             userId:FriendId,
+             Notifications:arr
+        })
+        const notificationsSave=await newNotificationRecieve.save();
+
+        //Sent Notifications
+        const Notifi2=await NotificationSent.findOne({userId:userId});
+       
+        arr=[];
+     
+       if(Notifi2){
+           arr=Notifi2.Notifications;
+           const deleteUser=await NotificationSent.findOneAndDelete({userId:userId});
+       }
+       if(arr.indexOf(FriendId)==-1)
+       arr.push(FriendId);
+       const newNotificationSent=new NotificationSent({
+            userId:userId,
+            Notifications:arr
+       })
+       const notificationsSave2=await newNotificationSent.save();
+       console.log(notificationsSave);
+       console.log(notificationsSave2)
+      return res.status(201).json({msg:"Notification Sent"})
+
     }     
     catch(e){
         return res.send("error");
