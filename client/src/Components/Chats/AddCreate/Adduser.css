@@ -10,7 +10,18 @@
     min-height: 100vh;
     /* background-color:  rgb(236, 227, 227); */
   }
-  
+  .my-toast-container .Toastify__progress-bar--controlled {
+     color: rgb(127, 223, 138) !important;
+  }
+  .sizeIcon{
+    width: 30px;
+    font-size: 25px;
+    color:rgb(81, 47, 81);
+    cursor: pointer;
+    height: 20px;
+    margin-top: -5px;
+}
+
   .FormMargin{
     margin-top: 5%;
   }

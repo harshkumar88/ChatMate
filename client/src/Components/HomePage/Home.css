@@ -3,14 +3,13 @@
   width: 100%;
   height:100vh;
 }
-body{
+.fontSizeChat{
+    font-size: 13vw;
     font-family: 'Rubik Pixels', cursive;
 }
-.fontSizeChat{
-    font-size: 13vw
-}
 .fontSizeMate{
-    font-size: 8vw
+    font-size: 8vw;
+    font-family: 'Rubik Pixels', cursive;
 }
 .Mtop{
     margin-top:10% ;

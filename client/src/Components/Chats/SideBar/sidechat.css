@@ -7,8 +7,22 @@
     width:100vw;
     min-height: 100vh;
 }
+
+.SetCount{
+    position: absolute;
+    left:405px;
+    /* right:30px; */
+    top:12px
+}
+.bellICon{
+  width: 20px;
+  font-size: 20px;
+  color:rgb(81, 47, 81);
+  cursor: pointer;
+}
 .sizeIcon{
-    width: 30px;
+  padding-top: 1px;
+    width: 20px;
     font-size: 30px;
     color:rgb(81, 47, 81);
     cursor: pointer;
