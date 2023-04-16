@@ -173,7 +173,7 @@ const Adduser = () => {
                             {users.length>0?users.map((ele, id) => {
                                 return (
                                     <div className='d-flex mt-3 bg-light p-3' key={id} style={{ cursor: 'pointer' }}>
-                                        <div style={{ backgroundImage: 'url("https://th.bing.com/th/id/OIP.OmZtZd_CsC1JImAaVjEZUwHaFj?pid=ImgDet&rs=1")' }} className='setImage ms-2'>
+                                        <div style={{ backgroundImage: `url(${ele.pic})` }} className='setImage ms-2'>
                                         </div>
                                         <div className=' ms-3'>
                                             <span className='text-dark'>{ele.username}</span>

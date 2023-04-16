@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express();
+const multer = require("multer");
 const bcrypt = require("bcryptjs")
 const bp = require("body-parser");
+const path=require("path")
 const validator = require('validator');
 const jwt = require("jsonwebtoken");
 router.use(bp.json());
@@ -12,6 +14,7 @@ const cookieParser = require('cookie-parser');
 const cors=require("cors");
 router.use(cookieParser());
 router.use(cors());
+router.use("/image", express.static("image"));
 
 router.post("/",(req,res)=>{
     // console.log("cookies"+req.cookies.jwt)
@@ -24,7 +27,7 @@ router.post("/getID",(req,res)=>{
 })
 
 router.post("/registerData", async (req, res) => {
-    const { username, email, password, confirmpass } = req.body;
+    const { username, email, password, confirmpass,pic} = req.body;
     if (username !== "" && email !== "" && password !== "" && confirmpass !== "") {
 
         try {
@@ -46,17 +49,16 @@ router.post("/registerData", async (req, res) => {
             }
 
             const register = new Register({
-                username, email, hashedpassword
+                username, email, hashedpassword,pic
             })
             await register.save();
+            console.log(register)
             return res.status(201).json({ message: 'Sucess' })
         }
         catch (e) {
             res.send(e);
         }
-
     }
-
     else {
         return res.status(422).json("");
     }
@@ -169,7 +171,7 @@ router.post("/getAllUsers",async(req,res)=>{
     try{
         const {email}=req.body;
         const users=await Register.find({});
-        
+        console.log(users)
         const FList=await FriendList.findOne({userId:email});
         const MyList=await NotificationSent.findOne({userId:email});
         let list=[-1];
@@ -242,4 +244,30 @@ router.post("/SendNotification",async(req,res)=>{
     }
    
 })
+
+
+let imageName = "";  
+const storage = multer.diskStorage({
+  destination: path.join("./image"), 
+  filename: function (req, file, cb) {
+    imageName = Date.now() + path.extname(file.originalname);
+    cb(null, imageName);
+  },
+});
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 3000000 },
+}).single("myImage");
+
+router.post("/upload-image", (req, res) => {
+  upload(req, res, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      return res.status(201)
+      .json({ url: "http://localhost:5000/image/" + imageName }); 34
+    }
+  });
+});
+
 module.exports = router;
