@@ -1,15 +1,43 @@
 import React, { useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom';
-
+import img from '../AddCreate/Images/icon.png'
 const Users = ({ check}) => {
     const navigate=useNavigate();
     const [change, setChange] = useState(false);
     const [userlist,setList]=useState([]);
+    const [userId,setUserId]=useState();
+
+     const getFriends=async(Id)=>{
+   
+        const Friends= await fetch("/getFriends", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                userId: Id
+            })
+        });
+
+        const data=await Friends.json();
+        console.log(data.Friends);
+        setList(data.Friends)
+     }
+    const getID = async () => {
+        const res = await fetch("/getID", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        const data = await res.json();
+        setUserId(data.cookies.email)
+        getFriends(data.cookies.email);
+    }
+
     useEffect(() => {
-        if(sessionStorage.getItem("userList")){
-            const data=JSON.parse(sessionStorage.getItem("userList"));
-            setList(data)
-        }
+       getID();
     },[])
 
     useEffect(() => {
@@ -31,10 +59,11 @@ const Users = ({ check}) => {
                 return (
                     <div className={id!=0?'d-flex justify-content-between mt-3 pointer':'d-flex justify-content-between pointer'} key={id} onClick={showHideChat}>
                         <div  className="d-flex">
-                            <div style={{ backgroundImage: 'url("https://th.bing.com/th/id/OIP.OmZtZd_CsC1JImAaVjEZUwHaFj?pid=ImgDet&rs=1")' }} className='setImage mr-3 mt-2'>
+                            {/* {console.log(ele.pic)} */}
+                            <div style={ele.pic=="" || ele.pic==undefined?{backgroundImage: "url('https://cdn1.vectorstock.com/i/1000x1000/82/55/anonymous-user-circle-icon-vector-18958255.jpg')"}:{ backgroundImage: `url(${ele.pic})` }} className='setImage mr-3 mt-2'>
                             </div>
                             <div className=' mx-3'>
-                                <span style={{ display: "block" }}>Harsh Kumar {ele}</span>
+                                <span style={{ display: "block" }}>{ele.email}</span>
                                 <span className='text-muted'>Text me fast</span>
                             </div>
                         </div>
