@@ -14,26 +14,31 @@ const Register = () => {
         confirmpass:"",
         pic:""
     });
-    const [file,setFile]=useState();
+    const [loader,setLoader]=useState(false);
 
     const getData=(e)=>{
          const {name,value}=e.target;
          setData({...formData,[name]:value});
     }
     const getPic=async(e)=>{
+        setLoader(true)
           const file=e.target.files[0];
           if(file.type==="image/jpeg" || file.type==="image/png" || file.type==="image/jpg"){
             const formdata=new FormData();
-            formdata.append('myImage',file);
-            const res=await fetch("/upload-image",{
+            formdata.append('file',file);
+            formdata.append('upload_preset','chatAPP')
+            formdata.append("cloud_name",'db1ihyoqu');
+            const res=await fetch("https://api.cloudinary.com/v1_1/db1ihyoqu/image/upload",{
                 method:"post",
                 body:formdata
             });
 
             const data=await res.json();
-            const img=data.url
+            const img=data.url;
+            if(img){
+                setLoader(false);
+            }
             setData({...formData,pic:img});
-            setFile(img);
           }
     }
 
@@ -142,7 +147,8 @@ const Register = () => {
                      
             />
         </div>
-            <button className='mt-3'>Sign up</button>
+            {loader==true?<div className="loading">&#8230;</div>: <button className='mt-3' >Sign up</button>}
+           
             
         </form>
         <svg

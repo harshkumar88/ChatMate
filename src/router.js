@@ -235,8 +235,7 @@ router.post("/SendNotification",async(req,res)=>{
             Notifications:arr
        })
        const notificationsSave2=await newNotificationSent.save();
-       console.log(notificationsSave);
-       console.log(notificationsSave2)
+       
       return res.status(201).json({msg:"Notification Sent"})
 
     }     
@@ -245,6 +244,7 @@ router.post("/SendNotification",async(req,res)=>{
     }
    
 })
+
 
 
 module.exports = router;
