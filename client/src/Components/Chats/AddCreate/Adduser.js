@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './Adduser.css'
 import Swal from 'sweetalert2'
 import { uniqueId } from '../../Authentication/Login'
+import icon from './Images/icon.png'
 let FixeduserList;
 
 const Adduser = () => {
@@ -114,19 +115,6 @@ const Adduser = () => {
 
     const userAdded = () => {
         console.log("User" + list)
-        // Swal.fire({
-        //     title: `Do you want to add ${ele}?`,
-        //     showDenyButton: true,
-        //     confirmButtonText: 'Save',
-        //     denyButtonText: `Don't save`,
-        //   }).then((result) => {
-        //     /* Read more about isConfirmed, isDenied below */
-        //     if (result.isConfirmed) {
-        //       Swal.fire(`User ${ele} Added!`, '', 'success')
-        //     } else if (result.isDenied) {
-        //       Swal.fire(`User ${ele} not Added`, '', 'info')
-        //     }
-        //   })
         navigate("/Chat")
         sessionStorage.setItem("userList", JSON.stringify(list));
     }
@@ -144,7 +132,7 @@ const Adduser = () => {
         })
         setUsers(newUserList)
     }
-
+   
     return (
         <div className="App container-fluid areaApp">
             <ul className="circles">
@@ -173,7 +161,8 @@ const Adduser = () => {
                             {users.length>0?users.map((ele, id) => {
                                 return (
                                     <div className='d-flex mt-3 bg-light p-3' key={id} style={{ cursor: 'pointer' }}>
-                                        <div style={{ backgroundImage: `url(${ele.pic})` }} className='setImage ms-2'>
+                                        <div className='setImage ms-2'>
+                                        <img src={icon} alt="icon" style={{borderRadius:"50%"}}/>
                                         </div>
                                         <div className=' ms-3'>
                                             <span className='text-dark'>{ele.username}</span>
@@ -193,7 +182,7 @@ const Adduser = () => {
                       </div>
                       </div>
                     }
-                        <div className='w-100 mb-1'><button style={{ width: "47%" }} onClick={() => userAdded()}>Add Users</button> <button className='w-50' onClick={() => groupAdded()}>Create Group</button></div>
+                        <div className='w-100 mb-1'><button style={{ width: "47%" }} onClick={() => userAdded()}>Chat Page</button></div>
 
                     </div>
 
@@ -201,7 +190,6 @@ const Adduser = () => {
             </div>
 
             <ToastContainer className="my-toast-container"/>
-
 
         </div>
     )

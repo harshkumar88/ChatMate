@@ -16,6 +16,7 @@ const Register = () => {
     });
     const [filename,setFileName]=useState("");
     const [loader, setLoader] = useState(false);
+    const [loader2, setLoader2] = useState(false);
 
     const getData = (e) => {
         const { name, value } = e.target;
@@ -46,9 +47,11 @@ const Register = () => {
 
     const registerUser = async (e) => {
         e.preventDefault();
+        setLoader2(true);
         const { username, email, password, confirmpass, pic } = formData;
         if (password !== confirmpass) {
             Swal.fire('Password Must be Same')
+            setLoader2(false);
             return;
         }
 
@@ -80,11 +83,12 @@ const Register = () => {
                 showConfirmButton: false,
                 timer: 1500
             })
+           
             setData({ username: "", email: "", password: "", confirmpass: "" })
             document.getElementById("labelClick").click();
 
         }
-
+        setLoader2(false)
 
         return;
 
@@ -147,8 +151,8 @@ const Register = () => {
                     <input type="file" id="imageUpload" accept="image/*" style={{display: 'none'}}  className='form-control'
                     onChange={getPic}></input>
                 </div>
-                {loader == true ? <div className="loading">&#8230;</div> : <button className='mt-3' >Sign up</button>}
-
+                {loader == true ? <div className="loading">&#8230;</div> : <button className='mt-3' style={{minWidth:"35%"}} >Sign up</button>}
+                {loader2==true? <div className="loading">&#8230;</div>:""}
 
             </form>
             <svg
