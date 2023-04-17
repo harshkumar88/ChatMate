@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs")
 const bp = require("body-parser");
 const path=require("path")
 const validator = require('validator');
+const port=process.env.PORT||5000;
 const jwt = require("jsonwebtoken");
 router.use(bp.json());
 router.use(bp.urlencoded({ extended: true }));
@@ -245,29 +246,5 @@ router.post("/SendNotification",async(req,res)=>{
    
 })
 
-
-let imageName = "";  
-const storage = multer.diskStorage({
-  destination: path.join("./image"), 
-  filename: function (req, file, cb) {
-    imageName = Date.now() + path.extname(file.originalname);
-    cb(null, imageName);
-  },
-});
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 3000000 },
-}).single("myImage");
-
-router.post("/upload-image", (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      return res.status(201)
-      .json({ url: "http://localhost:5000/image/" + imageName }); 34
-    }
-  });
-});
 
 module.exports = router;
