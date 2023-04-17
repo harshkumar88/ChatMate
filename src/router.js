@@ -165,9 +165,11 @@ router.post("/getAllUsers",async(req,res)=>{
 
     try{
         const {email}=req.body;
+   
         const users=await Register.find({});
         const FList=await FriendList.findOne({userId:email});
         const MyList=await NotificationSent.findOne({userId:email});
+        const MyNoti=await NotificationRecieve.findOne({userId:email});
         let list=[-1];
         if(MyList)
           list=MyList.Notifications;
@@ -176,8 +178,13 @@ router.post("/getAllUsers",async(req,res)=>{
         if(FList)
           FriendArr=FList.Friends;
 
+        let NotiArr=[];
+        if(MyNoti){
+            NotiArr=MyNoti.Notifications
+        }
+
         const allUsers=users.filter((ele)=>{
-            return ele.email!=email && list.indexOf(ele.email)=="-1" && FriendArr.indexOf(ele.email)=="-1"
+            return ele.email!=email && list.indexOf(ele.email)=="-1" && FriendArr.indexOf(ele.email)=="-1" && NotiArr.indexOf(ele.email)=="-1"
            
         })
         return res.status(201).json({users:allUsers})
@@ -232,9 +239,170 @@ router.post("/SendNotification",async(req,res)=>{
     catch(e){
         return res.send("error");
     }
+})
+router.post("/getAllNotifications",async(req,res)=>{
+
+    try{
+        const {email}=req.body;
+        const MyList=await NotificationRecieve.findOne({userId:email});
+        // console.log(MyList.Notifications)
+        if(MyList)
+           return res.status(201).json({users:MyList.Notifications})
+
+        return res.status(201).json({users:[]})
+    }     
+    catch(e){
+        return res.send("error");
+    }
+   
+})
+router.post("/Accepted",async(req,res)=>{
+
+    try{
+        const {userId,FriendId}=req.body;
+        //Recive Notifications
+        
+        const Notifi=await NotificationRecieve.findOne({userId:userId});
+       
+        //  let arr=[];
+         console.log(Notifi)
+        const arr=Notifi.Notifications.filter((ele)=>{
+            return ele!==FriendId
+        })
+        console.log(arr)
+        const Notifi2=await NotificationSent.findOne({userId:FriendId});
+        const arr2=Notifi2.Notifications.filter((ele)=>{
+            return ele!==userId
+        })
+        // console.log(arr2)
+
+        let UserFriend=[];
+        let FriendFriend=[];
+        const FriendsOfUser=await FriendList.findOne({userId:userId});
+        if(FriendsOfUser){
+           UserFriend=FriendsOfUser.Friends
+           const User2=await FriendList.findOneAndDelete({userId:userId});
+        }
+
+        UserFriend.push(FriendId)
+          
+        const FriendsOfFriend=await FriendList.findOne({userId:FriendId});
+        if(FriendsOfFriend){
+          FriendFriend=FriendsOfFriend.Friends;
+          const User1=await FriendList.findOneAndDelete({userId:FriendId});
+        }
+          FriendFriend.push(userId)
+          
+          const deleteUser1=await NotificationSent.findOneAndDelete({userId:FriendId});
+          const deleteUser2=await NotificationRecieve.findOneAndDelete({userId:userId});
+
+          const newNotificationSent=new NotificationSent({
+            userId:FriendId,
+            Notifications:arr2
+       })
+       const notificationsSave1=await newNotificationSent.save();
+
+
+       const newNotificationRecieve=new NotificationRecieve({
+        userId:userId,
+        Notifications:arr
+   })
+   const notificationsSave2=await newNotificationRecieve.save();
+
+
+   const newFriend=new FriendList({
+    userId:userId,
+    Friends:UserFriend
+})
+const newFriendSave1=await newFriend.save();
+
+
+const newFriend1=new FriendList({
+    userId:FriendId,
+    Friends:FriendFriend
+})
+const newFriendSave2=await newFriend1.save();
+       
+    return res.status(201).json({msg:"Accepted"})
+
+    }     
+    catch(e){
+        return res.send("error");
+    }
+   
+})
+router.post("/Rejected",async(req,res)=>{
+
+    try{
+        const {userId,FriendId}=req.body;
+        //Recive Notifications
+        
+        const Notifi=await NotificationRecieve.findOne({userId:userId});
+      
+        const arr=Notifi.Notifications.filter((ele)=>{
+            return ele!==FriendId
+        })
+
+        const Notifi2=await NotificationSent.findOne({userId:FriendId});
+        const arr2=Notifi2.Notifications.filter((ele)=>{
+            return ele!==userId
+        })
+
+
+        const deleteUser1=await NotificationSent.findOneAndDelete({userId:FriendId});
+        const deleteUser2=await NotificationRecieve.findOneAndDelete({userId:userId});
+        
+        const newNotificationSent=new NotificationSent({
+          userId:FriendId,
+          Notifications:arr2
+     })
+     const notificationsSave1=await newNotificationSent.save();
+
+
+     const newNotificationRecieve=new NotificationRecieve({
+      userId:userId,
+      Notifications:arr
+ })
+ const notificationsSave2=await newNotificationRecieve.save();
+
+       
+      return res.status(201).json({msg:"Rejected"})
+
+    }     
+    catch(e){
+        return res.send("error");
+    }
    
 })
 
 
+router.post("/getFriends",async(req,res)=>{
+
+    try{
+        const {userId}=req.body;
+      
+        const FList=await FriendList.findOne({userId:userId});
+        // console.log(FList)
+       let Farr=[];
+        if(FList){
+            Farr=FList.Friends;
+        }
+        
+      
+        if(Farr.length>0){
+            const users=await Register.find({});
+            const userInfo=users.filter((user)=>{
+                return Farr.indexOf(user.email)!="-1";
+            })
+            return res.status(201).json({Friends:userInfo})
+        }
+
+        return res.status(201).json({Friends:[]})
+    }     
+    catch(e){
+        return res.send("error");
+    }
+   
+})
 
 module.exports = router;
