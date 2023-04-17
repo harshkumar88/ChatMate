@@ -11,6 +11,7 @@ const Login = () => {
         email: "",
         password: ""
     });
+    const [loader, setLoader] = useState(false);
     const navigate=useNavigate()
     const getData = (e) => {
         const { name, value } = e.target;
@@ -19,6 +20,7 @@ const Login = () => {
 
     const loginUser=async(e)=>{
         e.preventDefault();
+        setLoader(true)
         const {username,email,password}=formData;
         const res=await fetch("/LoginData",{
             method:"POST",
@@ -45,6 +47,7 @@ const Login = () => {
                 showConfirmButton: false,
                 timer: 1500
               })
+             
             setData({username:"",email:"",password:""})
             setTimeout(()=>{
                 navigate("/Chat")
@@ -52,6 +55,7 @@ const Login = () => {
            
         }
        
+        setLoader(false)
           return ;
     }
     return (
@@ -98,8 +102,8 @@ const Login = () => {
                 <div className='text-end w-75 mx-auto'>
                     <NavLink to='/forget' className='text-muted'> Forget Password</NavLink>
                 </div>
-                <button className='mt-3'>Login</button>
-
+                <button className='mt-3' style={{minWidth:"35%"}}>Login</button>
+                {loader==true?<div className="loading">&#8230;</div>:""}
             </form>
             
             </div>

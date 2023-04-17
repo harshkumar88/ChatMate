@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import './Form.css'
 import Swal from 'sweetalert2'
 
@@ -6,152 +6,156 @@ import Swal from 'sweetalert2'
 
 const Register = () => {
     // console.log(c)
-    
-    const [formData,setData]=useState({
-        username:"",
-        email:"",
-        password:"",
-        confirmpass:"",
-        pic:""
-    });
-    const [loader,setLoader]=useState(false);
 
-    const getData=(e)=>{
-         const {name,value}=e.target;
-         setData({...formData,[name]:value});
+    const [formData, setData] = useState({
+        username: "",
+        email: "",
+        password: "",
+        confirmpass: "",
+        pic: ""
+    });
+    const [filename,setFileName]=useState("");
+    const [loader, setLoader] = useState(false);
+    const [loader2, setLoader2] = useState(false);
+
+    const getData = (e) => {
+        const { name, value } = e.target;
+        setData({ ...formData, [name]: value });
     }
-    const getPic=async(e)=>{
+    const getPic = async (e) => {
         setLoader(true)
-          const file=e.target.files[0];
-          if(file.type==="image/jpeg" || file.type==="image/png" || file.type==="image/jpg"){
-            const formdata=new FormData();
-            formdata.append('file',file);
-            formdata.append('upload_preset','chatAPP')
-            formdata.append("cloud_name",'db1ihyoqu');
-            const res=await fetch("https://api.cloudinary.com/v1_1/db1ihyoqu/image/upload",{
-                method:"post",
-                body:formdata
+        const file = e.target.files[0];
+        setFileName(file.name)
+        if (file.type === "image/jpeg" || file.type === "image/png" || file.type === "image/jpg") {
+            const formdata = new FormData();
+            formdata.append('file', file);
+            formdata.append('upload_preset', 'chatAPP')
+            formdata.append("cloud_name", 'db1ihyoqu');
+            const res = await fetch("https://api.cloudinary.com/v1_1/db1ihyoqu/image/upload", {
+                method: "post",
+                body: formdata
             });
 
-            const data=await res.json();
-            const img=data.url;
-            if(img){
+            const data = await res.json();
+            const img = data.url;
+            if (img) {
                 setLoader(false);
             }
-            setData({...formData,pic:img});
-          }
+            setData({ ...formData, pic: img });
+        }
     }
 
-    const registerUser= async(e)=>{
+    const registerUser = async (e) => {
         e.preventDefault();
-        const {username,email,password,confirmpass,pic}=formData;
-        if(password!==confirmpass){
+        setLoader2(true);
+        const { username, email, password, confirmpass, pic } = formData;
+        if (password !== confirmpass) {
             Swal.fire('Password Must be Same')
-           return;
+            setLoader2(false);
+            return;
         }
-        
-        const res=await fetch("/registerData",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
+
+        const res = await fetch("/registerData", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
             },
-            body:JSON.stringify({
-               username,email,password,confirmpass,pic
-           })
+            body: JSON.stringify({
+                username, email, password, confirmpass, pic
+            })
         })
-        const data=await res.json();
-        
-        if(data.error==="emailrejected"){
+        const data = await res.json();
+
+        if (data.error === "emailrejected") {
             Swal.fire('Inavalid email')
         }
-        else if(data.error==="UserExist"){
+        else if (data.error === "UserExist") {
             Swal.fire('User Already Exist')
         }
-        else if(data.error==="passwordrejected"){
+        else if (data.error === "passwordrejected") {
             Swal.fire("Your Password must be in Format eg. Abc12@ min 8 chars ")
-       }
-        else{
+        }
+        else {
             Swal.fire({
                 position: 'center',
                 icon: 'success',
                 title: 'Succesfully Registered',
                 showConfirmButton: false,
                 timer: 1500
-              })
-            setData({username:"",email:"",password:"",confirmpass:""})
+            })
+           
+            setData({ username: "", email: "", password: "", confirmpass: "" })
             document.getElementById("labelClick").click();
-            
+
         }
-    
-    
-     return ;
-          
+        setLoader2(false)
+
+        return;
+
     }
 
     return (
         <div>
-        <form onSubmit={registerUser}>
-            <label htmlFor="chk" aria-hidden="true" id="labelClick">
-                Sign Up
-            </label>
-            <div className='w-75 mt-5 mx-auto '>
-                <input
-                    type="text"
-                    name="username"
-                    placeholder="User name"
-                    required
-                    className='form-control'
-                    value={formData.username}
-                    onChange={getData}
-                />
-            </div>
-            <div className='w-75 mt-3 mx-auto'>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    required
-                    className='form-control'
-                    value={formData.email}
-                    onChange={getData}
-                />
-            </div>
-            <div className='w-75 mt-3 mx-auto'>
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    required
-                    className='form-control'
-                    value={formData.password}
-                    onChange={getData}
-                />
-            </div>
-            <div className='w-75 mt-3 mx-auto'>
-                <input
-                    type="password"
-                    name="confirmpass"
-                    placeholder="ConfirmPassword"
-                    required
-                    className='form-control'
-                    value={formData.confirmpass}
-                    onChange={getData}
-                />
-            </div>
+            <form onSubmit={registerUser}>
+                <label htmlFor="chk" aria-hidden="true" id="labelClick">
+                    Sign Up
+                </label>
+                <div className='w-75 mt-5 mx-auto '>
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="User name"
+                        required
+                        className='form-control'
+                        value={formData.username}
+                        onChange={getData}
+                    />
+                </div>
+                <div className='w-75 mt-3 mx-auto'>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        required
+                        className='form-control'
+                        value={formData.email}
+                        onChange={getData}
+                    />
+                </div>
+                <div className='w-75 mt-3 mx-auto'>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        required
+                        className='form-control'
+                        value={formData.password}
+                        onChange={getData}
+                    />
+                </div>
+                <div className='w-75 mt-3 mx-auto'>
+                    <input
+                        type="password"
+                        name="confirmpass"
+                        placeholder="ConfirmPassword"
+                        required
+                        className='form-control'
+                        value={formData.confirmpass}
+                        onChange={getData}
+                    />
+                </div>
 
-            <div className='w-75 mt-3 mx-auto'>
-            <input
-                type="file"  
-                className='form-control'
-                onChange={getPic}   
-                     
-            />
-        </div>
-            {loader==true?<div className="loading">&#8230;</div>: <button className='mt-3' >Sign up</button>}
-           
-            
-        </form>
-        <svg
+                <div className='w-75 mt-3 mx-auto'>
+                    
+                    {filename!="" ?<span className='text-dark'>Image Uploaded:<span className='fw-bolder text-dark'>{filename}</span></span>:<label htmlFor="imageUpload" className='form-control '>Upload Pic</label>}
+                    <input type="file" id="imageUpload" accept="image/*" style={{display: 'none'}}  className='form-control'
+                    onChange={getPic}></input>
+                </div>
+                {loader == true ? <div className="loading">&#8230;</div> : <button className='mt-3' style={{minWidth:"35%"}} >Sign up</button>}
+                {loader2==true? <div className="loading">&#8230;</div>:""}
+
+            </form>
+            <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"

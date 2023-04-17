@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express();
-const multer = require("multer");
 const bcrypt = require("bcryptjs")
 const bp = require("body-parser");
 const path=require("path")
 const validator = require('validator');
-const port=process.env.PORT||5000;
 const jwt = require("jsonwebtoken");
 router.use(bp.json());
 router.use(bp.urlencoded({ extended: true }));
@@ -15,10 +13,9 @@ const cookieParser = require('cookie-parser');
 const cors=require("cors");
 router.use(cookieParser());
 router.use(cors());
-router.use("/image", express.static("image"));
+
 
 router.post("/",(req,res)=>{
-    // console.log("cookies"+req.cookies.jwt)
     return res.json({cookies:req.cookies.jwt})
 })
 
@@ -53,7 +50,6 @@ router.post("/registerData", async (req, res) => {
                 username, email, hashedpassword,pic
             })
             await register.save();
-            console.log(register)
             return res.status(201).json({ message: 'Sucess' })
         }
         catch (e) {
@@ -142,7 +138,6 @@ catch(e){
 router.post("/changepassword",async(req,res)=>{
     
         const{password,confirmpassword,email}=req.body
-        console.log(password+" "+confirmpassword+" "+ email)
         if ( password !== "" && confirmpassword !== "") {
 
             try {
@@ -155,8 +150,7 @@ router.post("/changepassword",async(req,res)=>{
                 const data=await userdata.updateOne({
                     hashedpassword:hashedpassword
                   })
-                // const finduser =await Register.findOne({email:email})
-                
+               
                  
                 return res.status(201).json({message:"Success"})
             }
@@ -172,7 +166,6 @@ router.post("/getAllUsers",async(req,res)=>{
     try{
         const {email}=req.body;
         const users=await Register.find({});
-        console.log(users)
         const FList=await FriendList.findOne({userId:email});
         const MyList=await NotificationSent.findOne({userId:email});
         let list=[-1];
@@ -183,13 +176,10 @@ router.post("/getAllUsers",async(req,res)=>{
         if(FList)
           FriendArr=FList.Friends;
 
-
-          
         const allUsers=users.filter((ele)=>{
             return ele.email!=email && list.indexOf(ele.email)=="-1" && FriendArr.indexOf(ele.email)=="-1"
            
         })
-        // console.log("ji"+allUsers)
         return res.status(201).json({users:allUsers})
     }     
     catch(e){
