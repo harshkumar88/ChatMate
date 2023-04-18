@@ -63,6 +63,7 @@ const Notifications = () => {
         })
 
         const data = await res.json();
+        console.log(data.cookies)
         setUserId(data.cookies.uniqueId)
         getAllNotifications(data.cookies.uniqueId);
     }

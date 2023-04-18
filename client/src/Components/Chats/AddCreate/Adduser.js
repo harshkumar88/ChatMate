@@ -59,6 +59,7 @@ const Adduser = () => {
         })
 
         const data = await res.json();
+        console.log(data.cookies)
         setUserId(data.cookies.uniqueId)
         getAllUsers(data.cookies.uniqueId);
     }
