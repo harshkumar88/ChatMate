@@ -45,11 +45,9 @@ const Adduser = () => {
         if (data) {
             setLoading(false);
         }
-        // console.log(loading)
         const users = data.users;
         FixeduserList = users;
         setUsers(users);
-        //  console.log(users)
     }
 
     const getID = async () => {

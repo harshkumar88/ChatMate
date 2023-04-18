@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Form.css'
 import Swal from 'sweetalert2'
 
 
 
 const Register = () => {
-    // console.log(c)
-
+   
     const [formData, setData] = useState({
         username: "",
         email: "",
@@ -17,9 +16,47 @@ const Register = () => {
     const [filename,setFileName]=useState("");
     const [loader, setLoader] = useState(false);
     const [loader2, setLoader2] = useState(false);
+    const [allusers,setUsers]=useState([]);
+    const [showUser,setshowUSer]=useState(false);
+    const [datashow,setShowdata]=useState("username already taken")
 
+    useEffect(()=>{
+        getUsers()
+    },[])
+
+    const getUsers=async()=>{
+        const res = await fetch("/CheckUser", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        const data=await res.json();
+        setUsers(data.users)
+    }
+    const CheckUser=(e)=>{
+        const { name, value } = e.target;
+        return allusers.indexOf(value)==-1;
+    }
     const getData = (e) => {
         const { name, value } = e.target;
+        if(name=="username"){
+            console.log(value)
+            if(value.length<4){
+               setShowdata("min 4 chars required")
+               setshowUSer(true)
+            }
+            else{
+            if(CheckUser(e)==1){
+                setshowUSer(false);
+            }
+            else{
+                setShowdata("username already taken")
+                setshowUSer(true)
+            }
+        }
+           
+        }
         setData({ ...formData, [name]: value });
     }
     const getPic = async (e) => {
@@ -109,9 +146,11 @@ const Register = () => {
                         className='form-control'
                         value={formData.username}
                         onChange={getData}
+                        // data-toggle="tooltip" data-placement="top" title="username already exist"
                     />
+                    <span className='text-danger'>{showUser?datashow:""}</span>
                 </div>
-                <div className='w-75 mt-3 mx-auto'>
+                <div className={showUser?'w-75 mt-2 mx-auto':"w-75 mt-3 mx-auto"}>
                     <input
                         type="email"
                         name="email"

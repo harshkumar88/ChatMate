@@ -14,7 +14,6 @@ const cors=require("cors");
 router.use(cookieParser());
 router.use(cors());
 
-
 router.post("/",(req,res)=>{
     return res.json({cookies:req.cookies.jwt})
 })
@@ -235,6 +234,21 @@ router.post("/SendNotification",async(req,res)=>{
    
 })
 
+
+router.post("/CheckUser",async(req,res)=>{
+    try{
+        const users=await Register.find({});
+        let userArr=[];
+        for(let i of users){
+            userArr.push(i.username);
+        }
+
+        return res.status(200).json({users:userArr});
+    }
+    catch(e){
+        return res.status(400).send(e);
+    }
+})
 
 
 module.exports = router;
