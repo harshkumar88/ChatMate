@@ -6,7 +6,7 @@ import Form from "./Components/Authentication/Form.js";
 import Forget from "./Components/Authentication/Forget.js";
 import Adduser from "./Components/Chats/AddCreate/Adduser.js";
 import Home from "./Components/HomePage/Home.jsx";
-
+import Notifications from "./Components/NotificationPage/Notifications.jsx";
 //Given All Routes here"
 function App() {
   return (
@@ -18,6 +18,7 @@ function App() {
       <Route exact path='/Chatting' element={<Chatting/>}/>
       <Route exact path='/forget' element={<Forget/>}/>
       <Route exact path='/Adduser' element={<Adduser/>}/>
+      <Route exact path='/Notifications' element={<Notifications/>}/>
     </Routes>
     </div>
   );
