@@ -6,7 +6,6 @@ const path=require("path")
 require("./src/router.js")
 app.use(registerRouter)
 
-
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));

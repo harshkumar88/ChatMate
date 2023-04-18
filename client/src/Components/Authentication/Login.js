@@ -7,7 +7,6 @@ import { NavLink, useNavigate } from 'react-router-dom'
 const Login = () => {
     
     const [formData, setData] = useState({
-        username: "",
         email: "",
         password: ""
     });
@@ -21,23 +20,28 @@ const Login = () => {
     const loginUser=async(e)=>{
         e.preventDefault();
         setLoader(true)
-        const {username,email,password}=formData;
+        const {email,password}=formData;
         const res=await fetch("/LoginData",{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
             },
             body:JSON.stringify({
-               username,email,password
+                email,password
                 })
         })
         const data=await res.json();
-        console.log(data)
         if(data.error==="notAuthorize"){
             Swal.fire('Not an Authentic User')
         }
-        else if( data.error==="userNotFound"){
-           Swal.fire("User Not Found");
+        else if( data.error==="UserNotFound"){
+           Swal.fire("User Not Found").then(()=>{
+                navigate("/form")
+                setData({email:"",password:""})
+                document.getElementById("labelClick").click();
+          
+           });
+           
         }
         else{
             Swal.fire({
@@ -48,7 +52,7 @@ const Login = () => {
                 timer: 1500
               })
              
-            setData({username:"",email:"",password:""})
+            setData({email:"",password:""})
             setTimeout(()=>{
                 navigate("/Chat")
             },1500)
@@ -66,18 +70,8 @@ const Login = () => {
                 <label htmlFor="chk" aria-hidden="true">
                     Login
                 </label>
+                
                 <div className='w-75 mt-5 mx-auto'>
-                    <input
-                        type="text"
-                        name="username"
-                        placeholder="User name"
-                        required
-                        className='form-control'
-                        value={formData.username}
-                        onChange={getData}
-                    />
-                </div>
-                <div className='w-75 mt-3 mx-auto'>
                     <input
                         type="email"
                         name="email"

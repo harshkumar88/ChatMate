@@ -37,7 +37,7 @@ const Notifications = () => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email: id
+                uniqueId: id
             })
         })
 
@@ -63,8 +63,8 @@ const Notifications = () => {
         })
 
         const data = await res.json();
-        setUserId(data.cookies.email)
-        getAllNotifications(data.cookies.email);
+        setUserId(data.cookies.uniqueId)
+        getAllNotifications(data.cookies.uniqueId);
     }
 
 //Accepted Notifications
