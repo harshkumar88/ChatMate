@@ -5,7 +5,7 @@ import Swal from 'sweetalert2'
 
 
 const Register = () => {
-   
+
     const [formData, setData] = useState({
         username: "",
         email: "",
@@ -13,49 +13,49 @@ const Register = () => {
         confirmpass: "",
         pic: ""
     });
-    const [filename,setFileName]=useState("");
+    const [filename, setFileName] = useState("");
     const [loader, setLoader] = useState(false);
     const [loader2, setLoader2] = useState(false);
-    const [allusers,setUsers]=useState([]);
-    const [showUser,setshowUSer]=useState(false);
-    const [datashow,setShowdata]=useState("username already taken")
+    const [allusers, setUsers] = useState([]);
+    const [showUser, setshowUSer] = useState(false);
+    const [datashow, setShowdata] = useState("username already taken")
 
-    useEffect(()=>{
+    useEffect(() => {
         getUsers()
-    },[])
+    }, [])
 
-    const getUsers=async()=>{
+    const getUsers = async () => {
         const res = await fetch("/CheckUser", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             }
         })
-        const data=await res.json();
+        const data = await res.json();
         setUsers(data.users)
     }
-    const CheckUser=(e)=>{
+    const CheckUser = (e) => {
         const { name, value } = e.target;
-        return allusers.indexOf(value)==-1;
+        return allusers.indexOf(value) == -1;
     }
     const getData = (e) => {
         const { name, value } = e.target;
-        if(name=="username"){
+        if (name == "username") {
             console.log(value)
-            if(value.length<4){
-               setShowdata("min 4 chars required")
-               setshowUSer(true)
-            }
-            else{
-            if(CheckUser(e)==1){
-                setshowUSer(false);
-            }
-            else{
-                setShowdata("username already taken")
+            if (value.length < 4) {
+                setShowdata("min 4 chars required")
                 setshowUSer(true)
             }
-        }
-           
+            else {
+                if (CheckUser(e) == 1) {
+                    setshowUSer(false);
+                }
+                else {
+                    setShowdata("username already taken")
+                    setshowUSer(true)
+                }
+            }
+
         }
         setData({ ...formData, [name]: value });
     }
@@ -120,7 +120,7 @@ const Register = () => {
                 showConfirmButton: false,
                 timer: 1500
             })
-           
+
             setData({ username: "", email: "", password: "", confirmpass: "" })
             document.getElementById("labelClick").click();
 
@@ -146,33 +146,55 @@ const Register = () => {
                         className='form-control'
                         value={formData.username}
                         onChange={getData}
-                        // data-toggle="tooltip" data-placement="top" title="username already exist"
+                    // data-toggle="tooltip" data-placement="top" title="username already exist"
                     />
-                    <span className='text-danger'>{showUser?datashow:""}</span>
+                    <span className='text-danger'>{showUser ? datashow : ""}</span>
                 </div>
-                <div className={showUser?'w-75 mt-2 mx-auto':"w-75 mt-3 mx-auto"}>
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="Email"
-                        required
-                        className='form-control'
-                        value={formData.email}
-                        onChange={getData}
-                    />
+                <div className={showUser ? 'w-75 mt-2 mx-auto' : "w-75 mt-3 mx-auto"}>
+                    {showUser ?
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            required
+                            className='form-control'
+                            value={formData.email}
+                            onChange={getData}
+                            disabled
+                        /> : <input
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                            required
+                            className='form-control'
+                            value={formData.email}
+                            onChange={getData}
+                        />}
                 </div>
                 <div className='w-75 mt-3 mx-auto'>
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        required
-                        className='form-control'
-                        value={formData.password}
-                        onChange={getData}
-                    />
+                    {showUser ?
+                        <input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            required
+                            className='form-control'
+                            value={formData.password}
+                            onChange={getData}
+                            disabled
+                        /> : <input
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                            required
+                            className='form-control'
+                            value={formData.password}
+                            onChange={getData}
+
+                        />}
                 </div>
                 <div className='w-75 mt-3 mx-auto'>
+                {showUser?
                     <input
                         type="password"
                         name="confirmpass"
@@ -181,17 +203,31 @@ const Register = () => {
                         className='form-control'
                         value={formData.confirmpass}
                         onChange={getData}
-                    />
+                        disabled
+                    />: <input
+                    type="password"
+                    name="confirmpass"
+                    placeholder="ConfirmPassword"
+                    required
+                    className='form-control'
+                    value={formData.confirmpass}
+                    onChange={getData}
+                />}
                 </div>
 
-                <div className='w-75 mt-3 mx-auto'>
-                    
-                    {filename!="" ?<span className='text-dark'>Image Uploaded:<span className='fw-bolder text-dark'>{filename}</span></span>:<label htmlFor="imageUpload" className='form-control '>Upload Pic</label>}
-                    <input type="file" id="imageUpload" accept="image/*" style={{display: 'none'}}  className='form-control'
+                {showUser==false?<div className='w-75 mt-3 mx-auto'>
+
+                    {filename != "" ? <span className='text-dark'>Image Uploaded:<span className='fw-bolder text-dark'>{filename}</span></span> : <label htmlFor="imageUpload" className='form-control '>Upload Pic</label>}
+                    <input type="file" id="imageUpload" accept="image/*" style={{ display: 'none' }} className='form-control'
+                        onChange={getPic}></input>
+                </div>:<div className='w-75 mt-3 mx-auto'>
+
+                {filename != "" ? <span className='text-dark'>Image Uploaded:<span className='fw-bolder text-dark'>{filename}</span></span> : <label htmlFor="imageUpload" className='form-control ' style={{backgroundColor:"#e9ecef"}} >Upload Pic</label>}
+                <input type="file" id="imageUpload" accept="image/*" style={{ display: 'none' }} className='form-control' disabled
                     onChange={getPic}></input>
-                </div>
-                {loader == true ? <div className="loading">&#8230;</div> : <button className='mt-3' style={{minWidth:"35%"}} >Sign up</button>}
-                {loader2==true? <div className="loading">&#8230;</div>:""}
+            </div>}
+                {loader == true ? <div className="loading">&#8230;</div> : <button className='mt-3' style={{ minWidth: "35%" }} >Sign up</button>}
+                {loader2 == true ? <div className="loading">&#8230;</div> : ""}
 
             </form>
             <svg
