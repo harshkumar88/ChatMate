@@ -147,6 +147,7 @@ const Register = () => {
                         value={formData.username}
                         onChange={getData}
                         // data-toggle="tooltip" data-placement="top" title="username already exist"
+                        
                     />
                     <span className='text-danger'>{showUser?datashow:""}</span>
                 </div>
