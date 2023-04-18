@@ -61,10 +61,10 @@ router.post("/registerData", async (req, res) => {
 })
 
 router.post("/LoginData", async (req, res) => {
-    const { username, email, password } = req.body;
+    const {email, password } = req.body;
 
 
-    if (username !== "" && email !== "" && password !== "") {
+    if ( email !== "" && password !== "") {
         try {
 
 
@@ -73,7 +73,7 @@ router.post("/LoginData", async (req, res) => {
                 return user.email === email
             })
 
-            
+            console.log(finduser)
 
             if (finduser === undefined) {
                 return res.status(422).json({ error: 'UserNotFound' })
@@ -83,8 +83,8 @@ router.post("/LoginData", async (req, res) => {
                 const isMatch=await bcrypt.compare(password, finduser.hashedpassword)
                     if (isMatch) {
                         let token = await finduser.generateAuthToken();
-
-                        res.cookie("jwt", {token,email}, {
+                       const uniqueId=finduser.username;
+                        res.cookie("jwt", {token,uniqueId}, {
                             expires: new Date(Date.now() + 50000000000000),
                             httpOnly: true
                         });
@@ -163,12 +163,12 @@ router.post("/changepassword",async(req,res)=>{
 router.post("/getAllUsers",async(req,res)=>{
 
     try{
-        const {email}=req.body;
+        const {uniqueId}=req.body;
    
         const users=await Register.find({});
-        const FList=await FriendList.findOne({userId:email});
-        const MyList=await NotificationSent.findOne({userId:email});
-        const MyNoti=await NotificationRecieve.findOne({userId:email});
+        const FList=await FriendList.findOne({userId:uniqueId});
+        const MyList=await NotificationSent.findOne({userId:uniqueId});
+        const MyNoti=await NotificationRecieve.findOne({userId:uniqueId});
         let list=[-1];
         if(MyList)
           list=MyList.Notifications;
@@ -183,7 +183,7 @@ router.post("/getAllUsers",async(req,res)=>{
         }
 
         const allUsers=users.filter((ele)=>{
-            return ele.email!=email && list.indexOf(ele.email)=="-1" && FriendArr.indexOf(ele.email)=="-1" && NotiArr.indexOf(ele.email)=="-1"
+            return ele.username!=uniqueId && list.indexOf(ele.username)=="-1" && FriendArr.indexOf(ele.username)=="-1" && NotiArr.indexOf(ele.username)=="-1"
            
         })
         return res.status(201).json({users:allUsers})
@@ -242,8 +242,8 @@ router.post("/SendNotification",async(req,res)=>{
 router.post("/getAllNotifications",async(req,res)=>{
 
     try{
-        const {email}=req.body;
-        const MyList=await NotificationRecieve.findOne({userId:email});
+        const {uniqueId}=req.body;
+        const MyList=await NotificationRecieve.findOne({userId:uniqueId});
         // console.log(MyList.Notifications)
         if(MyList)
            return res.status(201).json({users:MyList.Notifications})

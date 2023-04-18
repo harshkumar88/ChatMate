@@ -37,7 +37,7 @@ const Adduser = () => {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email: id
+                uniqueId: id
             })
         })
 
@@ -59,8 +59,8 @@ const Adduser = () => {
         })
 
         const data = await res.json();
-        setUserId(data.cookies.email)
-        getAllUsers(data.cookies.email);
+        setUserId(data.cookies.uniqueId)
+        getAllUsers(data.cookies.uniqueId);
     }
 
 //Sent Notifications
