@@ -406,7 +406,7 @@ router.post("/getFriends",async(req,res)=>{
         if(Farr.length>0){
             const users=await Register.find({});
             const userInfo=users.filter((user)=>{
-                return Farr.indexOf(user.email)!="-1";
+                return Farr.indexOf(user.username)!="-1";
             })
             return res.status(201).json({Friends:userInfo})
         }

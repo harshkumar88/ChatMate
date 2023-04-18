@@ -59,6 +59,7 @@ const Adduser = () => {
         })
 
         const data = await res.json();
+        console.log(data.cookies)
         setUserId(data.cookies.uniqueId)
         getAllUsers(data.cookies.uniqueId);
     }
@@ -166,7 +167,7 @@ const Adduser = () => {
                                             <span className='text-dark'>{ele.username}</span>
                                         </div>
                                         <div className=' ms-auto'>
-                                        <div className='sizeIcon bg-light' onClick={()=>NotificationSent(ele.email)}><div className='bi bi-plus-circle-fill'></div></div>
+                                        <div className='sizeIcon bg-light' onClick={()=>NotificationSent(ele.username)}><div className='bi bi-plus-circle-fill'></div></div>
                                         </div>
                                     </div>
                                 )

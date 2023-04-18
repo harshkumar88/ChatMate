@@ -32,8 +32,8 @@ const Users = ({ check}) => {
         })
 
         const data = await res.json();
-        setUserId(data.cookies.email)
-        getFriends(data.cookies.email);
+        setUserId(data.cookies.uniqueId)
+        getFriends(data.cookies.uniqueId);
     }
 
     useEffect(() => {
@@ -59,11 +59,11 @@ const Users = ({ check}) => {
                 return (
                     <div className={id!=0?'d-flex justify-content-between mt-3 pointer':'d-flex justify-content-between pointer'} key={id} onClick={showHideChat}>
                         <div  className="d-flex">
-                            {/* {console.log(ele.pic)} */}
-                            <div style={ele.pic=="" || ele.pic==undefined?{backgroundImage: "url('https://cdn1.vectorstock.com/i/1000x1000/82/55/anonymous-user-circle-icon-vector-18958255.jpg')"}:{ backgroundImage: `url(${ele.pic})` }} className='setImage mr-3 mt-2'>
+                             {console.log(ele.pic)}
+                            <div style={ele.pic=="" || ele.pic==undefined?{backgroundImage: "url('https://img.icons8.com/ultraviolet/512/user.png')"}:{ backgroundImage: `url(${ele.pic})` }} className='setImage mr-3 mt-2'>
                             </div>
                             <div className=' mx-3'>
-                                <span style={{ display: "block" }}>{ele.email}</span>
+                                <span style={{ display: "block" }}>{ele.username}</span>
                                 <span className='text-muted'>Text me fast</span>
                             </div>
                         </div>
