@@ -73,7 +73,6 @@ router.post("/LoginData", async (req, res) => {
                 return user.email === email
             })
 
-            console.log(finduser)
 
             if (finduser === undefined) {
                 return res.status(422).json({ error: 'UserNotFound' })
@@ -244,7 +243,6 @@ router.post("/getAllNotifications",async(req,res)=>{
     try{
         const {uniqueId}=req.body;
         const MyList=await NotificationRecieve.findOne({userId:uniqueId});
-        // console.log(MyList.Notifications)
         if(MyList)
            return res.status(201).json({users:MyList.Notifications})
 
@@ -263,18 +261,13 @@ router.post("/Accepted",async(req,res)=>{
         
         const Notifi=await NotificationRecieve.findOne({userId:userId});
        
-        //  let arr=[];
-         console.log(Notifi)
         const arr=Notifi.Notifications.filter((ele)=>{
             return ele!==FriendId
         })
-        console.log(arr)
         const Notifi2=await NotificationSent.findOne({userId:FriendId});
         const arr2=Notifi2.Notifications.filter((ele)=>{
             return ele!==userId
         })
-        // console.log(arr2)
-
         let UserFriend=[];
         let FriendFriend=[];
         const FriendsOfUser=await FriendList.findOne({userId:userId});
@@ -396,7 +389,6 @@ router.post("/getFriends",async(req,res)=>{
         const {userId}=req.body;
       
         const FList=await FriendList.findOne({userId:userId});
-        // console.log(FList)
        let Farr=[];
         if(FList){
             Farr=FList.Friends;

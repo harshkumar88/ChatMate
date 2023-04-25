@@ -2,12 +2,15 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {io} from 'socket.io-client'
 import './Adduser.css'
-import Swal from 'sweetalert2'
-import { uniqueId } from '../../Authentication/Login'
+
 import icon from './Images/icon.png'
 let FixeduserList;
-
+let uid;
+const ENDPOINT='http://localhost:5000';
+var socket=io(ENDPOINT);;
+let countOcur=1;
 const Adduser = () => {
   
     const [userId, setUserId] = useState();
@@ -17,6 +20,7 @@ const Adduser = () => {
 
     const [list, setlist] = useState([]);
     const [users, setUsers] = useState([]);
+    const [fId,setFid]=useState();
     const setWidth = () => {
         const w = window.innerWidth
         if (w < 600) {
@@ -26,11 +30,25 @@ const Adduser = () => {
             setChange(false)
         }
     }
+    useEffect(()=>{
+        socket.on('broadcast', function (message) {
+            console.log('Message from server:', message,uid);
+            if(message==userId){
+                getAllUsers(message);
+            }
+          });
 
-    
-
+          if(countOcur==1){
+            setWidth();
+            getID();
+            countOcur++;
+          }
+          return () => {
+            socket.off('broadcast');
+          };
+    },[])
+   
     const getAllUsers = async (id) => {
-        // console.log(userId)
         const res = await fetch("/getAllUsers", {
             method: "POST",
             headers: {
@@ -59,14 +77,15 @@ const Adduser = () => {
         })
 
         const data = await res.json();
-        console.log(data.cookies)
+        uid=data.cookies.uniqueId
         setUserId(data.cookies.uniqueId)
         getAllUsers(data.cookies.uniqueId);
     }
+     
 
 //Sent Notifications
    const NotificationSent=async(Id)=>{
-        //   console.log(Id,userId)
+        setFid(Id);
         const AddNotification= await fetch("/SendNotification", {
             method: "POST",
             headers: {
@@ -78,25 +97,21 @@ const Adduser = () => {
             })
         });
         const info=await AddNotification.json();
-        console.log(info.msg)
         getAllUsers(userId);
         toast('Notification Sent', {
             position: 'top-right',
             autoClose: 2000,
            
           })
+          socket.emit('message', Id);
 
     }
+
 
     window.onresize = function () {
         setWidth()
     }
-    useEffect(() => {
-        setWidth();
-        getID();
-        
-        
-    }, [])
+  
 
 
     const UserList = (ele) => {
@@ -118,10 +133,6 @@ const Adduser = () => {
         sessionStorage.setItem("userList", JSON.stringify(list));
     }
 
-    const groupAdded = () => {
-        console.log("Group" + list)
-        navigate("/Chat")
-    }
     const changeUserList = (name) => {
         const newUserList = FixeduserList.filter((ele) => {
             let s = ele.username;
