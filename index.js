@@ -23,13 +23,9 @@ const io=require("socket.io")(server,{
   }
 })
 
-let count=0;
 io.on("connection",(socket)=>{
-  count++
-  console.log("connect",count)
   socket.on("Refresh",(id)=>{
     console.log("refresh,",id)
-    io.sockets.emit("ID",id);
+    io.emit("ID",id);
 })
 
-})
