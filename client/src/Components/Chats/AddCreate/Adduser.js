@@ -37,7 +37,6 @@ const Adduser = () => {
                 getAllUsers(message);
             }
           });
-
           if(countOcur==1){
             setWidth();
             getID();
@@ -80,6 +79,8 @@ const Adduser = () => {
         uid=data.cookies.uniqueId
         setUserId(data.cookies.uniqueId)
         getAllUsers(data.cookies.uniqueId);
+        socket.emit('send',uid)
+
     }
      
 
