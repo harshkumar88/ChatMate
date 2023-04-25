@@ -31,13 +31,7 @@ const Adduser = () => {
     }
 
     socket.on("ID",(id)=>{
-        console.log(id,userId)
-        if(id==userId){
-            console.log("calling")
-            getAllUsers(id);
-            console.log(users)
-           
-        }
+     console.log(id)
              
       })
   

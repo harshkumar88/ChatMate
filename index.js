@@ -3,7 +3,6 @@ const app=express();
 const registerRouter=require('./src/router.js')
 const port=process.env.PORT||5000;
 const path=require("path")
-const {Server} =require("socket.io")
 require("./src/router.js")
 app.use(registerRouter)
 const cors=require("cors");
@@ -24,10 +23,13 @@ const io=require("socket.io")(server,{
   }
 })
 
+let count=0;
 io.on("connection",(socket)=>{
+  count++
+  console.log("connect",count)
   socket.on("Refresh",(id)=>{
     console.log("refresh,",id)
-    io.emit("ID",id);
+    io.sockets.emit("ID",id);
 })
 
 })
