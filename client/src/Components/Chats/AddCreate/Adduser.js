@@ -7,9 +7,10 @@ import './Adduser.css'
 
 import icon from './Images/icon.png'
 let FixeduserList;
-
+let uid;
 const ENDPOINT='http://localhost:5000';
 var socket=io(ENDPOINT);;
+let countOcur=1;
 const Adduser = () => {
   
     const [userId, setUserId] = useState();
@@ -29,18 +30,24 @@ const Adduser = () => {
             setChange(false)
         }
     }
+    useEffect(()=>{
+        socket.on('broadcast', function (message) {
+            console.log('Message from server:', message,uid);
+            if(message==userId){
+                getAllUsers(message);
+            }
+          });
 
-    socket.on("ID",(id)=>{
-        console.log(id,userId)
-        if(id==userId){
-            console.log("calling")
-            getAllUsers(id);
-            console.log(users)
-           
-        }
-             
-      })
-  
+          if(countOcur==1){
+            setWidth();
+            getID();
+            countOcur++;
+          }
+          return () => {
+            socket.off('broadcast');
+          };
+    },[])
+   
     const getAllUsers = async (id) => {
         const res = await fetch("/getAllUsers", {
             method: "POST",
@@ -70,6 +77,7 @@ const Adduser = () => {
         })
 
         const data = await res.json();
+        uid=data.cookies.uniqueId
         setUserId(data.cookies.uniqueId)
         getAllUsers(data.cookies.uniqueId);
     }
@@ -77,7 +85,6 @@ const Adduser = () => {
 
 //Sent Notifications
    const NotificationSent=async(Id)=>{
-        //   console.log(Id,userId)
         setFid(Id);
         const AddNotification= await fetch("/SendNotification", {
             method: "POST",
@@ -90,14 +97,14 @@ const Adduser = () => {
             })
         });
         const info=await AddNotification.json();
-        console.log(info.msg)
         getAllUsers(userId);
         toast('Notification Sent', {
             position: 'top-right',
             autoClose: 2000,
            
           })
-          socket.emit("Refresh",Id);
+          socket.emit('message', Id);
+          
         //   console.log("ju")
     }
 
@@ -106,11 +113,6 @@ const Adduser = () => {
         setWidth()
     }
   
-    useEffect(() => {
-        socket.emit("setup")
-        setWidth();
-        getID();
-    }, [])
 
 
     const UserList = (ele) => {

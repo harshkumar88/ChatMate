@@ -24,10 +24,29 @@ const io=require("socket.io")(server,{
   }
 })
 
-io.on("connection",(socket)=>{
-  socket.on("Refresh",(id)=>{
-    console.log("refresh,",id)
-    io.emit("ID",id);
-})
+const connections = new Set();
 
-})
+io.on('connection', function (socket) {
+  connections.add(socket);
+
+  socket.on('message', function (message) {
+    console.log('Received message from a client:', message);
+
+    // Broadcast the message to all clients
+    io.emit('broadcast', message);
+  });
+
+  socket.on('disconnect', function () {
+    connections.delete(socket);
+  });
+});
+
+
+
+
+
+
+
+
+
+
