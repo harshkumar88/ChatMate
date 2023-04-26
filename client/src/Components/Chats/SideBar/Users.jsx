@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useContext } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom';
 import img from '../AddCreate/Images/icon.png'
 import '../../NotificationPage/Notifications'
+import io from 'socket.io-client'
+import { PortNo } from '../../../App';
+
+var socket ;
 const Users = ({ check}) => {
+    const port=useContext(PortNo);
     const navigate=useNavigate();
     const [change, setChange] = useState(false);
     const [userlist,setList]=useState([]);
@@ -40,7 +45,15 @@ const Users = ({ check}) => {
     }
 
     useEffect(() => {
-       getID();
+        const URL = `http://localhost:${port}`;
+        socket=io(URL,{autoConnect: false});
+        socket.connect();
+        getID();
+        console.log(URL)
+        socket.emit('AddRoom');
+        return () => {
+           socket.disconnect();
+        };
     },[])
 
     useEffect(() => {

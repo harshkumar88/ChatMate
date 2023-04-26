@@ -5,13 +5,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import io from 'socket.io-client'
 import './Adduser.css'
 import icon from './Images/icon.png'
+import { PortNo } from '../../../App';
 let FixeduserList;
 let uid;
 let countOcur=1;
-const URL = "http://localhost:5000";
-const socket = io(URL,{autoConnect: false});
+
+var socket;
 const Adduser = () => {
-  
+    const port=useContext(PortNo);
     const [userId, setUserId] = useState();
     const navigate = useNavigate();
     const [change, setChange] = useState(false);
@@ -19,7 +20,7 @@ const Adduser = () => {
 
     const [list, setlist] = useState([]);
     const [users, setUsers] = useState([]);
-    const [fId,setFid]=useState();
+    const [fId,setFid]=useState();         
     const setWidth = () => {
         const w = window.innerWidth
         if (w < 600) {
@@ -29,6 +30,21 @@ const Adduser = () => {
             setChange(false)
         }
     }
+
+    
+    useEffect(()=>{
+        const URL = `http://localhost:${port}`;
+        socket=io(URL,{autoConnect: false});
+        socket.connect();
+        setWidth();
+        getID();
+        console.log(URL)
+        socket.emit('AddRoom');
+        return () => {
+           socket.disconnect();
+        };
+    },[])
+
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
             console.log('Message from server:', message+" ->"+uid);
@@ -41,7 +57,7 @@ const Adduser = () => {
             socket.off('broadcast');
           };
     },[socket])
-   
+
     const getAllUsers = async (id) => {
         const res = await fetch("/getAllUsers", {
             method: "POST",
@@ -102,15 +118,6 @@ const Adduser = () => {
           await socket.emit('message', Id);
     }
 
-    useEffect(()=>{
-        socket.connect();
-        setWidth();
-        getID();
-        socket.emit('AddRoom');
-        return () => {
-           socket.disconnect();
-        };
-    },[])
 
     window.onresize = function () {
         setWidth()

@@ -14,6 +14,9 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 })
 
+app.post('/getPort',(req,res)=>{
+    return res.json({port:port});
+})
 const server=app.listen(port,(res,req)=>{
     console.log("I am running on port "+port)
 })
@@ -24,7 +27,6 @@ const io=require("socket.io")(server,{
     methods:["GET","POST"]
   }
 })
-
 io.on("connection",(socket)=>{
   console.log("user connected "+socket.id);
   socket.on("AddRoom",()=>{

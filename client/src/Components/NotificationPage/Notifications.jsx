@@ -7,12 +7,12 @@ import './Notifications.css'
 import Swal from 'sweetalert2'
 import { uniqueId } from '../Authentication/Login'
 import icon from './Images/icon.png'
+import { PortNo } from '../../App';
 let FixeduserList;
 
-const URL = "http://localhost:5000";
-const socket = io(URL,{autoConnect: false});
+var socket ;
 const Notifications = () => {
-  
+    const port=useContext(PortNo);
     const [userId, setUserId] = useState();
     const navigate = useNavigate();
     const [change, setChange] = useState(false);
@@ -30,6 +30,18 @@ const Notifications = () => {
         }
     }
        
+    useEffect(()=>{
+        const URL = `http://localhost:${port}`;
+        socket=io(URL,{autoConnect: false});
+        socket.connect();
+        setWidth();
+        getID();
+        console.log(URL)
+        socket.emit('AddRoom');
+        return () => {
+           socket.disconnect();
+        };
+    },[])
 
     const getAllNotifications = async (id) => {
         // console.log(userId)
@@ -119,16 +131,7 @@ const Rejected=async(Id)=>{
     window.onresize = function () {
         setWidth()
     }
-    useEffect(() => {
-        socket.connect();
-        setWidth();
-        getID();
-        socket.emit('AddRoom');
-        return () => {
-            socket.disconnect();
-         };
-        
-    }, [])
+    
 
    
     return (
