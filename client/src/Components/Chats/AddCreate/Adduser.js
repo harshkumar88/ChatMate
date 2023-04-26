@@ -8,7 +8,8 @@ import icon from './Images/icon.png'
 let FixeduserList;
 let uid;
 let countOcur=1;
-const socket=io.connect("http://localhost:5000")
+const URL = "http://localhost:5000";
+const socket = io(URL, { autoConnect: false });
 const Adduser = () => {
   
     const [userId, setUserId] = useState();
