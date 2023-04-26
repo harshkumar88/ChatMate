@@ -7,7 +7,7 @@ import io from 'socket.io-client'
 export  const uniqueId=createContext();
 
 const URL = "http://localhost:5000";
-const socket = io(URL, { autoConnect: false });
+const socket = io(URL,{autoConnect: false});
 const Chat = () => {
 
   const [change, setChange] = useState(false);
@@ -41,9 +41,13 @@ const Chat = () => {
   }
 
   useEffect(() => {
+    socket.connect();
     setWidth();
     getID();
     socket.emit('AddRoom');
+    return () => {
+      socket.disconnect();
+   };
   }, [])
 
   return (
