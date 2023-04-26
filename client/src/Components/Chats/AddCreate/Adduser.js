@@ -9,7 +9,7 @@ let FixeduserList;
 let uid;
 let countOcur=1;
 const URL = "http://localhost:5000";
-const socket = io(URL, { autoConnect: false });
+const socket = io(URL,{autoConnect: false});
 const Adduser = () => {
   
     const [userId, setUserId] = useState();
@@ -31,7 +31,7 @@ const Adduser = () => {
     }
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
-            // console.log('Message from server:', message+" ->"+uid);
+            console.log('Message from server:', message+" ->"+uid);
             if(message==uid){
                 console.log("hii")
                 getAllUsers(message);
@@ -103,8 +103,13 @@ const Adduser = () => {
     }
 
     useEffect(()=>{
+        socket.connect();
         setWidth();
         getID();
+        socket.emit('AddRoom');
+        return () => {
+           socket.disconnect();
+        };
     },[])
 
     window.onresize = function () {

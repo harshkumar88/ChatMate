@@ -10,7 +10,7 @@ import icon from './Images/icon.png'
 let FixeduserList;
 
 const URL = "http://localhost:5000";
-const socket = io(URL, { autoConnect: false });
+const socket = io(URL,{autoConnect: false});
 const Notifications = () => {
   
     const [userId, setUserId] = useState();
@@ -90,7 +90,7 @@ const Accepted=async(Id)=>{
         autoClose: 2000,
        
       })
-      await socket.emit('message', Id);
+       socket.emit('message', Id);
 
 }
 const Rejected=async(Id)=>{
@@ -112,28 +112,24 @@ const Rejected=async(Id)=>{
       autoClose: 2000,
      
     })
-    await socket.emit('message', Id);
+    socket.emit('message', Id);
 
 }
    
-
     window.onresize = function () {
         setWidth()
     }
     useEffect(() => {
+        socket.connect();
         setWidth();
         getID();
-        
+        socket.emit('AddRoom');
+        return () => {
+            socket.disconnect();
+         };
         
     }, [])
 
-
-
-
-   
-
- 
-  
    
     return (
         <div className="App container-fluid areaApp">
