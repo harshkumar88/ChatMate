@@ -2,12 +2,14 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import io from 'socket.io-client'
 import './Notifications.css'
 import Swal from 'sweetalert2'
 import { uniqueId } from '../Authentication/Login'
 import icon from './Images/icon.png'
 let FixeduserList;
 
+const socket=io.connect("http://localhost:5000")
 const Notifications = () => {
   
     const [userId, setUserId] = useState();
@@ -26,8 +28,7 @@ const Notifications = () => {
             setChange(false)
         }
     }
-
-    
+       
 
     const getAllNotifications = async (id) => {
         // console.log(userId)
@@ -88,6 +89,7 @@ const Accepted=async(Id)=>{
         autoClose: 2000,
        
       })
+      await socket.emit('message', Id);
 
 }
 const Rejected=async(Id)=>{
@@ -109,6 +111,7 @@ const Rejected=async(Id)=>{
       autoClose: 2000,
      
     })
+    await socket.emit('message', Id);
 
 }
    
