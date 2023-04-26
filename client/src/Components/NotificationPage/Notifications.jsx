@@ -9,7 +9,8 @@ import { uniqueId } from '../Authentication/Login'
 import icon from './Images/icon.png'
 let FixeduserList;
 
-const socket=io.connect("http://localhost:5000")
+const URL = "http://localhost:5000";
+const socket = io(URL, { autoConnect: false });
 const Notifications = () => {
   
     const [userId, setUserId] = useState();
