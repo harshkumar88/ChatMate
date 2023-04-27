@@ -8,7 +8,7 @@ import icon from './Images/icon.png'
 import { PortNo } from '../../../App';
 let FixeduserList;
 let uid;
-const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false});
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
 const Adduser = () => {
     const port=useContext(PortNo);
     const [userId, setUserId] = useState();

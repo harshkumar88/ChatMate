@@ -9,8 +9,8 @@ import { uniqueId } from '../Authentication/Login'
 import icon from './Images/icon.png'
 import { PortNo } from '../../App';
 let FixeduserList;
-
-const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false});
+let uid;
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false, transports: ['websocket']});
 const Notifications = () => {
     const port=useContext(PortNo);
     const [userId, setUserId] = useState();
@@ -39,6 +39,19 @@ const Notifications = () => {
            socket.disconnect();
         };
     },[])
+
+    useEffect(()=>{
+        socket.on('NotificationSent', function (message) {
+            console.log('Message from server:', message+" ->"+uid);
+            if(message==uid){
+                console.log("hii")
+                getAllNotifications(message);
+            }
+          });
+          return () => {
+            socket.off('broadcast');
+          };
+    },[socket])
 
     const getAllNotifications = async (id) => {
         // console.log(userId)
@@ -76,6 +89,7 @@ const Notifications = () => {
         const data = await res.json();
         console.log(data.cookies)
         setUserId(data.cookies.uniqueId)
+        uid=data.cookies.uniqueId
         getAllNotifications(data.cookies.uniqueId);
     }
 
@@ -130,7 +144,6 @@ const Rejected=async(Id)=>{
     }
     
 
-   
     return (
         <div className="App container-fluid areaApp">
             <ul className="circles">

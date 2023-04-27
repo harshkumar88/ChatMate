@@ -4,8 +4,8 @@ import img from '../AddCreate/Images/icon.png'
 import '../../NotificationPage/Notifications'
 import io from 'socket.io-client'
 import { PortNo } from '../../../App';
-
-const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false});
+let uid;
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
 const Users = ({ check}) => {
     const port=useContext(PortNo);
     const navigate=useNavigate();
@@ -41,6 +41,7 @@ const Users = ({ check}) => {
 
         const data = await res.json();
         setUserId(data.cookies.uniqueId)
+        uid=data.cookies.uniqueId
         getFriends(data.cookies.uniqueId);
     }
 
@@ -52,6 +53,19 @@ const Users = ({ check}) => {
            socket.disconnect();
         };
     },[])
+
+    useEffect(()=>{
+        socket.on('NotificationSent', function (message) {
+            console.log('Message from server:', message+" ->"+uid);
+            if(message==uid){
+                console.log("hii")
+                getFriends(message);
+            }
+          });
+          return () => {
+            socket.off('broadcast');
+          };
+    },[socket])
 
     useEffect(() => {
         setChange(check);
