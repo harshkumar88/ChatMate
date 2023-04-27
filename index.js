@@ -28,12 +28,8 @@ const server=app.listen(port,(res,req)=>{
     console.log("I am running on port "+port)
 })
 
-const io=require("socket.io")(server,{
-  cors:{
-    origin:"http://localhost:3000",
-    methods:["GET","POST"]
-  }
-})
+const io=require("socket.io")(server)
+
 io.on("connection",(socket)=>{
   console.log("user connected "+socket.id);
   socket.on("AddRoom",()=>{
