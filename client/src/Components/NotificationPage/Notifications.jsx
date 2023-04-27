@@ -10,7 +10,7 @@ import icon from './Images/icon.png'
 import { PortNo } from '../../App';
 let FixeduserList;
 
-var socket ;
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false});
 const Notifications = () => {
     const port=useContext(PortNo);
     const [userId, setUserId] = useState();
@@ -30,13 +30,10 @@ const Notifications = () => {
         }
     }
        
-    useEffect(()=>{
-        const URL = `http://localhost:${port}`;
-        socket=io(URL,{autoConnect: false});
+    useEffect(()=>{       
         socket.connect();
         setWidth();
         getID();
-        console.log(URL)
         socket.emit('AddRoom');
         return () => {
            socket.disconnect();

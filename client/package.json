@@ -22,7 +22,7 @@
     "sweetalert2": "^11.7.3",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "http://localhost:5000",
+  "proxy": "https://chatmate-backend.onrender.com",
   "devServer": {
     "historyApiFallback": true
   },
