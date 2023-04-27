@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {io} from 'socket.io-client'
 import './Home.css'
-const ENDPOINT='http://localhost:5000';
-var socket=io(ENDPOINT);;
+
 const Home = () => {
   
     const navigate=useNavigate();
@@ -97,9 +96,6 @@ const Home = () => {
    }
     useEffect(()=>{
           // handle events sent from the server
-      socket.on('connect', function() {
-    console.log('Connected to server');
-        });
         makeEffect();
     },[])
     return (

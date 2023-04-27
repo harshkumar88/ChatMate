@@ -5,7 +5,7 @@ import '../../NotificationPage/Notifications'
 import io from 'socket.io-client'
 import { PortNo } from '../../../App';
 
-var socket ;
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false});
 const Users = ({ check}) => {
     const port=useContext(PortNo);
     const navigate=useNavigate();
@@ -45,11 +45,8 @@ const Users = ({ check}) => {
     }
 
     useEffect(() => {
-        const URL = `http://localhost:${port}`;
-        socket=io(URL,{autoConnect: false});
         socket.connect();
         getID();
-        console.log(URL)
         socket.emit('AddRoom');
         return () => {
            socket.disconnect();

@@ -8,9 +8,7 @@ import icon from './Images/icon.png'
 import { PortNo } from '../../../App';
 let FixeduserList;
 let uid;
-let countOcur=1;
-
-var socket;
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false});
 const Adduser = () => {
     const port=useContext(PortNo);
     const [userId, setUserId] = useState();
@@ -33,12 +31,9 @@ const Adduser = () => {
 
     
     useEffect(()=>{
-        const URL = `http://localhost:${port}`;
-        socket=io(URL,{autoConnect: false});
         socket.connect();
         setWidth();
         getID();
-        console.log(URL)
         socket.emit('AddRoom');
         return () => {
            socket.disconnect();
