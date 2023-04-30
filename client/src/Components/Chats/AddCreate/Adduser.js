@@ -2,17 +2,17 @@ import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {io} from 'socket.io-client'
+import io from 'socket.io-client'
 import './Adduser.css'
-
 import icon from './Images/icon.png'
+import { PortNo } from '../../../App';
 let FixeduserList;
 let uid;
 const ENDPOINT='http://localhost:5000';
-var socket=io(ENDPOINT);;  
+var socket=io(ENDPOINT);;
 let countOcur=1;
 const Adduser = () => {
-  
+    const port=useContext(PortNo);
     const [userId, setUserId] = useState();
     const navigate = useNavigate();
     const [change, setChange] = useState(false);
@@ -20,7 +20,7 @@ const Adduser = () => {
 
     const [list, setlist] = useState([]);
     const [users, setUsers] = useState([]);
-    const [fId,setFid]=useState();
+    const [fId,setFid]=useState();         
     const setWidth = () => {
         const w = window.innerWidth
         if (w < 600) {
@@ -30,27 +30,18 @@ const Adduser = () => {
             setChange(false)
         }
     }
-
-    
     useEffect(()=>{
-        
         socket.on('broadcast', function (message) {
             console.log('Message from server:', message,uid);
             if(message==userId){
                 getAllUsers(message);
             }
           });
-
-          if(countOcur==1){
-            setWidth();
-            getID();
-            countOcur++;
-          }
           return () => {
             socket.off('broadcast');
           };
-    },[])
-   
+    },[socket])
+
     const getAllUsers = async (id) => {
         const res = await fetch("/getAllUsers", {
             method: "POST",
@@ -85,9 +76,9 @@ const Adduser = () => {
         uid=data.cookies.uniqueId
         setUserId(data.cookies.uniqueId)
         getAllUsers(data.cookies.uniqueId);
-        socket.emit('send',uid)
     }
      
+   
 
 //Sent Notifications
    const NotificationSent=async(Id)=>{
@@ -109,7 +100,7 @@ const Adduser = () => {
             autoClose: 2000,
            
           })
-          io.emit('message', Id);
+          socket.emit('message', Id);
 
     }
 
@@ -118,20 +109,6 @@ const Adduser = () => {
         setWidth()
     }
   
-
-
-    const UserList = (ele) => {
-        setlist([...list, ele]);
-
-    }
-
-    const DeleteList = (ele) => {
-
-        const arr = list.filter((el) => {
-            return ele != el;
-        })
-        setlist(arr);
-    }
 
     const userAdded = () => {
         console.log("User" + list)

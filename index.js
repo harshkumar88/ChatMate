@@ -14,46 +14,43 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 })
 
+app.post('/getPort',(req,res)=>{
+    return res.json({port:port});
+})
 const server=app.listen(port,(res,req)=>{
     console.log("I am running on port "+port)
 })
 
 const io=require("socket.io")(server,{
   cors:{
-    origin:"http://localhost:3000"
+    origin:["http://localhost:3000",'https://chat-mate-alpha.vercel.app'],
+    methods:["GET","POST"]
   }
 })
 
 const connections = new Set();
 
-const roomName = "room";
 io.on('connection', function (socket) {
- socket.join("room")
- const numberOfSocketsInRoom = io.sockets.adapter.rooms.get(roomName)?.size;
- console.log(`There are ${numberOfSocketsInRoom} sockets in room ${roomName}.`);
-
- const socketsInRoom = io.sockets.adapter.rooms.get(roomName);
-
-if (socketsInRoom) {
-  // Loop through each socket ID in the room
-  socketsInRoom.forEach((socketId) => {
-    // Use the socket ID to get the socket object
-    const socket = io.sockets.sockets.get(socketId);
-    console.log("Socket ID:", socketId);
-  });
-}
+  connections.add(socket);
 
   socket.on('message', function (message) {
     console.log('Received message from a client:', message);
 
     // Broadcast the message to all clients
-    io.to('room').emit('broadcast', message);
+    io.emit('broadcast', message);
   });
 
   socket.on('disconnect', function () {
     connections.delete(socket);
-    socket.leave("room");
-    console.log("leave")
-    
   });
 });
+
+
+
+
+
+
+
+
+
+
