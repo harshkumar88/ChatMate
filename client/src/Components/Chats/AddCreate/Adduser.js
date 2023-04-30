@@ -9,7 +9,7 @@ import icon from './Images/icon.png'
 let FixeduserList;
 let uid;
 const ENDPOINT='http://localhost:5000';
-var socket=io(ENDPOINT);;
+var socket=io(ENDPOINT);;  
 let countOcur=1;
 const Adduser = () => {
   
@@ -30,7 +30,10 @@ const Adduser = () => {
             setChange(false)
         }
     }
+
+    
     useEffect(()=>{
+        
         socket.on('broadcast', function (message) {
             console.log('Message from server:', message,uid);
             if(message==userId){
@@ -58,14 +61,16 @@ const Adduser = () => {
                 uniqueId: id
             })
         })
-
+        
         const data = await res.json();
         if (data) {
             setLoading(false);
         }
         const users = data.users;
         FixeduserList = users;
+
         setUsers(users);
+        
     }
 
     const getID = async () => {
@@ -80,6 +85,7 @@ const Adduser = () => {
         uid=data.cookies.uniqueId
         setUserId(data.cookies.uniqueId)
         getAllUsers(data.cookies.uniqueId);
+        socket.emit('send',uid)
     }
      
 
@@ -103,7 +109,7 @@ const Adduser = () => {
             autoClose: 2000,
            
           })
-          socket.emit('message', Id);
+          io.emit('message', Id);
 
     }
 
