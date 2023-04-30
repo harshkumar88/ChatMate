@@ -8,9 +8,7 @@ import icon from './Images/icon.png'
 import { PortNo } from '../../../App';
 let FixeduserList;
 let uid;
-const ENDPOINT='http://localhost:5000';
-var socket=io(ENDPOINT);;
-let countOcur=1;
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
 const Adduser = () => {
     const port=useContext(PortNo);
     const [userId, setUserId] = useState();
@@ -30,10 +28,23 @@ const Adduser = () => {
             setChange(false)
         }
     }
+
+    
     useEffect(()=>{
-        socket.on('broadcast', function (message) {
-            console.log('Message from server:', message,uid);
-            if(message==userId){
+        socket.connect();
+        setWidth();
+        getID();
+        socket.emit('AddRoom');
+        return () => {
+           socket.disconnect();
+        };
+    },[])
+
+    useEffect(()=>{
+        socket.on('NotificationSent', function (message) {
+            console.log('Message from server:', message+" ->"+uid);
+            if(message==uid){
+                console.log("hii")
                 getAllUsers(message);
             }
           });
@@ -52,16 +63,14 @@ const Adduser = () => {
                 uniqueId: id
             })
         })
-        
+
         const data = await res.json();
         if (data) {
             setLoading(false);
         }
         const users = data.users;
         FixeduserList = users;
-
         setUsers(users);
-        
     }
 
     const getID = async () => {
@@ -76,6 +85,7 @@ const Adduser = () => {
         uid=data.cookies.uniqueId
         setUserId(data.cookies.uniqueId)
         getAllUsers(data.cookies.uniqueId);
+
     }
      
    
@@ -100,8 +110,7 @@ const Adduser = () => {
             autoClose: 2000,
            
           })
-          socket.emit('message', Id);
-
+          await socket.emit('message', Id);
     }
 
 
