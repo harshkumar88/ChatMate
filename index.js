@@ -21,30 +21,26 @@ const server=app.listen(port,(res,req)=>{
     console.log("I am running on port "+port)
 })
 
+//Adding socket for server side
 const io=require("socket.io")(server,{
   cors:{
     origin:["http://localhost:3000",'https://chat-mate-alpha.vercel.app'],
     methods:["GET","POST"]
   }
 })
-
-const connections = new Set();
-
-io.on('connection', function (socket) {
-  connections.add(socket);
-
-  socket.on('message', function (message) {
-    console.log('Received message from a client:', message);
-
-    // Broadcast the message to all clients
-    io.emit('broadcast', message);
-  });
-
-  socket.on('disconnect', function () {
-    connections.delete(socket);
-  });
-});
-
+io.on("connection",(socket)=>{
+  console.log("user connected "+socket.id);
+  socket.on("AddRoom",()=>{
+    socket.join("Chat");
+  })
+  socket.on("message",(id)=>{
+       console.log("user with id"+socket.id+ "send request to "+id);
+       socket.to("Chat").emit("NotificationSent",id)
+  })  
+  socket.on("disconnect",()=>{
+    console.log("user disconnected")
+  })
+})
 
 
 
