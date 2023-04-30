@@ -3,8 +3,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import SidebarChat from './SideBar/SidebarChat'
 import Chatting from './Main/Chatting';
 import { useLocation } from 'react-router-dom';
-
+import io from 'socket.io-client'
 export  const uniqueId=createContext();
+
+
 const Chat = () => {
 
   const [change, setChange] = useState(false);
