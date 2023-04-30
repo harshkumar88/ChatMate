@@ -21,6 +21,7 @@ const server=app.listen(port,(res,req)=>{
     console.log("I am running on port "+port)
 })
 
+//Adding socket for server side
 const io=require("socket.io")(server,{
   cors:{
     origin:["http://localhost:3000",'https://chat-mate-alpha.vercel.app'],
