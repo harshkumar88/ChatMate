@@ -7,13 +7,12 @@ import './Notifications.css'
 import Swal from 'sweetalert2'
 import { uniqueId } from '../Authentication/Login'
 import icon from './Images/icon.png'
-import { PortNo } from '../../App';
+import { UserID } from '../../App';
 let FixeduserList;
 let uid;
-const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false, transports: ['websocket']});
+const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
 const Notifications = () => {
-    const port=useContext(PortNo);
-    const [userId, setUserId] = useState();
+    const userId=useContext(UserID);
     const navigate = useNavigate();
     const [change, setChange] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -33,17 +32,18 @@ const Notifications = () => {
     useEffect(()=>{       
         socket.connect();
         setWidth();
-        getID();
+        if(userId)
+        getAllNotifications(userId);
         socket.emit('AddRoom');
         return () => {
            socket.disconnect();
         };
-    },[])
+    },[userId])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
-            console.log('Message from server:', message+" ->"+uid);
-            if(message==uid){
+            console.log('Message from server:', message+" ->"+userId);
+            if(message==userId){
                 console.log("hii")
                 getAllNotifications(message);
             }
@@ -76,21 +76,6 @@ const Notifications = () => {
         //  console.log(FixeduserList);
         setUsers(users);
         //  console.log(users)
-    }
-
-    const getID = async () => {
-        const res = await fetch("/getID", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-
-        const data = await res.json();
-        console.log(data.cookies)
-        setUserId(data.cookies.uniqueId)
-        uid=data.cookies.uniqueId
-        getAllNotifications(data.cookies.uniqueId);
     }
 
 //Accepted Notifications

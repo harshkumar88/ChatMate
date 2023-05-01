@@ -1,37 +1,37 @@
 import React,{useEffect,useState} from 'react'
 import './Main.css'
-
-
+import io from 'socket.io-client'
+const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
 let data=[{Data:["hi how are youaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","i am fineaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","aur btao","bs yaar kuch nhi aap Btao",
 "kya kar rahe the","aapko yaad aur kya","ok Nice","Kya hua kuch nhi","Chlo Bye","Bye Gn"],Day:"Yesterday"},{Data:["hi how are youaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","i am fineaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","aur btao","bs yaar kuch nhi aap Btao",
 "kya kar rahe the","aapko yaad aur kya","ok Nice","Kya hua kuch nhi","Chlo Bye","Bye","ok"],Day:"Today"}];
-const Display = ({change}) => {
+const Display = ({change,userId,FriendId}) => {
   const [arr,setData]=useState(data);
-  const [text,setText]=useState();
-  
+  const [text,setText]=useState("");
+
   useEffect(()=>{
-    let objDiv = document.getElementById("scrollDiv");
+     let objDiv = document.getElementById("scrollDiv");
      objDiv.scrollTop = objDiv.scrollHeight;
+     socket.connect();
+    console.log("connet")
+    socket.emit('AddRoom');
+    return () => {
+       socket.disconnect();
+    };
   },[])
+
   const sendMsg=(e)=>{
     e.preventDefault();
-    
-    if(text=='')return;
-    let info=[];
-    for(let i  of arr){
-      if(i.Day!="Today")info.push(i);
-      else{
-        let newInfo=[...i.Data,text];
-        let newDoc={Data:newInfo,Day:"Today"};
-        info.push(newDoc)
-      }
-    }
+    //sending info to backenf
+    socket.emit("msgInfo",{text,userId,FriendId});
     setText("");
-    setData(info);
 
       let objDiv = document.getElementById("scrollDiv");
-     objDiv.scrollTop = objDiv.scrollHeight;
+      objDiv.scrollTop = objDiv.scrollHeight;
   }
+
+
+
   return (
     
     <div className='flex-grow-1 border-top scroll mb-5' id="scrollDiv">

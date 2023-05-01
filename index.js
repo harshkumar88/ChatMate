@@ -37,6 +37,16 @@ io.on("connection",(socket)=>{
        console.log("user with id"+socket.id+ "send request to "+id);
        socket.to("Chat").emit("NotificationSent",id)
   })  
+  socket.on("userDetails",(data)=>{
+    console.log("hii agya")
+     socket.to("Chat").emit("getuserDetails",data);
+  })
+
+  socket.on("msgInfo",(ele)=>{
+     socket.to("Chat").emit("getMessage",ele,()=>{
+      console.log("sendMsg")
+     });
+  })
   socket.on("disconnect",()=>{
     console.log("user disconnected")
   })
