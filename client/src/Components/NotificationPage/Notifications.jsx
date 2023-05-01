@@ -10,7 +10,7 @@ import icon from './Images/icon.png'
 import { UserID } from '../../App';
 let FixeduserList;
 let uid;
-const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false, transports: ['websocket']});
+const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
 const Notifications = () => {
     const userId=useContext(UserID);
     const navigate = useNavigate();
@@ -32,17 +32,18 @@ const Notifications = () => {
     useEffect(()=>{       
         socket.connect();
         setWidth();
-        getAllNotifications(UserID);
+        if(userId)
+        getAllNotifications(userId);
         socket.emit('AddRoom');
         return () => {
            socket.disconnect();
         };
-    },[])
+    },[userId])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
-            console.log('Message from server:', message+" ->"+uid);
-            if(message==uid){
+            console.log('Message from server:', message+" ->"+userId);
+            if(message==userId){
                 console.log("hii")
                 getAllNotifications(message);
             }

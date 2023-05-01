@@ -6,11 +6,11 @@ import io from 'socket.io-client'
 import './Adduser.css'
 import icon from './Images/icon.png'
 import { UserID } from '../../../App';
-import { SocketIO } from '../../../App';
 let FixeduserList;
+let uid;
+const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
 const Adduser = () => {
-    const userId=useContext(UserID);
-    const socket=useContext(SocketIO);
+    const userId=useContext(userId);
     const navigate = useNavigate();
     const [change, setChange] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -30,9 +30,14 @@ const Adduser = () => {
 
     
     useEffect(()=>{
+        socket.connect();
         setWidth();
         if(userId)
         getAllUsers(userId);
+        socket.emit('AddRoom');
+        return () => {
+           socket.disconnect();
+        };
     },[userId])
 
     useEffect(()=>{

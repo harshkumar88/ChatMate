@@ -2,12 +2,13 @@ import React, { useEffect, useState,useContext } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom';
 import img from '../AddCreate/Images/icon.png'
 import '../../NotificationPage/Notifications'
+import io from 'socket.io-client'
 import { UserID } from '../../../App';
-import { SocketIO } from '../../../App';
-
+let uid;
+//'https://chatmate-backend.onrender.com'
+const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
 const Users = ({ check}) => {
     const userId=useContext(UserID);
-    const socket=useContext(SocketIO);
     const navigate=useNavigate();
     const [change, setChange] = useState(false);
     const [userlist,setList]=useState([]);
@@ -31,14 +32,19 @@ const Users = ({ check}) => {
      }
    
     useEffect(() => {
+        socket.connect();
         if(userId)
         getFriends(userId);
+        socket.emit('AddRoom');
+        return () => {
+           socket.disconnect();
+        };
     },[userId])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
-            console.log('Message from server:', message+" ->"+userId);
-            if(message==userId){
+            console.log('Message from server:', message+" ->"+uid);
+            if(message==uid){
                 console.log("hii")
                 getFriends(message);
             }
@@ -56,6 +62,7 @@ const Users = ({ check}) => {
         if(change==true){
             navigate("/Chatting",{change:check})
         }
+        
         socket.emit("userDetails",ele);
 
     }

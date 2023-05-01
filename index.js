@@ -41,6 +41,12 @@ io.on("connection",(socket)=>{
     console.log("hii agya")
      socket.to("Chat").emit("getuserDetails",data);
   })
+
+  socket.on("msgInfo",(ele)=>{
+     socket.to("Chat").emit("getMessage",ele,()=>{
+      console.log("sendMsg")
+     });
+  })
   socket.on("disconnect",()=>{
     console.log("user disconnected")
   })
