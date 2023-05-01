@@ -20,6 +20,7 @@ function App() {
     })
 
     const data = await res.json();
+    sessionStorage.setItem("userId",data.cookies.uniqueId)
     setId(data.cookies.uniqueId);
 }
     useEffect(()=>{

@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 router.use(bp.json());
 router.use(bp.urlencoded({ extended: true }));
 require("./database.js");
-const { Register, FriendList, NotificationRecieve,NotificationSent } = require("./Collections.js")
+const { Register, FriendList, NotificationRecieve,NotificationSent,Chats } = require("./Collections.js")
 const cookieParser = require('cookie-parser');
 const cors=require("cors");
 router.use(cookieParser());
@@ -410,5 +410,38 @@ router.post("/getFriends",async(req,res)=>{
     }
    
 })
+
+
+router.post("/saveMsg",async(req,res)=>{
+
+    try{
+        const {data}=req.body       
+        const {userId,FriendId}=data;
+       
+        const getChat=await Chats.findOne({userId:userId,friendId:FriendId});
+        let chats=[];
+      
+      
+        if(getChat){
+            chats=getChat.chats;
+            const DeleteChat=await Chats.findOneAndDelete({userId:userId,friendId:FriendId});
+        }
+        chats.push(data);
+        const saveChat=new Chats({
+             userId:userId,
+             friendId:FriendId,
+             chats:chats
+        })
+        const datasave=await saveChat.save();
+        console.log(datasave);
+        return res.status(201).json({msg:datasave});
+    }     
+    catch(e){
+        return res.send("error");
+    }
+   
+})
+
+
 
 module.exports = router;

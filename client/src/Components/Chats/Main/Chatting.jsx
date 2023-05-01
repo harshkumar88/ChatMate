@@ -5,8 +5,8 @@ import io from 'socket.io-client'
 import './Main.css'
 import { UserID } from '../../../App'
 const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
+const userId=sessionStorage.getItem("userId")
 const Chatting = ({change}) => { 
-  const userId=useContext(UserID)
   const [userDetails,setDetails]=useState({username:"harsh",pic:""});
   useEffect(() => {
     socket.connect();
@@ -17,17 +17,36 @@ const Chatting = ({change}) => {
     };
 },[])
 
-const saveMsg=async()=>{
+const saveMsg=async(data)=>{
      
+  const res = await fetch("/saveMsg", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+          data
+    })
+});
+
+const info=await res.json();
+console.log(info.msg)
 }
 
 useEffect(()=>{
     socket.on("getuserDetails",(data)=>{
-      setDetails(data)
-      // console.log("chatting",data)
+      if(data.userId==userId)
+              setDetails(data)
+      //  onsole.log("chatting",data)
     })
     socket.on("getMessage",(data)=>{
-      if(data.userId==userId || data.FriendId==userDetails.username){
+      if(data.userId==userId){
+         saveMsg(data);
+      }
+      if(data.FriendId==userId){
+         const uid=data.userId;
+         data.userId=data.FriendId;
+         data.FriendId=uid;
          saveMsg(data);
       }
       console.log(data)

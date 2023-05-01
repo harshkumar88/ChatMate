@@ -7,8 +7,9 @@ import { UserID } from '../../../App';
 let uid;
 //'https://chatmate-backend.onrender.com'
 const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
+const userId=sessionStorage.getItem("userId")
 const Users = ({ check}) => {
-    const userId=useContext(UserID);
+   
     const navigate=useNavigate();
     const [change, setChange] = useState(false);
     const [userlist,setList]=useState([]);
@@ -62,8 +63,8 @@ const Users = ({ check}) => {
         if(change==true){
             navigate("/Chatting",{change:check})
         }
-        
-        socket.emit("userDetails",ele);
+        ele.userId=userId
+        socket.emit("userDetails",ele)
 
     }
     

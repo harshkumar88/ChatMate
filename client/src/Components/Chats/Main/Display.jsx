@@ -22,7 +22,7 @@ const Display = ({change,userId,FriendId}) => {
 
   const sendMsg=(e)=>{
     e.preventDefault();
-    //sending info to backend
+    //sending info to backenf
     socket.emit("msgInfo",{text,userId,FriendId});
     setText("");
 

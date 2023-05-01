@@ -9,8 +9,8 @@ import { UserID } from '../../../App';
 let FixeduserList;
 let uid;
 const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
+const userId=sessionStorage.getItem("userId")
 const Adduser = () => {
-    const userId=useContext(userId);
     const navigate = useNavigate();
     const [change, setChange] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -32,13 +32,12 @@ const Adduser = () => {
     useEffect(()=>{
         socket.connect();
         setWidth();
-        if(userId)
         getAllUsers(userId);
         socket.emit('AddRoom');
         return () => {
            socket.disconnect();
         };
-    },[userId])
+    },[])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
