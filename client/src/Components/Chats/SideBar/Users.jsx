@@ -40,7 +40,7 @@ const Users = ({ check}) => {
         return () => {
            socket.disconnect();
         };
-    },[userId])
+    },[])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
