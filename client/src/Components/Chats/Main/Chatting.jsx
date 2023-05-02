@@ -56,14 +56,12 @@ setCheck(false);
 
 useEffect(()=>{
     socket.on("getuserDetails",(data)=>{
-      console.log("getUser",data)
       if(data.userId==userId){
             setDetails(data)
             getMsg(userId,data.username)
       }
      })
     socket.on("getMessage",(data)=>{
-      console.log("getMsg",data)
       if(data.sender==userId){
          saveMsg(data,{uid:data.sender,Fid:data.reciever});
          saveMsg(data,{uid:data.reciever,Fid:data.sender});
@@ -76,7 +74,7 @@ useEffect(()=>{
    
   return (
     <div className={change==false?'bg-light w-75 heightMIn':'bg-light w-100 heightMIn'}>
-    <Info userdata={userDetails}/>
+    <Info/>
     <div className='d-flex flex-column justify-content-between heightDisplay'>
     <Display change={change} userId={userId} FriendId={userDetails.username} arr={chats} check={check}/>
     </div>

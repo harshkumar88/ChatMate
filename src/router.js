@@ -84,13 +84,13 @@ router.post("/LoginData", async (req, res) => {
                         let token = await finduser.generateAuthToken();
                        const uniqueId=finduser.username;
                         res.cookie("jwt", {token,uniqueId}, {
-                            expires: new Date(Date.now() + 50000000000000),
+                            expires: new Date(Date.now() + 60000),
                             httpOnly: true
                         });
         
                         
 
-                        return res.status(201).json({ message: "Success" });
+                        return res.status(201).json({ message: "Success",userId:uniqueId});
                     }
                     else {
                         return res.status(422).json({ error: "notAuthorize" });

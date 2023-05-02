@@ -44,6 +44,7 @@ const Login = () => {
            
         }
         else{
+            sessionStorage.setItem("userId",data.userId)
             Swal.fire({
                 position: 'center',
                 icon: 'success',

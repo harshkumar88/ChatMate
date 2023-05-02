@@ -1,6 +1,25 @@
-import React from 'react'
+import React, { useEffect,useState} from 'react'
+import io from 'socket.io-client'
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
+const userId=sessionStorage.getItem("userId");
+const Info = () => {
+    const [userdata,setDetails]=useState({username:"harsh",pic:""});
+    useEffect(() => {
+        socket.connect();
+        console.log("connet")
+        socket.emit('AddRoom');
+        return () => {
+            socket.disconnect();
+          };
+    },[])
 
-const Info = ({userdata}) => {
+    useEffect(()=>{
+        socket.on("getuserDetails",(data)=>{
+            if(data.userId==userId){
+                  setDetails(data)
+            }
+           })
+    })
     return (
         <div className='p-3 mx-2 d-flex justify-content-between'>
             <div className="d-flex">
