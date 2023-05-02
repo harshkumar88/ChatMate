@@ -38,7 +38,7 @@ const Notifications = () => {
         return () => {
            socket.disconnect();
         };
-    },[userId])
+    },[])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
