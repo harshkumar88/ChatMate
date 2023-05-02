@@ -7,6 +7,7 @@ import { UserID } from '../../../App'
 const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
 const userId=sessionStorage.getItem("userId");
 let arr=[];
+let userdata={username:"harsh",pic:""};
 const Chatting = ({change}) => { 
   const [userDetails,setDetails]=useState({username:"harsh",pic:""});
   const [chats,setChats]=useState([]);
@@ -20,7 +21,7 @@ const Chatting = ({change}) => {
       };
 },[])
 
-const saveMsg=async(data,Info)=>{
+const saveMsg1=async(data,Info)=>{
     //  console.log(data)
   const res = await fetch("/saveMsg", {
     method: "POST",
@@ -37,8 +38,26 @@ const info=await res.json();
 getMsg(data.sender,data.reciever);
 }
 
+
+const saveMsg2=async(data,Info)=>{
+  //  console.log(data)
+const res = await fetch("/saveMsg", {
+  method: "POST",
+  headers: {
+      "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+        data,Info
+  })
+});
+
+const info=await res.json();
+// console.log(info.msg)
+  return info;
+}
+
 const getMsg=async(sender,reciever)=>{
-         
+        console.log(sender,reciever)
   const res = await fetch("getChat", {
     method: "POST",
     headers: {
@@ -58,24 +77,31 @@ setCheck(false);
 useEffect(()=>{
     socket.on("getuserDetails",(data)=>{
       if(data.userId==userId){
-            setDetails(data)
-            getMsg(userId,data.username)
-      }
+        userdata=data
+          setDetails(data)
+          getMsg(userId,data.username)
+    }
+     
      })
-    socket.on("getMessage",(data)=>{
+    socket.on("getMessage",async(data)=>{
       if(data.sender==userId){
-         saveMsg(data,{uid:data.sender,Fid:data.reciever});
-         saveMsg(data,{uid:data.reciever,Fid:data.sender});
+         saveMsg1(data,{uid:data.sender,Fid:data.reciever});
+         const res=await saveMsg2(data,{uid:data.reciever,Fid:data.sender});
+         if(res){
+          console.log("chalgya")
+           getMsg(data.reciever,data.sender);
+         }
       }
-      if(data.reciever==userId){
-            getMsg(data.reciever,data.sender);
-      }
+      // if(data.reciever==userId){
+      //   getMsg(data.reciever,data.sender);
+      //  }
+      
     })
 },[socket])
    
   return (
     <div className={change==false?'bg-light w-75 heightMIn':'bg-light w-100 heightMIn'}>
-    <Info/>
+    <Info userdata={userdata}/>
     <div className='d-flex flex-column justify-content-between heightDisplay'>
     <Display change={change} userId={userId} FriendId={userDetails.username} arr={arr} check={check}/>
     </div>
