@@ -442,5 +442,22 @@ router.post("/saveMsg",async(req,res)=>{
    
 })
 
+router.post("/getChat",async(req,res)=>{
+
+    try{
+        const {sender,reciever} =req.body;
+       
+        const getChat=await Chats.findOne({userId:sender,friendId:reciever});
+        if(getChat)
+        return res.status(201).json({msg:getChat.chats});
+
+        return res.status(201).json({msg:[]});
+    }     
+    catch(e){
+        return res.send("error");
+    }
+   
+})
+
 
 module.exports = router;

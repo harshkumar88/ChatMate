@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Info = ({userdata}) => {
-
     return (
         <div className='p-3 mx-2 d-flex justify-content-between'>
             <div className="d-flex">
