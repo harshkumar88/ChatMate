@@ -427,9 +427,9 @@ router.post("/saveMsg",async(req,res)=>{
             const DeleteChat=await Chats.findOneAndDelete({userId:userId,friendId:FriendId});
         }
        
-        if(chats[chats.length-1].counter!=data.counter)
-        chats.push(data);
-        
+        if(chats.length==0 || chats[chats.length-1].counter!=data.counter)
+           chats.push(data);
+
         const saveChat=new Chats({
              userId:userId,
              friendId:FriendId,
