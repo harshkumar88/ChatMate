@@ -52,8 +52,7 @@ const res = await fetch("/saveMsg", {
 });
 
 const info=await res.json();
-// console.log(info.msg)
-  return info;
+getMsg(Info.uid,Info.Fid);
 }
 
 const getMsg=async(sender,reciever)=>{
@@ -86,15 +85,11 @@ useEffect(()=>{
     socket.on("getMessage",async(data)=>{
       if(data.sender==userId){
          saveMsg1(data,{uid:data.sender,Fid:data.reciever});
-         const res=await saveMsg2(data,{uid:data.reciever,Fid:data.sender});
-         if(res){
-          console.log("chalgya")
-           getMsg(data.reciever,data.sender);
-         }
       }
-      // if(data.reciever==userId){
-      //   getMsg(data.reciever,data.sender);
-      //  }
+      if(data.reciever==userId){
+        console.log("hiii")
+        saveMsg2(data,{uid:data.reciever,Fid:data.sender});
+       }
       
     })
 },[socket])
