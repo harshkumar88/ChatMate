@@ -155,7 +155,6 @@ const Rejected=async(Id)=>{
                         {/* <div className='mx-auto w-100 text-center bg-light p-1' style={{ zIndex: 2 }}><input className='form-control w-75 mx-auto' placeholder='Search User' onChange={(e) => changeUserList(e.target.value)} /></div> */}
                         {loading==false?<div style={{ height: "auto", maxHeight: "400px", overflow: "scroll" }} >
                             {users.length>0?users.map((ele, id) => {
-                                 console.log(ele)
                                 return (
                                     <div className='d-flex mt-3 bg-light p-3' key={id} style={{ cursor: 'pointer' }}>
                                         <div className='setImage ms-2'>

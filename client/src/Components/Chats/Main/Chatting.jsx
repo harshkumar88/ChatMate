@@ -55,6 +55,23 @@ const info=await res.json();
 getMsg(Info.uid,Info.Fid);
 }
 
+
+
+const saveMsg3=async(data,Info)=>{
+  //  console.log(data)
+const res = await fetch("/saveMsg", {
+  method: "POST",
+  headers: {
+      "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+        data,Info
+  })
+});
+
+const info=await res.json();
+}
+
 const getMsg=async(sender,reciever)=>{
         console.log(sender,reciever)
   const res = await fetch("getChat", {
@@ -85,6 +102,7 @@ useEffect(()=>{
     socket.on("getMessage",async(data)=>{
       if(data.sender==userId){
          saveMsg1(data,{uid:data.sender,Fid:data.reciever});
+         saveMsg3(data,{uid:data.reciever,Fid:data.sender});
       }
       if(data.reciever==userId){
         console.log("hiii")
