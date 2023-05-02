@@ -41,9 +41,10 @@ useEffect(()=>{
     socket.on("getMessage",(data)=>{
       if(data.userId==userId){
          saveMsg(data,{uid:data.userId,Fid:data.FriendId});
+         saveMsg({...data,uid:data.FriendId,Fid:data.userId});
       }
       if(data.FriendId==userId){
-         saveMsg({...data,uid:data.FriendId,Fid:data.userId});
+            
       }
       console.log(data)
     })
