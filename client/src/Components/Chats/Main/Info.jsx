@@ -4,6 +4,7 @@ const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,tran
 const userId=sessionStorage.getItem("userId");
 const Info = () => {
     const [userdata,setDetails]=useState({username:"harsh",pic:""});
+    
     useEffect(() => {
         socket.connect();
         console.log("connet")
@@ -15,11 +16,12 @@ const Info = () => {
 
     useEffect(()=>{
         socket.on("getuserDetails",(data)=>{
+            console.log(data)
             if(data.userId==userId){
                   setDetails(data)
             }
            })
-    })
+    },[socket])
     return (
         <div className='p-3 mx-2 d-flex justify-content-between'>
             <div className="d-flex">
