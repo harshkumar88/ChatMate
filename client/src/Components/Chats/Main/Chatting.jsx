@@ -36,24 +36,25 @@ const saveMsg1=async(data,Info)=>{
 const info=await res.json();
 // console.log(info.msg)
 getMsg(data.sender,data.reciever);
+return info;
 }
 
 
-const saveMsg2=async(data,Info)=>{
-  //  console.log(data)
-const res = await fetch("/saveMsg", {
-  method: "POST",
-  headers: {
-      "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-        data,Info
-  })
-});
+// const saveMsg2=async(data,Info)=>{
+//   //  console.log(data)
+// const res = await fetch("/saveMsg", {
+//   method: "POST",
+//   headers: {
+//       "Content-Type": "application/json"
+//   },
+//   body: JSON.stringify({
+//         data,Info
+//   })
+// });
 
-const info=await res.json();
-getMsg(Info.uid,Info.Fid);
-}
+// const info=await res.json();
+// getMsg(Info.uid,Info.Fid);
+// }
 
 
 
@@ -70,6 +71,7 @@ const res = await fetch("/saveMsg", {
 });
 
 const info=await res.json();
+return info;
 }
 
 const getMsg=async(sender,reciever)=>{
@@ -100,13 +102,16 @@ useEffect(()=>{
      
      })
     socket.on("getMessage",async(data)=>{
+      let resp;
       if(data.sender==userId){
-         saveMsg1(data,{uid:data.sender,Fid:data.reciever});
-         saveMsg3(data,{uid:data.reciever,Fid:data.sender});
+         const res=await saveMsg1(data,{uid:data.sender,Fid:data.reciever});
+         if(res)
+             resp=await saveMsg3(data,{uid:data.reciever,Fid:data.sender});
       }
       if(data.reciever==userId){
         console.log("hiii")
-        saveMsg2(data,{uid:data.reciever,Fid:data.sender});
+        if(resp)
+           getMsg(data.reciever,data.sender);
        }
       
     })
