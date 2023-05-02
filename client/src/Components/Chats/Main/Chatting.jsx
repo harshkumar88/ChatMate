@@ -15,7 +15,9 @@ const Chatting = ({change}) => {
     socket.connect();
     console.log("connet")
     socket.emit('AddRoom');
-    
+    return () => {
+           socket.disconnect();
+        };
 },[])
 
 const saveMsg=async(data,Info)=>{
@@ -54,9 +56,10 @@ setCheck(false);
 
 useEffect(()=>{
     socket.on("getuserDetails",(data)=>{
-      if(data.userId==userId)
+      if(data.userId==userId){
             setDetails(data)
             getMsg(userId,data.username)
+      }
      })
     socket.on("getMessage",(data)=>{
       if(data.sender==userId){

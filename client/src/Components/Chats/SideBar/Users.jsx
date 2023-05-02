@@ -34,12 +34,13 @@ const Users = ({ check}) => {
    
     useEffect(() => {
         socket.connect();
+        if(userId)
         getFriends(userId);
         socket.emit('AddRoom');
         return () => {
            socket.disconnect();
         };
-    },[])
+    },[userId])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
