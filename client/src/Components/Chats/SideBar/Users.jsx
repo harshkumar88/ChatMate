@@ -6,7 +6,7 @@ import io from 'socket.io-client'
 import { UserID } from '../../../App';
 let uid;
 //'https://chatmate-backend.onrender.com'
-const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
 const userId=sessionStorage.getItem("userId")
 const Users = ({ check}) => {
    
