@@ -10,7 +10,7 @@ import icon from './Images/icon.png'
 import { UserID } from '../../App';
 let FixeduserList;
 let uid;
-const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
 const Notifications = () => {
     const userId=useContext(UserID);
     const navigate = useNavigate();

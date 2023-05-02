@@ -415,12 +415,12 @@ router.post("/getFriends",async(req,res)=>{
 router.post("/saveMsg",async(req,res)=>{
 
     try{
-        const {data}=req.body       
-        const {userId,FriendId}=data;
+        const {data,Info} =req.body;
+        const userId=Info.uid
+        const FriendId=Info.Fid 
        
         const getChat=await Chats.findOne({userId:userId,friendId:FriendId});
         let chats=[];
-      
       
         if(getChat){
             chats=getChat.chats;
@@ -441,7 +441,6 @@ router.post("/saveMsg",async(req,res)=>{
     }
    
 })
-
 
 
 module.exports = router;

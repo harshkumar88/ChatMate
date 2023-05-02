@@ -4,7 +4,7 @@ import Info from './Info'
 import io from 'socket.io-client'
 import './Main.css'
 import { UserID } from '../../../App'
-const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
 const userId=sessionStorage.getItem("userId")
 const Chatting = ({change}) => { 
   const [userDetails,setDetails]=useState({username:"harsh",pic:""});
@@ -17,15 +17,15 @@ const Chatting = ({change}) => {
     };
 },[])
 
-const saveMsg=async(data)=>{
-     
+const saveMsg=async(data,Info)=>{
+    //  console.log(data)
   const res = await fetch("/saveMsg", {
     method: "POST",
     headers: {
         "Content-Type": "application/json"
     },
     body: JSON.stringify({
-          data
+          data,Info
     })
 });
 
@@ -36,18 +36,14 @@ console.log(info.msg)
 useEffect(()=>{
     socket.on("getuserDetails",(data)=>{
       if(data.userId==userId)
-              setDetails(data)
-      //  onsole.log("chatting",data)
+            setDetails(data)
     })
     socket.on("getMessage",(data)=>{
       if(data.userId==userId){
-         saveMsg(data);
+         saveMsg(data,{uid:data.userId,Fid:data.FriendId});
       }
       if(data.FriendId==userId){
-         const uid=data.userId;
-         data.userId=data.FriendId;
-         data.FriendId=uid;
-         saveMsg(data);
+         saveMsg({...data,uid:data.FriendId,Fid:data.userId});
       }
       console.log(data)
     })
