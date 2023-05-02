@@ -50,6 +50,7 @@ const getMsg=async(sender,reciever)=>{
 });
 
 const info=await res.json();
+arr=info.msg
 setChats(info.msg);
 setCheck(false);
 }
@@ -76,7 +77,7 @@ useEffect(()=>{
     <div className={change==false?'bg-light w-75 heightMIn':'bg-light w-100 heightMIn'}>
     <Info/>
     <div className='d-flex flex-column justify-content-between heightDisplay'>
-    <Display change={change} userId={userId} FriendId={userDetails.username} arr={chats} check={check}/>
+    <Display change={change} userId={userId} FriendId={userDetails.username} arr={arr} check={check}/>
     </div>
     </div>
   )

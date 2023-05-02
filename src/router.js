@@ -84,7 +84,7 @@ router.post("/LoginData", async (req, res) => {
                         let token = await finduser.generateAuthToken();
                        const uniqueId=finduser.username;
                         res.cookie("jwt", {token,uniqueId}, {
-                            expires: new Date(Date.now() + 60000),
+                            expires: new Date(Date.now() + 60000000000),
                             httpOnly: true
                         });
         
