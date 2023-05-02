@@ -11,8 +11,8 @@ import { UserID } from '../../App';
 let FixeduserList;
 let uid;
 const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
+const userId=sessionStorage.getItem("userId")
 const Notifications = () => {
-    const userId=useContext(UserID);
     const navigate = useNavigate();
     const [change, setChange] = useState(false);
     const [loading, setLoading] = useState(true);
