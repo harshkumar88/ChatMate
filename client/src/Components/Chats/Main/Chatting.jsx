@@ -17,7 +17,7 @@ const Chatting = ({change}) => {
     socket.emit('AddRoom');
     return () => {
            socket.disconnect();
-        };
+      };
 },[])
 
 const saveMsg=async(data,Info)=>{
@@ -74,7 +74,7 @@ useEffect(()=>{
    
   return (
     <div className={change==false?'bg-light w-75 heightMIn':'bg-light w-100 heightMIn'}>
-    <Info userdata={userDetails}/>
+    <Info/>
     <div className='d-flex flex-column justify-content-between heightDisplay'>
     <Display change={change} userId={userId} FriendId={userDetails.username} arr={chats} check={check}/>
     </div>

@@ -4,7 +4,8 @@ import {io} from 'socket.io-client'
 import './Home.css'
 
 const Home = () => {
-  
+    let check=false;
+    let info;
     const navigate=useNavigate();
     const [Chat,setChat]=useState({
         C:"",
@@ -42,7 +43,7 @@ const Home = () => {
                 clearInterval(cls);
                 makeEffect2();
             }
-        },500);
+        },300);
         
     }
 
@@ -70,7 +71,7 @@ const Home = () => {
                clearInterval(cls);
                makeBlink();
            }
-       },500);
+       },300);
        
    }
 
@@ -87,15 +88,37 @@ const Home = () => {
 
           if(i==10){
             clearInterval(set);
-            setTimeout(()=>{
-                navigate("/Form")
-          },1000)
-           
+            checkLink();
           }
-       },300);
+       },200);
    }
+
+   const checkLink=()=>{
+     if(check){
+        sessionStorage.setItem("userId",info.cookies.uniqueId)
+        navigate("/Chat")
+     }
+     else{
+        navigate("/Form")
+     }
+   }
+
+  const getID = async () => {
+    const res = await fetch("/getID", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+
+    const data = await res.json();
+    if(data.cookies){
+        check=true;
+        info=data;
+    }
+}
     useEffect(()=>{
-          // handle events sent from the server
+        getID();
         makeEffect();
     },[])
     return (

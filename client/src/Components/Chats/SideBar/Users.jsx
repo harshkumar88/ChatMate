@@ -7,9 +7,9 @@ import { UserID } from '../../../App';
 let uid;
 //'https://chatmate-backend.onrender.com'
 const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
-const userId=sessionStorage.getItem("userId")
+
 const Users = ({ check}) => {
-   
+    const userId=sessionStorage.getItem("userId")
     const navigate=useNavigate();
     const [change, setChange] = useState(false);
     const [userlist,setList]=useState([]);
@@ -40,7 +40,7 @@ const Users = ({ check}) => {
         return () => {
            socket.disconnect();
         };
-    },[userId])
+    },[])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
