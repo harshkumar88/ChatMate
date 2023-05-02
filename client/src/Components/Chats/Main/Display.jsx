@@ -5,7 +5,7 @@ const socket = io('https://chatmate-backend.onrender.com', { autoConnect: false,
 
 let len=0;
 const Display = ({ change, userId, FriendId, arr,check}) => {
-
+  let counter=arr.length+1;
   const [text, setText] = useState("");
   const [loader,setLoader]=useState(true);
   const [msg,setmsg]=useState(false);
@@ -36,7 +36,7 @@ const Display = ({ change, userId, FriendId, arr,check}) => {
    setmsg(true)
     e.preventDefault();
     //sending info to backenf
-    socket.emit("msgInfo", { text, sender: userId, reciever: FriendId });
+    socket.emit("msgInfo", { text, sender: userId, reciever: FriendId,counter});
     setText("");
 
     let objDiv = document.getElementById("scrollDiv");
