@@ -8,24 +8,26 @@ import Adduser from "./Components/Chats/AddCreate/Adduser.js";
 import Home from "./Components/HomePage/Home.jsx";
 import Notifications from "./Components/NotificationPage/Notifications.jsx";
 //Given All Routes here"
-export const PortNo=createContext();
+export const UserID=createContext();
 function App() {
-  const [port,setport]=useState();
-  const getPort=async()=>{
-    const res = await fetch("/getPort", {
+  const [userId,setId]=useState();
+  const getID = async () => {
+    const res = await fetch("/getID", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         }
-    });
-    const data=await res.json();
-    setport(data.port);
-  }
+    })
+
+    const data = await res.json();
+    sessionStorage.setItem("userId",data.cookies.uniqueId)
+    setId(data.cookies.uniqueId);
+}
     useEffect(()=>{
-         getPort();
+         getID();
     },[])
   return (
-    <PortNo.Provider value={port}>
+    <UserID.Provider value={userId}>
     <div>
     <Routes>
       <Route exact path="/" element={<Home/>}/>
@@ -37,7 +39,7 @@ function App() {
       <Route exact path='/Notifications' element={<Notifications/>}/>
     </Routes>
     </div>
-    </PortNo.Provider>
+    </UserID.Provider>
   );
 }
 

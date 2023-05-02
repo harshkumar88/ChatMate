@@ -64,6 +64,20 @@ const NotificationSentSchema=new mongoose.Schema({
     }
 })
 
+const ChatSchema=new mongoose.Schema({
+    userId:{
+        type:String,
+        unique:true
+    },
+    friendId:{
+        type:String,
+        unique:true
+    },
+    chats:{
+        type:Array
+    }
+})
+
 
 //generating token 
 RegisterSchema.methods.generateAuthToken= async function(){
@@ -82,7 +96,8 @@ const Register=mongoose.model("Register",RegisterSchema);
 const FriendList=mongoose.model("FriendList",FriendListSchema);
 const NotificationRecieve=mongoose.model("NotificationRecieve",NotificationRecieveSchema);
 const NotificationSent=mongoose.model("NotificationSent",NotificationSentSchema);
+const Chats=mongoose.model("Chats",ChatSchema);
 
 module.exports={
-    Register,FriendList,NotificationRecieve,NotificationSent
+    Register,FriendList,NotificationRecieve,NotificationSent,Chats
 };

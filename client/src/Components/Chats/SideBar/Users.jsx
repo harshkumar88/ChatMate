@@ -3,15 +3,16 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import img from '../AddCreate/Images/icon.png'
 import '../../NotificationPage/Notifications'
 import io from 'socket.io-client'
-import { PortNo } from '../../../App';
+import { UserID } from '../../../App';
 let uid;
+//'https://chatmate-backend.onrender.com'
 const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
+const userId=sessionStorage.getItem("userId")
 const Users = ({ check}) => {
-    const port=useContext(PortNo);
+   
     const navigate=useNavigate();
     const [change, setChange] = useState(false);
     const [userlist,setList]=useState([]);
-    const [userId,setUserId]=useState();
     const [loader,setLoader]=useState(true);
 
      const getFriends=async(Id)=>{
@@ -25,34 +26,21 @@ const Users = ({ check}) => {
                 userId: Id
             })
         });
-
         const data=await Friends.json();
         setLoader(false);
         console.log(data.Friends);
         setList(data.Friends)
      }
-    const getID = async () => {
-        const res = await fetch("/getID", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-
-        const data = await res.json();
-        setUserId(data.cookies.uniqueId)
-        uid=data.cookies.uniqueId
-        getFriends(data.cookies.uniqueId);
-    }
-
+   
     useEffect(() => {
         socket.connect();
-        getID();
+        if(userId)
+        getFriends(userId);
         socket.emit('AddRoom');
         return () => {
            socket.disconnect();
         };
-    },[])
+    },[userId])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
@@ -69,13 +57,15 @@ const Users = ({ check}) => {
 
     useEffect(() => {
         setChange(check);
-       
     },[check])
     
-    const showHideChat=()=>{
+    const showChat=(ele)=>{
         if(change==true){
             navigate("/Chatting",{change:check})
         }
+        ele.userId=userId
+        socket.emit("userDetails",ele)
+
     }
     
     return (
@@ -90,9 +80,8 @@ const Users = ({ check}) => {
             userlist.length==0?<div className='mt-5 text-center'><h1 >Your ChatMat <br/> is Empty</h1></div>:
             userlist.map((ele, id) => {
                 return (
-                    <div className={id!=0?'d-flex justify-content-between mt-3 pointer':'d-flex justify-content-between pointer'} key={id} onClick={showHideChat}>
+                    <div className={id!=0?'d-flex justify-content-between mt-3 pointer':'d-flex justify-content-between pointer'} key={id} onClick={()=>showChat(ele)}>
                         <div  className="d-flex">
-                             {console.log(ele.pic)}
                             <div style={ele.pic=="" || ele.pic==undefined?{backgroundImage: "url('https://img.icons8.com/ultraviolet/512/user.png')"}:{ backgroundImage: `url(${ele.pic})` }} className='setImage mr-3 mt-2'>
                             </div>
                             <div className=' mx-3'>
