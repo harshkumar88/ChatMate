@@ -4,24 +4,42 @@ import Info from './Info'
 import io from 'socket.io-client'
 import './Main.css'
 import { UserID } from '../../../App'
+import { useLocation } from 'react-router-dom'
 const socket=io('https://chatmate-backend.onrender.com',{autoConnect: true,transports: ['websocket']});
 const userId=sessionStorage.getItem("userId");
 let arr=[];
 let userdata={username:"harsh",pic:""};
-const Chatting = ({change}) => { 
+const Chatting = ({change,user}) => { 
  
   const [userDetails,setDetails]=useState({username:"harsh",pic:""});
   const [chats,setChats]=useState([]);
   const [check,setCheck]=useState(true);
   const [chatload,setLoad]=useState(false);
+  const location=useLocation();
   useEffect(() => {
-       socket.connect();
+    if(user){
+    userdata=user;
+    setDetails(user);
+    getMsg(userId,userdata.username)
+    }
+  
+
+    socket.connect();
     console.log("connet")
     socket.emit('AddRoom');
     return () => {
            socket.disconnect();
       };
 },[])
+
+useEffect(()=>{
+  if(location.state && location.state.data){
+    userdata=location.state.data;
+    setDetails(userdata)
+    getMsg(userId,userdata.username)
+  }
+ 
+},[location])
 
 const saveMsg1=async(data,Info)=>{
     //  console.log(data)
@@ -91,7 +109,7 @@ const getMsg=async(sender,reciever)=>{
 
 const info=await res.json();
 arr=info.msg
-setChats(info.msg);
+ setChats(info.msg);
 setCheck(false);
 setLoad(false)
 }
@@ -110,6 +128,9 @@ useEffect(()=>{
     socket.on("getMessage",async(data)=>{
       let resp;
       if(data.sender==userId){
+         arr.push(data);
+         setChats(arr);
+         console.log(arr)
          const res=await saveMsg1(data,{uid:data.sender,Fid:data.reciever});
          if(res)
              resp=await saveMsg3(data,{uid:data.reciever,Fid:data.sender});
@@ -122,6 +143,8 @@ useEffect(()=>{
       }
       else{
         if(data.reciever==userId){
+          arr.push(data);
+          setChats(arr);
           let resp=await saveMsg3(data,{uid:data.reciever,Fid:data.sender});
           console.log("hiii");
           if(resp)
