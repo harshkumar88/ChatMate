@@ -4,7 +4,7 @@ import io from 'socket.io-client'
 const socket = io('https://chatmate-backend.onrender.com', { autoConnect: false, transports: ['websocket'] });
 
 let len=0;
-const Display = ({ change, userId, FriendId, arr,check}) => {
+const Display = ({ change, userId, FriendId, arr,check,chatload}) => {
   let counter=arr.length+1;
   const [text, setText] = useState("");
   const [loader,setLoader]=useState(true);
@@ -46,7 +46,8 @@ const Display = ({ change, userId, FriendId, arr,check}) => {
 
 
   return (
-
+    <div className='flex-grow-1 border-top scroll mb-5'>
+     {chatload==true?<div className='chatLoad d-flex justify-content-center align-items-center'><div className='mt-5'>........</div></div>:
     <div className={loader==true?'flex-grow-1 border-top scroll mb-5 centerLoader':'flex-grow-1 border-top scroll mb-5'} id="scrollDiv">
     {loader==true?
     <div>
@@ -65,7 +66,7 @@ const Display = ({ change, userId, FriendId, arr,check}) => {
             </div>
           )
         })}
-        {msg==true?<p>Wait</p>:""}
+        {msg==true?<p className='ms-auto me-5 rightstyle'>...</p>:""}
       </div>
       }
       {/*SEnd Msg*/}
@@ -86,6 +87,7 @@ const Display = ({ change, userId, FriendId, arr,check}) => {
         </div>
       </div>
     </div>
+     }</div>
   )
 }
 

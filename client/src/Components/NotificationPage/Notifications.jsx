@@ -32,7 +32,6 @@ const Notifications = () => {
     useEffect(()=>{       
         socket.connect();
         setWidth();
-        if(userId)
         getAllNotifications(userId);
         socket.emit('AddRoom');
         return () => {
@@ -181,7 +180,7 @@ const Rejected=async(Id)=>{
                       </div>
                       </div>
                     }
-                        
+                    <div className='w-100 mb-1'><button style={{ width: "47%" }} onClick={()=>navigate("/Chat")}>Chat Page</button></div>
 
                     </div>
 
