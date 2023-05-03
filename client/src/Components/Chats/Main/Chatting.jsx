@@ -122,7 +122,9 @@ useEffect(()=>{
       }
       else{
         if(data.reciever==userId){
+          let resp=await saveMsg3(data,{uid:data.reciever,Fid:data.sender});
           console.log("hiii");
+          if(resp)
              getMsg(data.reciever,data.sender);
          }
       }
