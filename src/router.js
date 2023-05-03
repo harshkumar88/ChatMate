@@ -424,10 +424,13 @@ router.post("/saveMsg",async(req,res)=>{
       
         if(getChat){
             chats=getChat.chats;
+            if(chats.length>0 && chats[chats.length-1].counter==data.counter){
+                return res.status(201).json({msg:getChat});
+            }
             const DeleteChat=await Chats.findOneAndDelete({userId:userId,friendId:FriendId});
         }
        
-  
+        
         chats.push(data);
 
         const saveChat=new Chats({
