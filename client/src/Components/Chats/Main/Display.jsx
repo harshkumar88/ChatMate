@@ -83,9 +83,9 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
 
            {emoji == true ? <div className={change == false ? 'd-flex fixedPos3 mt-5 bg-light w-50 ms-5' : 'd-flex fixedPos4 mt-5 mb-2 bg-danger w-75 ms-5'}>
             <div className='ms-auto d-flex w-25 designEmoji flex-wrap'>
-              {emojiArr.map((ele)=>{
+              {emojiArr.map((ele,id)=>{
                   return (
-                    <div className='ms-3 pointerCursor' onClick={()=>setEmoji(ele)}  >{ele}</div>
+                    <div key ={id} className='ms-3 pointerCursor' onClick={()=>setEmoji(ele)}  >{ele}</div>
                   )
               })}
             </div>

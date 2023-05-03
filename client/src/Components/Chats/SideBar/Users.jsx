@@ -69,11 +69,13 @@ const Users = ({ check}) => {
             console.log("send hua")
         });
         if(change==true){
-            navigate("/Chatting",{change:check})
+            navigate("/Chatting",{
+                state:{data:ele}})
         }
-        else
-        navigate("/Chat",{usedata:ele})
-
+        else{
+        navigate("/Chat",{
+            state:{data:ele}})
+        }
     }
     
     return (
