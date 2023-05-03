@@ -75,10 +75,31 @@
     bottom: 0.3%;
     width: 95%;
 }
+
+.fixedPos3{
+  position: fixed;
+  bottom: 10%;
+  width: 65%;
+  z-index: 2;
+}
+
+.fixedPos4{
+  position: fixed;
+  bottom: 8%;
+  width: 95%;
+  z-index: 2;
+}
+
+.designEmoji{
+  background-color: rgb(165, 200, 200);
+  border-radius: 10px;
+}
 .heightSet{
     height: 40px;
 }
-
+.pointerCursor{
+  cursor: pointer;
+}
 
 .tooltiptxt{
     position: absolute;
