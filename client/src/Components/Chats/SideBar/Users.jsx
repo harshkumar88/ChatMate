@@ -62,14 +62,16 @@ const Users = ({ check}) => {
     },[check])
     
     const showChat=(ele)=>{
-        if(change==true){
-            navigate("/Chatting",{change:check})
-        }
+        
         ele.userId=userId
         sessionStorage.setItem("userData",ele);
         socket.emit("userDetails",ele,()=>{
             console.log("send hua")
         });
+        if(change==true){
+            navigate("/Chatting",{change:check})
+        }
+        else
         navigate("/Chat",{usedata:ele})
 
     }
