@@ -34,6 +34,9 @@ const Users = ({ check}) => {
    
     useEffect(() => {
         socket.connect();
+        
+         socket.on('connect', () => {
+      });
         if(userId)
         getFriends(userId);
         socket.emit('AddRoom');
@@ -50,9 +53,8 @@ const Users = ({ check}) => {
                 getFriends(message);
             }
           });
-          return () => {
-            socket.off('broadcast');
-          };
+
+          
     },[socket])
 
     useEffect(() => {
@@ -64,7 +66,11 @@ const Users = ({ check}) => {
             navigate("/Chatting",{change:check})
         }
         ele.userId=userId
-        socket.emit("userDetails",ele)
+        sessionStorage.setItem("userData",ele);
+        socket.emit("userDetails",ele,()=>{
+            console.log("send hua")
+        });
+        navigate("/Chat",{usedata:ele})
 
     }
     
