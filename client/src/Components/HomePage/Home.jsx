@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {io} from 'socket.io-client'
 import './Home.css'
+import { uId } from '../../App'
 
+let userId
 const Home = () => {
-  
+    const uid=useContext(uId);
+    if(uid){
+        userId=uid;
+    }
     const navigate=useNavigate();
     const [Chat,setChat]=useState({
         C:"",
@@ -42,7 +47,7 @@ const Home = () => {
                 clearInterval(cls);
                 makeEffect2();
             }
-        },500);
+        },300);
         
     }
 
@@ -70,7 +75,7 @@ const Home = () => {
                clearInterval(cls);
                makeBlink();
            }
-       },500);
+       },300);
        
    }
 
@@ -87,15 +92,18 @@ const Home = () => {
 
           if(i==10){
             clearInterval(set);
-            setTimeout(()=>{
+            console.log(userId)
+            if(!userId){
                 navigate("/Form")
-          },1000)
-           
+            }
+            else{
+                navigate('/Chat')
+            }
           }
-       },300);
+       },200);
    }
+
     useEffect(()=>{
-          // handle events sent from the server
         makeEffect();
     },[])
     return (

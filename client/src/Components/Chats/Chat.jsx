@@ -8,10 +8,10 @@ export  const uniqueId=createContext();
 
 
 const Chat = () => {
-
   const [change, setChange] = useState(false);
   const location = useLocation();
   const [userId,setUserId]=useState();
+  const [data,setData]=useState([]);
 
   const setWidth = () => {
     const w = window.innerWidth
@@ -40,6 +40,9 @@ const Chat = () => {
   }
 
   useEffect(() => {
+    if(location.state && location.state.data){
+      setData(location.state.data);
+    }
     setWidth();
     getID();
   }, [])
@@ -50,7 +53,7 @@ const Chat = () => {
       {change == false ?
         <div className='d-flex'>
           <SidebarChat change={change} />
-          <Chatting change={change} />
+          <Chatting change={change} user={data}/>
         </div>
         : <div><SidebarChat change={change} /></div>}
 

@@ -7,15 +7,15 @@ import './Notifications.css'
 import Swal from 'sweetalert2'
 import { uniqueId } from '../Authentication/Login'
 import icon from './Images/icon.png'
-import { UserID } from '../../App';
+import { UserID, uId } from '../../App';
 let FixeduserList;
-let uid;
-const socket=io('http://localhost:5000',{autoConnect: false,transports: ['websocket']});
+const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
+let userId;
 const Notifications = () => {
-    const userId=useContext(UserID);
     const navigate = useNavigate();
     const [change, setChange] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [user,setUid]=useState("");
 
     const [list, setlist] = useState([]);
     const [users, setUsers] = useState([]);
@@ -28,17 +28,37 @@ const Notifications = () => {
             setChange(false)
         }
     }
+
+    const getID = async () => {
+        const res = await fetch("/getID", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+     
+        const data = await res.json();
+        let check=false;
+        if(data.cookies){
+            check=true;
+        }
+     
+        if(check){
+            userId=data.cookies.uniqueId;
+            setUid(data.cookies.uniqueId);
+        }
+     }
        
     useEffect(()=>{       
+        getID();
         socket.connect();
         setWidth();
-        if(userId)
         getAllNotifications(userId);
         socket.emit('AddRoom');
         return () => {
            socket.disconnect();
         };
-    },[userId])
+    },[])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
@@ -155,7 +175,6 @@ const Rejected=async(Id)=>{
                         {/* <div className='mx-auto w-100 text-center bg-light p-1' style={{ zIndex: 2 }}><input className='form-control w-75 mx-auto' placeholder='Search User' onChange={(e) => changeUserList(e.target.value)} /></div> */}
                         {loading==false?<div style={{ height: "auto", maxHeight: "400px", overflow: "scroll" }} >
                             {users.length>0?users.map((ele, id) => {
-                                 console.log(ele)
                                 return (
                                     <div className='d-flex mt-3 bg-light p-3' key={id} style={{ cursor: 'pointer' }}>
                                         <div className='setImage ms-2'>
@@ -182,7 +201,7 @@ const Rejected=async(Id)=>{
                       </div>
                       </div>
                     }
-                        
+                    <div className='w-100 mb-1'><button style={{ width: "47%" }} onClick={()=>navigate("/Chat")}>Chat Page</button></div>
 
                     </div>
 

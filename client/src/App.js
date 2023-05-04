@@ -1,5 +1,5 @@
 import React,{useState,useEffect, createContext} from "react";
-import { Routes,Route } from "react-router-dom";
+import { Routes,Route,useNavigate } from "react-router-dom";
 import Chat from "./Components/Chats/Chat.jsx";
 import Chatting from "./Components/Chats/Main/Chatting.jsx";
 import Form from "./Components/Authentication/Form.js";
@@ -8,25 +8,34 @@ import Adduser from "./Components/Chats/AddCreate/Adduser.js";
 import Home from "./Components/HomePage/Home.jsx";
 import Notifications from "./Components/NotificationPage/Notifications.jsx";
 //Given All Routes here"
-export const UserID=createContext();
+export const uId=createContext();
 function App() {
-  const [userId,setId]=useState();
-  const getID = async () => {
-    const res = await fetch("/getID", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
+  let check=false;
+  const [userId,setuserId]=useState();
+  
+ const getID = async () => {
+   const res = await fetch("/getID", {
+       method: "POST",
+       headers: {
+           "Content-Type": "application/json"
+       }
+   })
 
-    const data = await res.json();
-    setId(data.cookies.uniqueId);
+   const data = await res.json();
+   if(data.cookies){
+       check=true;
+   }
+
+   if(check){
+       setuserId(data.cookies.uniqueId)
+   }
 }
-    useEffect(()=>{
-         getID();
-    },[])
+
+useEffect(()=>{
+   getID();
+},[])
   return (
-    <UserID.Provider value={userId}>
+    <uId.Provider value={userId}>
     <div>
     <Routes>
       <Route exact path="/" element={<Home/>}/>
@@ -38,7 +47,7 @@ function App() {
       <Route exact path='/Notifications' element={<Notifications/>}/>
     </Routes>
     </div>
-    </UserID.Provider>
+    </uId.Provider>
   );
 }
 
