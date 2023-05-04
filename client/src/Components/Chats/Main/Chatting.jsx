@@ -24,11 +24,12 @@ const saveMsg=async()=>{
 useEffect(()=>{
     socket.on("getuserDetails",(data)=>{
       setDetails(data)
-      // console.log("chatting",data)
+       console.log("chatting",data)
     })
     socket.on("getMessage",(data)=>{
       if(data.userId==userId || data.FriendId==userDetails.username){
-         saveMsg(data);
+         saveMsg(data); 
+         console.log("messgae recived")
       }
       console.log(data)
     })
