@@ -5,15 +5,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import io from 'socket.io-client'
 import './Adduser.css'
 import icon from './Images/icon.png'
-import { UserID } from '../../../App';
+import { UserID, uId } from '../../../App';
 let FixeduserList;
-let uid;
 const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
-const userId=sessionStorage.getItem("userId")
+let userId;
 const Adduser = () => {
     const navigate = useNavigate();
     const [change, setChange] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [user,setUid]=useState("");
 
     const [list, setlist] = useState([]);
     const [users, setUsers] = useState([]);
@@ -28,8 +28,29 @@ const Adduser = () => {
         }
     }
 
+    const getID = async () => {
+        const res = await fetch("/getID", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+     
+        const data = await res.json();
+        let check=false;
+        if(data.cookies){
+            check=true;
+        }
+     
+        if(check){
+            userId=data.cookies.uniqueId;
+            setUid(data.cookies.uniqueId);
+        }
+     }
+
     
     useEffect(()=>{
+        getID();
         socket.connect();
         setWidth();
         getAllUsers(userId);
@@ -37,7 +58,7 @@ const Adduser = () => {
         return () => {
            socket.disconnect();
         };
-    },[])
+    },[userId])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {

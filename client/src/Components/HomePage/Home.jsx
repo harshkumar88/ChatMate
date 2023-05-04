@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {io} from 'socket.io-client'
 import './Home.css'
+import { uId } from '../../App'
 
+let userId
 const Home = () => {
-    let check=false;
-    let info;
+    const uid=useContext(uId);
+    if(uid){
+        userId=uid;
+    }
     const navigate=useNavigate();
     const [Chat,setChat]=useState({
         C:"",
@@ -88,37 +92,18 @@ const Home = () => {
 
           if(i==10){
             clearInterval(set);
-            checkLink();
+            console.log(userId)
+            if(!userId){
+                navigate("/Form")
+            }
+            else{
+                navigate('/Chat')
+            }
           }
        },200);
    }
 
-   const checkLink=()=>{
-     if(check){
-        sessionStorage.setItem("userId",info.cookies.uniqueId)
-        navigate("/Chat")
-     }
-     else{
-        navigate("/Form")
-     }
-   }
-
-  const getID = async () => {
-    const res = await fetch("/getID", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-
-    const data = await res.json();
-    if(data.cookies){
-        check=true;
-        info=data;
-    }
-}
     useEffect(()=>{
-        getID();
         makeEffect();
     },[])
     return (
