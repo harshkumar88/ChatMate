@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Main.css'
 import io from 'socket.io-client'
 const socket = io('https://chatmate-backend.onrender.com', { autoConnect: false, transports: ['websocket'] });
@@ -7,6 +7,7 @@ let len = 0;
 let emojiArr=['😎','😭','🥲','🫡','🧐','😆','😍','😆','🙊']
 const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
   let counter = arr.length + 1;
+  const inputRef = useRef(null);
   const [text, setText] = useState("");
   const [loader, setLoader] = useState(true);
   const [msg, setmsg] = useState(false);
@@ -14,6 +15,7 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
 
   if (len < arr.length) {
     setmsg(false);
+    // inputRef.current.focus();
     len = arr.length;
   }
 
@@ -24,6 +26,8 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
 
     }
 
+    if(inputRef)
+    inputRef.current.focus();
     let objDiv = document.getElementById("scrollDiv");
     objDiv.scrollTop = objDiv.scrollHeight;
     socket.connect();
@@ -33,6 +37,8 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
       socket.disconnect();
     };
   }, [])
+
+
 
   const sendMsg = (e) => {
     setmsg(true)
@@ -44,6 +50,7 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
     let objDiv = document.getElementById("scrollDiv");
     objDiv.scrollTop = objDiv.scrollHeight;
     showEmoji(false)
+    inputRef.current.focus();
   }
 
   const setEmoji=(ele)=>{
@@ -97,9 +104,9 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
             <div className='w-75'>
               <form onSubmit={sendMsg} className="d-flex heightSet">
                 <div className='inp w-100'>
-                  {loader == true ? <input className='form-control bg-light' placeholder='send Message' onChange={(e) => setText(e.target.value)} value={text} readOnly /> :
-                    <input className='form-control bg-light' placeholder='send Message' onChange={(e) => setText(e.target.value)} value={text} />}
-                  <span className='tooltiptxt'>Search</span>
+                  {loader == true ||msg==true ? <input className='form-control bg-light' placeholder='Wait....' onChange={(e) => setText(e.target.value)} value={text} readOnly ref={inputRef} /> :
+                    <input className='form-control bg-light' placeholder='send Message' onChange={(e) => setText(e.target.value)} value={text}  ref={inputRef}/>}
+                  <span className='tooltiptxt'>Send Msg</span>
                 </div>
                 
                 <div className='bi bi-emoji-smile sizeIcon ms-2 bg-light' onClick={() => showEmoji(!emoji)}></div>

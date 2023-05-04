@@ -145,7 +145,6 @@ useEffect(()=>{
           setDetails(data)
           setLoad(true)
           getMsg(userId,data.username)
-          
     }
      })
     socket.on("getMessage",async(data)=>{
