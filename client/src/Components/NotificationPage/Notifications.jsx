@@ -7,15 +7,15 @@ import './Notifications.css'
 import Swal from 'sweetalert2'
 import { uniqueId } from '../Authentication/Login'
 import icon from './Images/icon.png'
-import { UserID } from '../../App';
+import { UserID, uId } from '../../App';
 let FixeduserList;
-let uid;
 const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
-const userId=sessionStorage.getItem("userId")
+let userId;
 const Notifications = () => {
     const navigate = useNavigate();
     const [change, setChange] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [user,setUid]=useState("");
 
     const [list, setlist] = useState([]);
     const [users, setUsers] = useState([]);
@@ -28,8 +28,29 @@ const Notifications = () => {
             setChange(false)
         }
     }
+
+    const getID = async () => {
+        const res = await fetch("/getID", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+     
+        const data = await res.json();
+        let check=false;
+        if(data.cookies){
+            check=true;
+        }
+     
+        if(check){
+            userId=data.cookies.uniqueId;
+            setUid(data.cookies.uniqueId);
+        }
+     }
        
     useEffect(()=>{       
+        getID();
         socket.connect();
         setWidth();
         getAllNotifications(userId);

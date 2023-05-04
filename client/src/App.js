@@ -8,9 +8,34 @@ import Adduser from "./Components/Chats/AddCreate/Adduser.js";
 import Home from "./Components/HomePage/Home.jsx";
 import Notifications from "./Components/NotificationPage/Notifications.jsx";
 //Given All Routes here"
-export const UserID=createContext();
+export const uId=createContext();
 function App() {
+  let check=false;
+  const [userId,setuserId]=useState();
+  
+ const getID = async () => {
+   const res = await fetch("/getID", {
+       method: "POST",
+       headers: {
+           "Content-Type": "application/json"
+       }
+   })
+
+   const data = await res.json();
+   if(data.cookies){
+       check=true;
+   }
+
+   if(check){
+       setuserId(data.cookies.uniqueId)
+   }
+}
+
+useEffect(()=>{
+   getID();
+},[])
   return (
+    <uId.Provider value={userId}>
     <div>
     <Routes>
       <Route exact path="/" element={<Home/>}/>
@@ -22,6 +47,7 @@ function App() {
       <Route exact path='/Notifications' element={<Notifications/>}/>
     </Routes>
     </div>
+    </uId.Provider>
   );
 }
 

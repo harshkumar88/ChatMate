@@ -3,17 +3,16 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import img from '../AddCreate/Images/icon.png'
 import '../../NotificationPage/Notifications'
 import io from 'socket.io-client'
-import { UserID } from '../../../App';
-let uid;
+import { UserID, uId } from '../../../App';
 //'https://chatmate-backend.onrender.com'
 const socket=io('https://chatmate-backend.onrender.com',{autoConnect: false,transports: ['websocket']});
-
+let userId;
 const Users = ({ check}) => {
-    const userId=sessionStorage.getItem("userId")
     const navigate=useNavigate();
     const [change, setChange] = useState(false);
     const [userlist,setList]=useState([]);
     const [loader,setLoader]=useState(true);
+    const [user,setUid]=useState("");
 
      const getFriends=async(Id)=>{
         setLoader(true);
@@ -31,10 +30,32 @@ const Users = ({ check}) => {
         console.log(data.Friends);
         setList(data.Friends)
      }
+
+     const getID = async () => {
+        const res = await fetch("/getID", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+     
+        const data = await res.json();
+        let check=false;
+        if(data.cookies){
+            check=true;
+        }
+     
+         
+        if(check){
+            userId=data.cookies.uniqueId;
+            setUid(data.cookies.uniqueId);
+        }
+     }
+
    
     useEffect(() => {
+        getID();
         socket.connect();
-        
          socket.on('connect', () => {
       });
         if(userId)
@@ -43,12 +64,12 @@ const Users = ({ check}) => {
         return () => {
            socket.disconnect();
         };
-    },[])
+    },[userId])
 
     useEffect(()=>{
         socket.on('NotificationSent', function (message) {
-            console.log('Message from server:', message+" ->"+uid);
-            if(message==uid){
+            console.log('Message from server:', message+" ->"+userId);
+            if(message==userId){
                 console.log("hii")
                 getFriends(message);
             }
@@ -70,11 +91,11 @@ const Users = ({ check}) => {
         });
         if(change==true){
             navigate("/Chatting",{
-                state:{data:ele}})
+                state:{data:ele}},{ replace: true })
         }
         else{
         navigate("/Chat",{
-            state:{data:ele}})
+            state:{data:ele}},{ replace: true })
         }
     }
     

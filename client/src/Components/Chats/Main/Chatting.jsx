@@ -3,27 +3,48 @@ import Display from './Display'
 import Info from './Info'
 import io from 'socket.io-client'
 import './Main.css'
-import { UserID } from '../../../App'
+import { UserID, uId } from '../../../App'
 import { useLocation } from 'react-router-dom'
 const socket=io('https://chatmate-backend.onrender.com',{autoConnect: true,transports: ['websocket']});
-const userId=sessionStorage.getItem("userId");
+let userId;
 let arr=[];
 let userdata={username:"harsh",pic:""};
 const Chatting = ({change,user}) => { 
- 
   const [userDetails,setDetails]=useState({username:"harsh",pic:""});
   const [chats,setChats]=useState([]);
   const [check,setCheck]=useState(true);
   const [chatload,setLoad]=useState(false);
   const location=useLocation();
-  useEffect(() => {
-    if(user){
-    userdata=user;
-    setDetails(user);
-    getMsg(userId,userdata.username)
-    }
-  
+  const [userdd,setUid]=useState("");
 
+  const getID = async () => {
+    const res = await fetch("/getID", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+ 
+    const data = await res.json();
+    let check=false;
+    if(data.cookies){
+        check=true;
+    }
+ 
+    if(check){
+      userId=data.cookies.uniqueId;
+      setUid(data.cookies.uniqueId);
+    }
+ }
+
+
+  useEffect(() => {
+    if(location.state && location.state.data){
+      userdata=location.state.data;
+      setDetails(userdata)
+      getMsg(userId,userdata.username)
+    }
+    getID();
     socket.connect();
     console.log("connet")
     socket.emit('AddRoom');
@@ -32,14 +53,14 @@ const Chatting = ({change,user}) => {
       };
 },[])
 
-useEffect(()=>{
-  if(location.state && location.state.data){
-    userdata=location.state.data;
-    setDetails(userdata)
-    getMsg(userId,userdata.username)
-  }
+// useEffect(()=>{
+//   if(location.state && location.state.data){
+//     userdata=location.state.data;
+//     setDetails(userdata)
+//     getMsg(userId,userdata.username)
+//   }
  
-},[location])
+// },[location])
 
 const saveMsg1=async(data,Info)=>{
     //  console.log(data)
@@ -54,7 +75,7 @@ const saveMsg1=async(data,Info)=>{
 });
 
 const info=await res.json();
-// console.log(info.msg)
+console.log(info.msg)
 getMsg(data.sender,data.reciever);
 return info;
 }
@@ -80,7 +101,7 @@ return info;
 
 const saveMsg3=async(data,Info)=>{
   //  console.log(data)
-const res = await fetch("/saveMsg", {
+const res = await fetch("http://localhost:5000/saveMsg", {
   method: "POST",
   headers: {
       "Content-Type": "application/json"
@@ -91,6 +112,7 @@ const res = await fetch("/saveMsg", {
 });
 
 const info=await res.json();
+console.log(info.json)
 return info;
 }
 
@@ -108,7 +130,8 @@ const getMsg=async(sender,reciever)=>{
 });
 
 const info=await res.json();
-arr=info.msg
+arr=info.msg;
+// alert("change")
  setChats(info.msg);
 setCheck(false);
 setLoad(false)
