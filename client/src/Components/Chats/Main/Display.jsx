@@ -4,10 +4,11 @@ import io from 'socket.io-client'
 const socket = io('https://chatmate-backend.onrender.com', { autoConnect: false, transports: ['websocket'] });
 
 let len = 0;
-let emojiArr=['😎','😭','🥲','🫡','🧐','😆','😍','😆','🙊']
+let emojiArr=['😎','😭','🥲','🫡','🧐','😆','😍','😆','🙊'];
+let counter;
 const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
   // chatload=true;
-  let counter = arr.length + 1;
+  counter= arr.length + 1;
   const [text, setText] = useState("");
   const [loader, setLoader] = useState(true);
   const [msg, setmsg] = useState(false);

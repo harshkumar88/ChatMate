@@ -72,7 +72,6 @@ const Chatting = ({ change, user }) => {
     }
   }
 
-
   const getFriends=async(Id)=>{
     setLoader(true);
     const Friends= await fetch("/getFriends", {
@@ -90,8 +89,6 @@ const Chatting = ({ change, user }) => {
     FixeduserList=data.Friends;
     setList(data.Friends)
  }
-
-
 
   useEffect(() => {
     setWidth();
