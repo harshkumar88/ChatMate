@@ -26,6 +26,7 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
     }
 
     let objDiv = document.getElementById("scrollDiv");
+    if(objDiv)
     objDiv.scrollTop = objDiv.scrollHeight;
     socket.connect();
     console.log("connet")
@@ -35,15 +36,26 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
     };
   }, [])
 
+  useEffect(()=>{
+    let objDiv = document.getElementById("scrollDiv");
+    if(objDiv)
+    objDiv.scrollTop = objDiv.scrollHeight;
+    // alert(objDiv.scrollHeight)
+  },[msg])
+
   const sendMsg = (e) => {
+    if(text=="")return;
     setmsg(true)
     e.preventDefault();
     //sending info to backenf
+    
     socket.emit("msgInfo", { text, sender: userId, reciever: FriendId, counter });
     setText("");
-
+  
     let objDiv = document.getElementById("scrollDiv");
+    if(objDiv)
     objDiv.scrollTop = objDiv.scrollHeight;
+    // alert(objDiv)
     showEmoji(false)
   }
 
@@ -59,10 +71,10 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
   return (
     <div className='flex-grow-1 border-top scroll mb-5'>
       {chatload == true ? <div className='chatLoad d-flex justify-content-center align-items-center'><div className='loader2'></div></div> :
-        <div className={loader == true ? 'flex-grow-1 border-top scroll mb-5 centerLoader' : 'flex-grow-1 border-top scroll mb-5'} id="scrollDiv">
+        <div className={loader == true ? 'flex-grow-1 border-top scroll mb-5 centerLoader' : 'flex-grow-1 border-top scroll mb-5'} >
           {loader == true ?
             <div className='chatLoad d-flex justify-content-center align-items-center'><div className='loader2'></div></div> :                                                                                                                 
-            <div className=" mx-auto">
+            <div className=" mx-auto" id="scrollDiv">
               <p className='text-muted text-center fitContent mx-auto'>"Today"</p>
               {arr.map((ele, id) => {
                 return (

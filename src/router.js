@@ -23,12 +23,8 @@ router.post("/getID", (req, res) => {
     return res.json({ cookies: req.cookies.jwt })
 })
 router.post('/logout',(req, res) => {
-    res.clearCookie('jwt', { httpOnly: true });
-    console.log(req.cookies.jwt)
-    console.log("hello")
-    
+    res.clearCookie('jwt');
     return res.status(201).json({msg:"hello"});
-    
   });
   
 
@@ -98,7 +94,6 @@ router.post("/LoginData", async (req, res) => {
                         sameSite:"strict",
                         path:"/"
                     });
-
                     
 
                     return res.status(201).json({ message: "Success", userId: uniqueId });

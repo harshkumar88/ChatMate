@@ -119,6 +119,18 @@
     height: 30px;
     border-radius: 50%;
 }
+
+.setImage2{
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  position: absolute;
+  top:-50;
+  left:50;
+  z-index: 3;
+}
 ::-webkit-scrollbar {
     width: 20px;
     height: 20px;
