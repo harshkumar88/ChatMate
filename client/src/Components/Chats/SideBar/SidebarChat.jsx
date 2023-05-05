@@ -12,7 +12,6 @@ const SidebarChat = ({change}) => {
     <div className={change == true ? 'sideWidth2 bg-light' : "sidebarWidth1 bg-light"}>
       <div className='heightSide1'>
         <Addperson />
-        <SearchChat />
       </div>
       <div className='heightSide2'>
        <Users check={change}/>

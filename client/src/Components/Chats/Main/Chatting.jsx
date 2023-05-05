@@ -39,6 +39,9 @@ const Chatting = ({change,user}) => {
 
 
   useEffect(() => {
+    if(change){
+      setCheck(true)
+    }
     if(location.state && location.state.data){
       userdata=location.state.data;
       setDetails(userdata)

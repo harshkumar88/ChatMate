@@ -57,7 +57,7 @@ const Form = () => {
 
             <div className={change==false?"mt-5 outerWidth":"outerWidth2 d-flex justify-content-center align-items-center"}>
                 <div className="main mx-auto innerWidth">
-                    <input type="checkbox" id="chk" aria-hidden="true" />
+                    <input type="checkbox" id="chk" aria-hidden="true"  />
                     <div className="signup">
                         <Register/>
                     </div>

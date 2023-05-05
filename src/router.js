@@ -15,13 +15,22 @@ router.use(cookieParser());
 router.use(cors());
 
 router.post("/", (req, res) => {
+  
     return res.json({ cookies: req.cookies.jwt })
 })
 
 router.post("/getID", (req, res) => {
-
     return res.json({ cookies: req.cookies.jwt })
 })
+router.post('/logout',(req, res) => {
+    res.clearCookie('jwt', { httpOnly: true });
+    console.log(req.cookies.jwt)
+    console.log("hello")
+    
+    return res.status(201).json({msg:"hello"});
+    
+  });
+  
 
 router.post("/registerData", async (req, res) => {
     const { username, email, password, confirmpass, pic } = req.body;
@@ -85,10 +94,12 @@ router.post("/LoginData", async (req, res) => {
                     const uniqueId = finduser.username;
                     res.cookie("jwt", { token, uniqueId }, {
                         expires: new Date(Date.now() + 60000000000),
-                        httpOnly: true
+                        secure:true,
+                        sameSite:"strict",
+                        path:"/"
                     });
 
-
+                    
 
                     return res.status(201).json({ message: "Success", userId: uniqueId });
                 }
