@@ -49,15 +49,9 @@ const Chat = () => {
 
   return (
     <uniqueId.Provider value={userId}>
-    <div>
-      {change == false ?
-        <div className='d-flex'>
-          <SidebarChat change={change} />
+        <div>
           <Chatting change={change} user={data}/>
         </div>
-        : <div><SidebarChat change={change} /></div>}
-
-    </div>
     </uniqueId.Provider>
   )
 }

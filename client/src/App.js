@@ -26,8 +26,9 @@ function App() {
        check=true;
    }
 
+
    if(check){
-       setuserId(data.cookies.uniqueId)
+       setuserId(data.cookies.uniqueId);
    }
 }
 

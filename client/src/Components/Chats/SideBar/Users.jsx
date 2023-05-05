@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext } from 'react'
+import React, { useEffect, useState,useContext, useRef } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom';
 import img from '../AddCreate/Images/icon.png'
 import '../../NotificationPage/Notifications'
@@ -14,11 +14,14 @@ let userId;
 let FixeduserList=[];
 const Users = ({ check}) => {
     const navigate=useNavigate();
+    const changeDiv=useRef(null);
     const [change, setChange] = useState(false);
     const [name,setname]=useState("");
     const [userlist,setList]=useState([]);
     const [loader,setLoader]=useState(true);
     const [user,setUid]=useState("");
+    const [pic,setPic]=useState("");
+    const [picChange,setPch]=useState(false);
    
      const getFriends=async(Id)=>{
         setLoader(true);
@@ -90,12 +93,11 @@ const Users = ({ check}) => {
     },[check])
     
     const showChat=(ele)=>{
-        
+        // if(changeDiv)
+        //    changeDiv.current.style.backgroundColor="purple"
         ele.userId=userId
         sessionStorage.setItem("userData",ele);
-        socket.emit("userDetails",ele,()=>{
-            console.log("send hua")
-        });
+        socket.emit("userDetails",ele);
         if(change==true){
             navigate("/Chatting",{
                 state:{data:ele}},{ replace: true })
@@ -115,6 +117,12 @@ const Users = ({ check}) => {
             return st == name;
         })
         setList(newUserList)
+    }
+
+    const showPic=(pic)=>{
+        if(!pic)pic='https://img.icons8.com/ultraviolet/512/user.png'
+       setPic(pic);
+       setPch(true)
     }
     
     
@@ -150,11 +158,11 @@ const Users = ({ check}) => {
             userlist.length==0?<div className='mt-5 text-center'><h1 >Your ChatMat <br/> is Empty</h1></div>:
             userlist.map((ele, id) => {
                 return (
-                    <div className={id!=0?'d-flex justify-content-between mt-3 pointer':'d-flex justify-content-between pointer'} key={id} onClick={()=>showChat(ele)}>
+                    <div className={id!=0?'d-flex justify-content-between mt-3':'d-flex justify-content-between'} key={id}>
                         <div  className="d-flex">
-                            <div style={ele.pic=="" || ele.pic==undefined?{backgroundImage: "url('https://img.icons8.com/ultraviolet/512/user.png')"}:{ backgroundImage: `url(${ele.pic})` }} className='setImage mr-3 mt-2'>
+                            <div style={ele.pic=="" || ele.pic==undefined?{backgroundImage: "url('https://img.icons8.com/ultraviolet/512/user.png')"}:{ backgroundImage: `url(${ele.pic})` }} className='setImage mr-3 mt-2 pointer' onClick={()=>showPic(ele.pic)}>
                             </div>
-                            <div className=' mx-3'>
+                            <div className=' mx-3 pointer'  onClick={()=>showChat(ele)} ref={changeDiv}>
                                 <span style={{ display: "block" }}>{ele.username}</span>
                                 <span className='text-muted'>Text me fast</span>
                             </div>
@@ -163,6 +171,9 @@ const Users = ({ check}) => {
                     </div>
                 )
            })}
+
+           {picChange?  <div style={{backgroundImage: `url(${pic})` }} className='setImage2 mr-3 mt-2 pointer'>
+           </div>:""}
         </div>
     )
 }
