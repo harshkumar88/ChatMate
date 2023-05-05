@@ -1,6 +1,24 @@
 import React, { useEffect,useState} from 'react'
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom'
 
-const Info = ({userdata}) => {   
+const Info = ({userdata}) => { 
+    const navigate = useNavigate();
+    const logout=async()=>{
+        // const data= await fetch("http://localhost:5000/logout", {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     }
+
+        // });
+        // const res=await data.json();
+        // console.log(res)
+        const al=Cookies.remove('jwt');
+        console.log(al)
+        navigate("/Form")
+    }
+
     return (
         <div className='p-3 mx-2 d-flex justify-content-between'>
             <div className="d-flex">
@@ -8,10 +26,10 @@ const Info = ({userdata}) => {
             </div>
                 <div className=' mx-3'>
                     <span style={{ display: "block" }}>{userdata.username}</span>
-                    <span className='text-muted'>Last seen 2 min ago</span>
+                   
                 </div>
             </div>
-            <div className='mt-3 d-flex'> <div className='mx-2'> <i className="bi bi-three-dots"></i></div> </div>
+            <div className='mt-3 d-flex'> <div className='mx-2'> <i className="bi bi-box-arrow-right" onClick={logout}></i></div> </div>
         </div>
     )
 }
