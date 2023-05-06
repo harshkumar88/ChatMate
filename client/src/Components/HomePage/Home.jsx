@@ -92,8 +92,8 @@ const Home = () => {
 
           if(i==10){
             clearInterval(set);
-            console.log(userId)
-            if(!userId){
+            const id=localStorage.getItem("userId");
+            if(!id){
                 navigate("/Form")
             }
             else{

@@ -37,6 +37,19 @@
 
 }
 
+.letsChat{
+    background-color: rgb(81, 47, 81);
+    border-radius: 20px;
+    color: whitesmoke !important;
+    font-weight: bold;
+}
+
+.dontsee{
+  opacity: 0;
+}
+.dontShow{
+  display: none;
+}
 .abs{
   position: absolute;
   left:25vw

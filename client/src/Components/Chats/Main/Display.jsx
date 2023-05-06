@@ -5,25 +5,23 @@ const socket = io('https://chatmate-backend.onrender.com', { autoConnect: false,
 
 let len = 0;
 let emojiArr=['😎','😭','🥲','🫡','🧐','😆','😍','😆','🙊'];
-let counter;
-const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
-  // chatload=true;
-  counter= arr.length + 1;
+
+const Display = ({ change, userId, FriendId, arr=[], check, chatload }) => {
   const [text, setText] = useState("");
   const [loader, setLoader] = useState(true);
   const [msg, setmsg] = useState(false);
   const [emoji, showEmoji] = useState(false);
 
-  if (len < arr.length) {
-    setmsg(false);
-    len = arr.length;
-  }
-
-
+  
   useEffect(() => {
-    if (check) {
+    
+    if (len<arr.length || check) {
       setLoader(false);
+    }
 
+    if (len < arr.length) {
+      setmsg(false);
+      len = arr.length;
     }
 
     let objDiv = document.getElementById("scrollDiv");
@@ -41,22 +39,24 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
     let objDiv = document.getElementById("scrollDiv");
     if(objDiv)
     objDiv.scrollTop = objDiv.scrollHeight;
-    // alert(objDiv.scrollHeight)
   },[msg])
+
+  function generateRandom(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
   const sendMsg = (e) => {
     if(text=="")return;
     setmsg(true)
     e.preventDefault();
     //sending info to backenf
-    
-    socket.emit("msgInfo", { text, sender: userId, reciever: FriendId, counter });
+    const date=generateRandom(1, 10002020)+new Date();
+    socket.emit("msgInfo", { text, sender: userId, reciever: FriendId, date });
     setText("");
   
     let objDiv = document.getElementById("scrollDiv");
     if(objDiv)
     objDiv.scrollTop = objDiv.scrollHeight;
-    // alert(objDiv)
     showEmoji(false)
   }
 
@@ -66,8 +66,6 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
     }
     ;showEmoji(false)
   }
-
-
 
   return (
     <div className='flex-grow-1 border-top scroll mb-5'>

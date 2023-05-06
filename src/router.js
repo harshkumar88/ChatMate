@@ -373,7 +373,6 @@ router.post("/Rejected", async (req, res) => {
 
 })
 
-
 router.post("/CheckUser", async (req, res) => {
     try {
         const users = await Register.find({});
@@ -424,14 +423,13 @@ router.post("/saveMsg", async (req, res) => {
         const { data, Info } = req.body;
         const userId = Info.uid;
         const FriendId = Info.Fid;
-       
-
+        // console.log(data)
         // Find the chat document that matches userId and FriendId
            const chatData= await Chats.findOne({ userId: userId, friendId: FriendId });
            
            if(chatData){
                 const chats=chatData.chats;
-                if(chats.length>0 && chats[chats.length-1].counter!=data.counter){
+                if(chats.length>0 && chats[chats.length-1].date!=data.date){
                     chatData.chats.push(data);
                     const saveData=await chatData.save();
                     return res.status(200).json({msg:saveData})
@@ -439,7 +437,6 @@ router.post("/saveMsg", async (req, res) => {
                 else{
                     return res.status(200).json({msg:chatData})
                 }
-                
            }
 
            else {
@@ -447,7 +444,6 @@ router.post("/saveMsg", async (req, res) => {
             const newChatDoc = new Chats({ userId: userId, friendId: FriendId, chats: [data]});
             const saveData=await newChatDoc.save();
             return res.status(200).json({msg:saveData})
-
            }
     }
     catch (e) {
