@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Main.css'
 import io from 'socket.io-client'
 const socket = io('https://chatmate-backend.onrender.com', { autoConnect: false, transports: ['websocket'] });
@@ -11,18 +11,33 @@ const Display = ({ change, userId, FriendId, arr=[], check, chatload }) => {
   const [loader, setLoader] = useState(true);
   const [msg, setmsg] = useState(false);
   const [emoji, showEmoji] = useState(false);
-
+  const inputRef = useRef(null);
+  const containerRef = useRef(null);
   
+
+
+
   useEffect(() => {
-    
-    if (len<arr.length || check) {
-      setLoader(false);
+    if (inputRef.current) {
+      inputRef.current.addEventListener('focus', handleInputFocus);
     }
 
-    if (len < arr.length) {
+    return () => {
+      if (inputRef.current) {
+        inputRef.current.removeEventListener('focus', handleInputFocus);
+      }
+    };
+  }, [inputRef]);
+
+  useEffect(() => {
+     console.log("krange")
+    if (len<arr.length || check) {
+      console.log("less")
+      setLoader(false);
       setmsg(false);
-      len = arr.length;
+      len=arr.length;
     }
+
 
     let objDiv = document.getElementById("scrollDiv");
     if(objDiv)
@@ -30,10 +45,8 @@ const Display = ({ change, userId, FriendId, arr=[], check, chatload }) => {
     socket.connect();
     console.log("connet")
     socket.emit('AddRoom');
-    return () => {
-      socket.disconnect();
-    };
-  }, [])
+   
+  }, [arr])
 
   useEffect(()=>{
     let objDiv = document.getElementById("scrollDiv");
@@ -45,7 +58,23 @@ const Display = ({ change, userId, FriendId, arr=[], check, chatload }) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+
+const handleInputFocus = () => {
+  const containerHeight = containerRef.current.offsetHeight;
+  const windowHeight = window.innerHeight;
+  const inputHeight = inputRef.current.offsetHeight;
+  const scrollY = window.scrollY;
+  const inputBottom = windowHeight - containerHeight;
+  const inputTop = containerRef.current.getBoundingClientRect().top + scrollY;
+
+  if (inputTop > inputBottom) {
+    window.scrollTo(0, inputTop - inputHeight - 10);
+  }
+};
+
+
   const sendMsg = (e) => {
+    check=false
     if(text=="")return;
     setmsg(true)
     e.preventDefault();
@@ -64,7 +93,7 @@ const Display = ({ change, userId, FriendId, arr=[], check, chatload }) => {
     if(emojiArr.indexOf(ele)!=-1){
       setText(text+ele)
     }
-    ;showEmoji(false)
+    showEmoji(false)
   }
 
   return (
@@ -99,13 +128,13 @@ const Display = ({ change, userId, FriendId, arr=[], check, chatload }) => {
          </div> 
        : 
        ""}
-          <div className={change == false ? 'd-flex fixedPos1 mt-5 mb-2 ' : 'd-flex fixedPos2 mt-5 mb-2'}>
+          <div className={change == false ? 'd-flex fixedPos1 mt-5 mb-2 ' : 'd-flex fixedPos2 mt-5 mb-2'} ref={containerRef}>
             <div className='bi bi-plus-circle-fill sizeIcon ms-5 mx-1 bg-light borderR'></div>
             <div className='w-75'>
               <form onSubmit={sendMsg} className="d-flex heightSet">
                 <div className='inp w-100'>
                   {loader == true || msg==true ? <input className='form-control bg-light' placeholder='wait ....' onChange={(e) => setText(e.target.value)} value={text} readOnly /> :
-                    <input className='form-control bg-light' placeholder='send Message' onChange={(e) => setText(e.target.value)} value={text} />}
+                    <input className='form-control bg-light' ref={inputRef} placeholder='send Message' onChange={(e) => setText(e.target.value)} value={text} />}
                   <span className='tooltiptxt'>Send Msgx </span>
                 </div>
                 
