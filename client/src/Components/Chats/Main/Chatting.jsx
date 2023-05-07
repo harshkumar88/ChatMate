@@ -227,7 +227,7 @@ const Chatting = ({ change, user }) => {
   return (
     <div className='d-flex w-100 bg-dark' style={{ minHeight: "100vh" }}>
       {chatPage == false ?
-        <div className={changePage == true & picChange == false ? 'sideWidth2 bg-light' : changePage == true & picChange == true ? 'sideWidth2' : picChange == true ? "sidebarWidth1 " : "sidebarWidth1 bg-light"} style={{ minHeight: "100vh" }}>
+        <div className={changePage == true & picChange == false ? 'sideWidth2 bg-light' : changePage == true & picChange == true ? 'sideWidth2' : picChange == true ? "sidebarWidth1  " : "sidebarWidth1 bg-light"} style={{ minHeight: "100vh" }}>
           <div className={picChange == true ? 'heightSide1 opacityChange' : 'heightSide1'}>
             {/*Adduserpage*/}
             <div >

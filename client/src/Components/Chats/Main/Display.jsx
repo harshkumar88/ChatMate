@@ -4,28 +4,28 @@ import io from 'socket.io-client'
 const socket = io('https://chatmate-backend.onrender.com', { autoConnect: false, transports: ['websocket'] });
 
 let len = 0;
-let emojiArr=['😎','😭','🥲','🫡','🧐','😆','😍','😆','🙊'];
-
-const Display = ({ change, userId, FriendId, arr=[], check, chatload }) => {
+let emojiArr=['😎','😭','🥲','🫡','🧐','😆','😍','😆','🙊']
+const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
+  // chatload=true;
+  let counter = arr.length + 1;
   const [text, setText] = useState("");
   const [loader, setLoader] = useState(true);
   const [msg, setmsg] = useState(false);
   const [emoji, showEmoji] = useState(false);
 
-  
-  useEffect(() => {
-    
-    if (len<arr.length || check) {
-      setLoader(false);
-    }
+  if (len < arr.length) {
+    setmsg(false);
+    len = arr.length;
+  }
 
-    if (len < arr.length) {
-      setmsg(false);
-      len = arr.length;
+
+  useEffect(() => {
+    if (check) {
+      setLoader(false);
+
     }
 
     let objDiv = document.getElementById("scrollDiv");
-    if(objDiv)
     objDiv.scrollTop = objDiv.scrollHeight;
     socket.connect();
     console.log("connet")
@@ -35,27 +35,14 @@ const Display = ({ change, userId, FriendId, arr=[], check, chatload }) => {
     };
   }, [])
 
-  useEffect(()=>{
-    let objDiv = document.getElementById("scrollDiv");
-    if(objDiv)
-    objDiv.scrollTop = objDiv.scrollHeight;
-  },[msg])
-
-  function generateRandom(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
   const sendMsg = (e) => {
-    if(text=="")return;
     setmsg(true)
     e.preventDefault();
     //sending info to backenf
-    const date=generateRandom(1, 10002020)+new Date();
-    socket.emit("msgInfo", { text, sender: userId, reciever: FriendId, date });
+    socket.emit("msgInfo", { text, sender: userId, reciever: FriendId, counter });
     setText("");
-  
+
     let objDiv = document.getElementById("scrollDiv");
-    if(objDiv)
     objDiv.scrollTop = objDiv.scrollHeight;
     showEmoji(false)
   }
@@ -67,13 +54,15 @@ const Display = ({ change, userId, FriendId, arr=[], check, chatload }) => {
     ;showEmoji(false)
   }
 
+
+
   return (
     <div className='flex-grow-1 border-top scroll mb-5'>
       {chatload == true ? <div className='chatLoad d-flex justify-content-center align-items-center'><div className='loader2'></div></div> :
-        <div className={loader == true ? 'flex-grow-1 border-top scroll mb-5 centerLoader' : 'flex-grow-1 border-top scroll mb-5'} >
+        <div className={loader == true ? 'flex-grow-1 border-top scroll mb-5 centerLoader' : 'flex-grow-1 border-top scroll mb-5'} id="scrollDiv">
           {loader == true ?
             <div className='chatLoad d-flex justify-content-center align-items-center'><div className='loader2'></div></div> :                                                                                                                 
-            <div className=" mx-auto" id="scrollDiv">
+            <div className=" mx-auto">
               <p className='text-muted text-center fitContent mx-auto'>"Today"</p>
               {arr.map((ele, id) => {
                 return (

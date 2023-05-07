@@ -172,8 +172,8 @@ const Users = ({ check}) => {
                 )
            })}
 
-           {picChange?  <div style={{backgroundImage: `url(${pic})` }} className='setImage2 mr-3 mt-2 pointer'>
-           </div>:""}
+           {/* {picChange?  <div style={{backgroundImage: `url(${pic})` }} className='setImage2 mr-3 mt-2 pointer'>
+           </div>:""} */}
         </div>
     )
 }
