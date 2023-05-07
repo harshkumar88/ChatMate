@@ -47,6 +47,10 @@ io.on("connection",(socket)=>{
       console.log("sendMsg")
      });
   })
+
+  socket.on("msgSaved",(data)=>{
+    socket.to("Chat").emit("showMsg",data);
+  })
   socket.on("disconnect",()=>{
     console.log("user disconnected")
   })

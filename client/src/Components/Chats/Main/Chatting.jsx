@@ -181,19 +181,19 @@ const Chatting = ({ change, user }) => {
         console.log(res)
         if (res) {
           const response = await saveMsg(data, { uid: data.reciever, Fid: data.sender });
-          console.log("msg")
-          await getMsg(data.sender, data.reciever);
+          console.log("msg");
+          socket.emit("msgSaved",data);
         }
       }
+    })
 
-      if (data.reciever == userId) {
+    socket.on("showMsg",(data)=>{
+      if(data.sender==userId){
+         getMsg(data.sender, data.reciever);
+      }
+      if(data.reciever==userId){
         getMsg(data.reciever, data.sender);
-        const response = await saveMsg(data, { uid: data.reciever, Fid: data.sender });
-        if (response) {
-          getMsg(data.reciever, data.sender);
-        }
       }
-
     })
   }, [socket])
 
