@@ -42,7 +42,7 @@ const Info = ({userdata}) => {
             </div>
            
             <div className='mt-3 d-flex log'> <div className='mx-2'> <i className="bi bi-box-arrow-right pointer " onClick={logout}></i></div>
-            <span className='tooltiptxt1'>Logout</span>
+           
              </div>
         </div>
     )
