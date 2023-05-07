@@ -237,7 +237,7 @@ const Chatting = ({ change, user }) => {
 
   return (
     <div className={picChange==true?"bg-dark":""}>
-     {picChange==false?<div className='d-flex w-100 ' style={{ minHeight: "100vh" }}>
+     {picChange==false?<div className='d-flex w-100 ' style={{ minHeight: "100vh",overflow:'hidden' }}>
       {chatPage == false ?
         <div className={changePage == true & picChange == false ? 'sideWidth2 bg-light' : changePage == true & picChange == true ? 'sideWidth2' : picChange == true ? "sidebarWidth1 " : "sidebarWidth1 bg-light"} style={{ minHeight: "100vh" }}>
           <div className={picChange == true ? 'heightSide1 opacityChange' : 'heightSide1'}>
@@ -251,12 +251,7 @@ const Chatting = ({ change, user }) => {
                 <div className='bi bi-plus-circle-fill sizeIcon bg-light ms-3' onClick={showPage}></div>
               </div>
             </div>
-
-          </div>
-          <div className={picChange == true ? 'heightSide2 opacityChange' : 'heightSide2'} >
-            {/*userspage*/}
-            <div className={change == true ? 'scrollChats1 bg-light p-4' : "scrollChats2 bg-light p-4"}>
-              <div className='searchMargin mb-5'>
+            <div className='searchMargin mb-5'>
 
                 <InputGroup className="mb-3 mx-auto bg-light inputWidth ">
                   <Form.Control
@@ -274,6 +269,12 @@ const Chatting = ({ change, user }) => {
 
                 </InputGroup>
               </div>
+
+          </div>
+          <div className={picChange == true ? 'heightSide2 opacityChange' : 'heightSide2'} >
+            {/*userspage*/}
+            <div className={change == true ? 'scrollChats1 bg-light p-4' : "scrollChats2 bg-light p-4"}>
+              
               {loader ? <div className='p-3 mt-5'>
                 <div className="loader">
                   <div className="inner one"></div>
