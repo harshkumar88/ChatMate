@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './Main.css'
 import io from 'socket.io-client'
+
 const socket = io('https://chatmate-backend.onrender.com', { autoConnect: false, transports: ['websocket'] });
 
 let len = 0;
@@ -13,7 +14,7 @@ const Display = ({ change, userId, FriendId, arr = [], check, chatload }) => {
   const [emoji, showEmoji] = useState(false);
   const inputRef = useRef(null);
   const containerRef = useRef(null);
-
+  
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.addEventListener('focus', handleInputFocus);
@@ -73,16 +74,23 @@ const Display = ({ change, userId, FriendId, arr = [], check, chatload }) => {
     setmsg(true)
     e.preventDefault();
     //sending info to backenf
+
     const date = generateRandom(1, 10002020) + new Date();
     const d = new Date();
+    const monthName=["Jan","Feb","Mar","April","May","June","July","Aug","Sep","Oct","Nov","Dec"]
     const time = d.toLocaleString("en-US", {
       hour: "numeric",
       minute: "numeric",
       hour12: true,
     });
-    socket.emit("msgInfo", { text, sender: userId, reciever: FriendId, date, time });
-    setText("");
+    const day=d.getDate().toString().padStart(2,'0');
+    const month=monthName[d.getMonth()];
+   const senddate=day+"/"+month
 
+  
+    socket.emit("msgInfo", { text, sender: userId, reciever: FriendId, date, time,senddate});
+    setText("");
+   
     let objDiv = document.getElementById("scrollDiv");
     if (objDiv)
       objDiv.scrollTop = objDiv.scrollHeight;
@@ -107,7 +115,7 @@ const Display = ({ change, userId, FriendId, arr = [], check, chatload }) => {
               {arr.map((ele, id) => {
                 return (
                   <div key={id}>
-                    {ele.sender != userId ? <div key={id} className="ms-5 bg-light"><div className='text-break leftStyle mb-2 d-flex'> <div>{ele.text} </div><div style={{ fontSize: "10px", marginTop: "11px" }} className='ms-2'>{ele.time}</div></div></div> : <div key={id} className=" text-break me-5 w-100 bg-light "><div className='ms-auto me-5 rightStyle mb-2 d-flex'> <div>{ele.text} </div><div style={{ fontSize: "10px", marginTop: "11px" }} className='ms-2'>{ele.time}</div></div></div>}
+                    {ele.sender != userId ? <div key={id} className="ms-5 bg-light"><div className='text-break leftStyle mb-2 d-flex'><div>{ele.text} </div><div style={{ fontSize: "10px", marginTop: "11px" }} className='ms-2'>{ele.time}</div><div className='tooltiptxtDate'><span className='tooltiptxtdateShow'>{ele.senddate}</span><span className="bi bi-three-dots-vertical" style={{marginLeft:"3px"}}></span></div></div></div> : <div key={id} className=" text-break me-5 w-100 bg-light "><div className='ms-auto me-5 rightStyle mb-2 d-flex'> <div>{ele.text} </div><div style={{ fontSize: "10px", marginTop: "11px" }} className='ms-2'>{ele.time}</div><div className='tooltiptxtDate'><span className='tooltiptxtdateShow pointer  '>{ele.senddate}</span><span className="bi bi-three-dots-vertical  pointer" style={{marginLeft:"3px"}}></span></div></div></div>}
                   </div>
                 )
               })}
