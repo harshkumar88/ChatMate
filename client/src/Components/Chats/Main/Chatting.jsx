@@ -16,6 +16,7 @@ let FixeduserList = [];
 let userdata = { username: "DontSee123", pic: "" };
 let contentList;
 let ch;
+
 const Chatting = ({ change, user }) => {
   const navigate = useNavigate();
   const changeDiv = useRef(null)
@@ -38,6 +39,7 @@ const Chatting = ({ change, user }) => {
   const [picChange, setPch] = useState(false);
   const [chatPage, setChatPage] = useState(false);
   const [showColor, setColor] = useState("");
+  const [msgCount,setMsgCount]=useState([]);
 
   const handleBackButton = () => {
     // This function will be called when the user navigates back to this page
@@ -192,14 +194,23 @@ const Chatting = ({ change, user }) => {
 
     socket.on("showMsg",(data)=>{
      
-      if(data.reciever==userId){
-        getMsg(data.reciever,data.sender)
+      if(data.reciever==userId && data.sender==userDetails.username){
+           getMsg(data.reciever,data.sender)
+      }
+
+      else if(data.reciever==userId){
+             if(msgCount.indexOf(data.sender)==-1){
+                 setMsgCount([...msgCount,data.sender]);
+             }
       }
     })
   }, [socket])
 
-
   const showChat = (ele) => {
+    let Count=msgCount.filter((el)=>{
+      return el!=ele.username
+    })
+    setMsgCount(Count);
     contentList=[];
     setColor(ele.username)
     ele.userId = userId
@@ -294,7 +305,7 @@ const Chatting = ({ change, user }) => {
                             <span className='text-muted'>Text me fast</span>
                           </div>
                         </div>
-                        <div className='text-muted me-2'>Let's chat</div>
+                        <div className='text-muted me-2'> {msgCount.indexOf(ele.username)!=-1 ?<span className='text-success'><i className="bi bi-bell"></i></span>:<span>Let's chat</span>}</div>
                       </div>
                     )
                   })}
