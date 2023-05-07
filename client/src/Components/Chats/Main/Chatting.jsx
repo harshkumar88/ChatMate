@@ -12,7 +12,6 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Addperson from '../SideBar/Addperson'
 const socket = io('https://chatmate-backend.onrender.com', { autoConnect: true, transports: ['websocket'] });
 let userId;
-// let arr = [];
 let FixeduserList = [];
 let userdata = { username: "DontSee123", pic: "" };
 let contentList;
@@ -182,23 +181,26 @@ const Chatting = ({ change, user }) => {
         if (res) {
           const response = await saveMsg(data, { uid: data.reciever, Fid: data.sender });
           console.log("msg");
-          socket.emit("msgSaved",data);
+          if(response){
+            console.log("ki")
+            setChats([...contentList,data])
+            socket.emit("msgSaved",data);
+          }
         }
       }
     })
 
     socket.on("showMsg",(data)=>{
-      if(data.sender==userId){
-         getMsg(data.sender, data.reciever);
-      }
+     
       if(data.reciever==userId){
-        getMsg(data.reciever, data.sender);
+        setChats([...contentList,data])
       }
     })
   }, [socket])
 
 
   const showChat = (ele) => {
+    contentList=[];
     setColor(ele.username)
     ele.userId = userId
     userdata = ele
