@@ -115,7 +115,10 @@ const Display = ({ change, userId, FriendId, arr = [], check, chatload }) => {
               {arr.map((ele, id) => {
                 return (
                   <div key={id}>
-                    {ele.sender != userId ? <div key={id} className="ms-5 bg-light"><div className='text-break leftStyle mb-2 d-flex'><div>{ele.text} </div><div style={{ fontSize: "10px", marginTop: "11px" }} className='ms-2'>{ele.time}</div><div className='tooltiptxtDate'><span className='tooltiptxtdateShow'>{ele.senddate}</span><span className="bi bi-three-dots-vertical" style={{marginLeft:"3px"}}></span></div></div></div> : <div key={id} className=" text-break me-5 w-100 bg-light "><div className='ms-auto me-5 rightStyle mb-2 d-flex'> <div>{ele.text} </div><div style={{ fontSize: "10px", marginTop: "11px" }} className='ms-2'>{ele.time}</div><div className='tooltiptxtDate'><span className='tooltiptxtdateShow pointer  '>{ele.senddate}</span><span className="bi bi-three-dots-vertical  pointer" style={{marginLeft:"3px"}}></span></div></div></div>}
+                    {ele.sender != userId ? <div key={id} className="ms-5 bg-light"><div className='text-break leftStyle mb-2 d-flex'><div className='textChata'>{ele.text} </div><div className='d-flex flex-column justify-content-center align-items-center mt-1'>
+                    <div style={{ fontSize: "10px", marginTop: "25%" }} className='ms-2'>{ele.time}</div></div></div></div> 
+                    : <div key={id} className=" text-break me-5 w-100 bg-light "><div className='ms-auto me-5 rightStyle mb-2 d-flex'> 
+                    <div className='textChata'>{ele.text} </div> <div style={{ fontSize: "10px", marginTop: "17%" }} className='ms-2'>{ele.time}</div></div></div>}
                   </div>
                 )
               })}

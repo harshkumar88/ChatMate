@@ -183,7 +183,7 @@ const Chatting = ({ change, user }) => {
           console.log("msg");
           if(response){
             console.log("ki")
-            setChats([...contentList,data])
+            getMsg(data.sender,data.reciever)
             socket.emit("msgSaved",data);
           }
         }
@@ -193,7 +193,7 @@ const Chatting = ({ change, user }) => {
     socket.on("showMsg",(data)=>{
      
       if(data.reciever==userId){
-        setChats([...contentList,data])
+        getMsg(data.reciever,data.sender)
       }
     })
   }, [socket])
