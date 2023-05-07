@@ -47,7 +47,7 @@
 .chatHover:hover{
   background-color: rgba(0, 0, 0, 0.08);
   transition: all 0.ws ease-in-out;
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
 .dontsee{
@@ -89,10 +89,10 @@
     
 }
 .heightSide1{
-  height: 5vh;
+  height: 13vh;
 }
 .heightSide2{
-  height: 85vh;
+  height: 75vh;
 }
 .heightMIn{
     min-height: 100vh;

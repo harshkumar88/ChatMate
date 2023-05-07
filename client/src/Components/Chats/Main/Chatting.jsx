@@ -12,7 +12,6 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Addperson from '../SideBar/Addperson'
 const socket = io('https://chatmate-backend.onrender.com', { autoConnect: true, transports: ['websocket'] });
 let userId;
-// let arr = [];
 let FixeduserList = [];
 let userdata = { username: "DontSee123", pic: "" };
 let contentList;
@@ -182,23 +181,26 @@ const Chatting = ({ change, user }) => {
         if (res) {
           const response = await saveMsg(data, { uid: data.reciever, Fid: data.sender });
           console.log("msg");
-          socket.emit("msgSaved",data);
+          if(response){
+            console.log("ki")
+            setChats([...contentList,data])
+            socket.emit("msgSaved",data);
+          }
         }
       }
     })
 
     socket.on("showMsg",(data)=>{
-      if(data.sender==userId){
-         getMsg(data.sender, data.reciever);
-      }
+     
       if(data.reciever==userId){
-        getMsg(data.reciever, data.sender);
+        setChats([...contentList,data])
       }
     })
   }, [socket])
 
 
   const showChat = (ele) => {
+    contentList=[];
     setColor(ele.username)
     ele.userId = userId
     userdata = ele
@@ -235,7 +237,7 @@ const Chatting = ({ change, user }) => {
 
   return (
     <div className={picChange==true?"bg-dark":""}>
-     {picChange==false?<div className='d-flex w-100 ' style={{ minHeight: "100vh" }}>
+     {picChange==false?<div className='d-flex w-100 ' style={{ minHeight: "100vh",overflow:'hidden' }}>
       {chatPage == false ?
         <div className={changePage == true & picChange == false ? 'sideWidth2 bg-light' : changePage == true & picChange == true ? 'sideWidth2' : picChange == true ? "sidebarWidth1 " : "sidebarWidth1 bg-light"} style={{ minHeight: "100vh" }}>
           <div className={picChange == true ? 'heightSide1 opacityChange' : 'heightSide1'}>
@@ -249,12 +251,7 @@ const Chatting = ({ change, user }) => {
                 <div className='bi bi-plus-circle-fill sizeIcon bg-light ms-3' onClick={showPage}></div>
               </div>
             </div>
-
-          </div>
-          <div className={picChange == true ? 'heightSide2 opacityChange' : 'heightSide2'} >
-            {/*userspage*/}
-            <div className={change == true ? 'scrollChats1 bg-light p-4' : "scrollChats2 bg-light p-4"}>
-              <div className='searchMargin mb-5'>
+            <div className='searchMargin mb-5'>
 
                 <InputGroup className="mb-3 mx-auto bg-light inputWidth ">
                   <Form.Control
@@ -272,6 +269,12 @@ const Chatting = ({ change, user }) => {
 
                 </InputGroup>
               </div>
+
+          </div>
+          <div className={picChange == true ? 'heightSide2 opacityChange' : 'heightSide2'} >
+            {/*userspage*/}
+            <div className={change == true ? 'scrollChats1 bg-light p-4' : "scrollChats2 bg-light p-4"}>
+              
               {loader ? <div className='p-3 mt-5'>
                 <div className="loader">
                   <div className="inner one"></div>
