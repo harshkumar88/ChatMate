@@ -27,21 +27,27 @@
   background-repeat: no-repeat;
   width: 300px;
   height: 300px;
-  border-radius: 50%;
   position: absolute;
   top:20%;
   left: 30vw;
-  background-color: #00000052;
   z-index: 3;
   opacity: 1;
 
 }
 
+.img{
+  background-color: #14141564;
+  border-radius: 50%;
+}
 .letsChat{
-    background-color: rgb(81, 47, 81);
-    border-radius: 20px;
-    color: whitesmoke !important;
-    font-weight: bold;
+    background-color: rgba(12, 10, 12, 0.107);
+    /* font-weight: bold; */
+}
+
+.chatHover:hover{
+  background-color: rgba(0, 0, 0, 0.08);
+  transition: all 0.ws ease-in-out;
+  transform: scale(1.1);
 }
 
 .dontsee{
@@ -54,16 +60,18 @@
   position: absolute;
   left:25vw
 }
+.abs1{
+  position: absolute;
+  left:70vw
+}
 .setImage3{
   background-size: 100% 100%;
   background-repeat: no-repeat;
   width: 300px;
   height: 300px;
-  border-radius: 50%;
   position: absolute;
-  top:25%;
-  left: 14vw;
-  background-color: #00000052;
+  top:23%;
+  left: 12vw;
   z-index: 3;
   opacity: 1;
 
@@ -78,6 +86,7 @@
 
 .opacityChange{
       opacity: 0.1;
+    
 }
 .heightSide1{
   height: 5vh;
@@ -212,6 +221,50 @@
     opacity: 1;
     /* border-radius: 2%; */
   }
+  
+  .inputWidth:hover .tooltiptxt{
+    top:-130%;
+    visibility: visible;
+    opacity: 1;
+    /* border-radius: 2%; */
+  }
+
+  .tooltiptxtdateShow{
+    position: absolute;
+    left: 94%;
+    top: 13%;
+    transform: translateX(-50%);
+    background-color: #f9f9f9;
+    color: #0a0a0a;
+    white-space: nowrap;
+    padding: 5px 7px;
+    /* border: 10px solid; */
+    /* border-radius: 20px; */
+    visibility: visible;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out;
+  }
+
+  .tooltiptxtdateShow::before{
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  border: 10px solid;
+  /* border-radius: 10px; */
+  border-color: #000 #0000 #0000 #0000;
+
+}
+
+.tooltiptxtDate:hover .tooltiptxtdateShow{
+  left: 94%;
+    top: 13%;
+  visibility: visible;
+  opacity: 1;
+  /* border-radius: 2%; */
+}
+
   
   .centerLoader{
     display: flex;
