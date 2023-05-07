@@ -244,7 +244,6 @@ const Chatting = ({ change, user }) => {
               <div><h2>Chats</h2><p className='text-muted'>Recents Chats</p></div>
 
               <div className='d-flex justify-content-evenly w-25 bellICon mt-2 ms-5 ' >
-                
 
                 <div className='bi bi-bell ms-4' onClick={() => { navigate('/Notifications') }}></div>
                 <div className='bi bi-plus-circle-fill sizeIcon bg-light ms-3' onClick={showPage}></div>
@@ -283,7 +282,7 @@ const Chatting = ({ change, user }) => {
                 userlist.length == 0 ? <div className='mt-5 text-center'><h1 >Your FriendList <br /> is Empty</h1></div> :
                   userlist.map((ele, id) => {
                     return (
-                      <div className={ele.username == showColor ? 'd-flex justify-content-between mt-3 letsChat chatHover' : 'd-flex justify-content-between mt-3 chatHover'} key={id}>
+                      <div className={ele.username == showColor ? 'd-flex justify-content-between mt-3 letsChat chatHover p-1' : 'd-flex justify-content-between mt-3 chatHover p-1'} key={id}>
                         <div className="d-flex">
                           <div style={ele.pic == "" || ele.pic == undefined ? { backgroundImage: "url('https://img.icons8.com/ultraviolet/512/user.png')" } : { backgroundImage: `url(${ele.pic})` }} className='setImage mr-3 mt-2 pointer' onClick={() => showPic(ele)}>
                           </div>
