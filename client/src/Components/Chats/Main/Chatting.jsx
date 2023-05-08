@@ -125,9 +125,9 @@ const Chatting = ({ change, user }) => {
     socket.connect();
     console.log("connet")
     socket.emit('AddRoom');
-return (()=>{
-  socket.disconnect();
-})
+    return (() => {
+      socket.disconnect();
+    })
   }, [])
 
 
@@ -202,7 +202,7 @@ return (()=>{
         let Count = msgCount.filter((el) => {
           return el != data.sender
         })
-       
+
         getMsg(data.reciever, data.sender)
         setMsgCount(Count);
       }
@@ -259,39 +259,40 @@ return (()=>{
     <div className={picChange == true ? "bg-dark" : ""}>
       {picChange == false ? <div className='d-flex w-100 ' style={{ minHeight: "100vh", overflow: 'hidden' }}>
         {chatPage == false ?
-          <div className={changePage == true & picChange == false ? 'sideWidth2 bg-light' : changePage == true & picChange == true ? 'sideWidth2' : picChange == true ? "sidebarWidth1 " : "sidebarWidth1 bg-light"} style={{ minHeight: "100vh" }}>
-            <div className={picChange == true ? 'heightSide1 opacityChange' : 'heightSide1'}>
-              {/*Adduserpage*/}
-              <div className='w-100 bg-light d-flex justify-content-between p-3'>
-                <div><h2>Chats</h2><p className='text-muted'>Recents Chats</p></div>
+          <div className={changePage == true & picChange == false ? 'sideWidth2 bg-light' : (changePage == true & picChange == true) || userlist.length == 0 ? 'sideWidth2' : picChange == true ? "sidebarWidth1 " : "sidebarWidth1 bg-light"} style={{ minHeight: "100vh" }}>
+           
+              <div className={picChange == true? 'heightSide1 opacityChange d-flex flex-column bg-light' : userlist.length==0 ? 'heightSide3  d-flex flex-column bg-light':'heightSide1  d-flex flex-column bg-light'}>
+                {/*Adduserpage*/}
+                <div className='w-100 bg-light d-flex justify-content-between p-3'>
+                  <div><h2>Chats</h2><p className='text-muted'>Recents Chats</p></div>
 
-                <div className='d-flex justify-content-evenly w-25 bellICon mt-2 ms-5 ' >
+                  <div className='d-flex justify-content-evenly w-25 bellICon mt-2 ms-5 ' >
 
-                  <div className='bi bi-bell ms-4' onClick={() => { navigate('/Notifications') }}></div>
-                  <div className='bi bi-plus-circle-fill sizeIcon bg-light ms-3' onClick={showPage}></div>
+                    <div className='bi bi-bell ms-4' onClick={() => { navigate('/Notifications') }}></div>
+                    <div className='bi bi-plus-circle-fill sizeIcon bg-light ms-3' onClick={showPage}></div>
+                  </div>
+                </div>
+
+                <div className=' mb-5 bg-light'>
+
+                  <InputGroup className="mb-3 mx-auto bg-light inputWidth ">
+                    <Form.Control
+                      placeholder="Search Chat"
+                      aria-label="Search Chat"
+                      aria-describedby="basic-addon2"
+                      className='formWidth bg-light'
+                      onChange={(e) => { changeUserList(e.target.value) }} />
+
+                    <span className='tooltiptxt'>Search</span>
+
+                    <Button id="button-addon2" className='searchWidth bg-outline-none'>
+                      <i className="bi bi-search"></i>
+                    </Button>
+
+                  </InputGroup>
                 </div>
               </div>
-              <div className='searchMargin mb-5'>
-
-                <InputGroup className="mb-3 mx-auto bg-light inputWidth ">
-                  <Form.Control
-                    placeholder="Search Chat"
-                    aria-label="Search Chat"
-                    aria-describedby="basic-addon2"
-                    className='formWidth bg-light'
-                    onChange={(e) => { changeUserList(e.target.value) }} />
-
-                  <span className='tooltiptxt'>Search</span>
-
-                  <Button id="button-addon2" className='searchWidth bg-outline-none'>
-                    <i className="bi bi-search"></i>
-                  </Button>
-
-                </InputGroup>
-              </div>
-
-            </div>
-            <div className={picChange == true ? 'heightSide2 opacityChange' : 'heightSide2'} >
+            <div className={picChange == true ? 'heightSide2 opacityChange mt-5' : 'heightSide2 mt-5'} >
               {/*userspage*/}
               <div className={change == true ? 'scrollChats1 bg-light p-4' : "scrollChats2 bg-light p-4"}>
 
@@ -302,7 +303,8 @@ return (()=>{
                     <div className="inner three"></div>
                   </div>
                 </div> :
-                  userlist.length == 0 ? <div className='mt-5 text-center'><h1 >Your FriendList <br /> is Empty</h1></div> :
+                  userlist.length == 0 ? <div className='mt-5 text-center'><h1 >Your FriendList <br /> is Empty</h1>
+                    <div className='bi bi-plus-circle-fill sizeIcon bg-light mx-auto' onClick={showPage}></div><p style={{ fontWeight: "bold" }} className='mt-3'>Add Friend</p></div> :
                     userlist.map((ele, id) => {
                       return (
                         <div className={ele.username == showColor ? 'd-flex justify-content-between mt-3 letsChat chatHover p-1' : 'd-flex justify-content-between mt-3 chatHover p-1'} key={id}>
@@ -322,7 +324,7 @@ return (()=>{
             </div>
           </div>
           : ""}
-        {changePage == false || chatPage ?
+        {(changePage == false || chatPage) && userlist.length != 0 ?
           <div className={change == false && !picChange ? 'bg-light w-75 heightMIn' : change == false && picChange ? 'bg-light w-75 heightMIn opacityChange ' : 'bg-light w-100 heightMIn'}>
             <Info userdata={userdata} />
             <div className={hide == false ? 'd-flex flex-column justify-content-between heightDisplay' : 'd-flex flex-column justify-content-between heightDisplay dontsee'}>
