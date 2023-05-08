@@ -89,10 +89,13 @@
     
 }
 .heightSide1{
-  height: 13vh;
+  height: 15vh;
 }
 .heightSide2{
-  height: 75vh;
+  height: 72vh;
+}
+.heightSide3{
+  height: 6vh;
 }
 .heightMIn{
     min-height: 100vh;
