@@ -133,7 +133,7 @@ const Chatting = ({ change, user }) => {
 
   const saveMsg = async (data, Info) => {
     //  console.log(data)
-    const res = await fetch("http://localhost:5000/saveMsg", {
+    const res = await fetch("/saveMsg", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
