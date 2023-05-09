@@ -17,7 +17,8 @@ const Adduser = () => {
 
     const [list, setlist] = useState([]);
     const [users, setUsers] = useState([]);
-    const [fId,setFid]=useState();         
+    const [fId,setFid]=useState();      
+    const [notifi,setNotifi]=useState(false);   
     const setWidth = () => {
         const w = window.innerWidth
         if (w < 600) {
@@ -98,6 +99,7 @@ const Adduser = () => {
 //Sent Notifications
    const NotificationSent=async(Id)=>{
         setFid(Id);
+        setNotifi(true);
         const AddNotification= await fetch("/SendNotification", {
             method: "POST",
             headers: {
@@ -110,12 +112,14 @@ const Adduser = () => {
         });
         const info=await AddNotification.json();
         getAllUsers(userId);
+        socket.emit('message', Id);
         toast('Notification Sent', {
             position: 'top-right',
             autoClose: 2000,
            
-          })
-          await socket.emit('message', Id);
+          });
+          setNotifi(false)
+          
     }
 
 
@@ -165,7 +169,7 @@ const Adduser = () => {
                         <h2 className='ForgetHeader pt-3  border-bottom border-dark'>Add User</h2>
                         <div className='mx-auto w-100 text-center bg-light p-1' style={{ zIndex: 2 }}><input className='form-control w-75 mx-auto' placeholder='Search User' onChange={(e) => changeUserList(e.target.value)} /></div>
                         {loading==false?<div style={{ height: "auto", maxHeight: "400px", overflow: "scroll" }} >
-                            {users.length>0?users.map((ele, id) => {
+                            {users.length>0 && notifi==false?users.map((ele, id) => {
                                 return (
                                     <div className='d-flex mt-3 bg-light p-3' key={id} style={{ cursor: 'pointer' }}>
                                         <div className='setImage ms-2'>
@@ -179,7 +183,7 @@ const Adduser = () => {
                                         </div>
                                     </div>
                                 )
-                            }):<p className='text-dark pt-3'>No User Found</p>}
+                            }):notifi?<p className='text-dark pt-3'>Wait pls ...</p>:<p className='text-dark pt-3'>No User Found</p>}
                         </div>:
                         <div className='p-3'>
                         <div className="loader">
@@ -189,7 +193,8 @@ const Adduser = () => {
                       </div>
                       </div>
                     }
-                        <div className='w-100 mb-1'><button style={{ width: "47%" }} onClick={() => userAdded()}>Chat Page</button></div>
+                     
+                    <div className='w-100 mb-1'><button style={{ width: "47%" }} onClick={() => userAdded()}>Chat Page</button></div>
 
                     </div>
 

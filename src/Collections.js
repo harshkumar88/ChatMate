@@ -33,8 +33,7 @@ const RegisterSchema=new mongoose.Schema({
 })
 const FriendListSchema=new mongoose.Schema({
     userId:{
-        type:String,
-        unique:true
+        type:String
     },
     Friends:{
         type:Array
@@ -43,8 +42,7 @@ const FriendListSchema=new mongoose.Schema({
 
 const NotificationRecieveSchema=new mongoose.Schema({
     userId:{
-        type:String,
-        unique:true
+        type:String
     },
     Notifications:{
         type:Array
@@ -54,8 +52,7 @@ const NotificationRecieveSchema=new mongoose.Schema({
 
 const NotificationSentSchema=new mongoose.Schema({
     userId:{
-        type:String,
-        unique:true
+        type:String
     },
     Notifications:{
         type:Array
@@ -64,12 +61,10 @@ const NotificationSentSchema=new mongoose.Schema({
 
 const ChatSchema=new mongoose.Schema({
     userId:{
-        type:String,
-        unique:true
+        type:String
     },
     friendId:{
-        type:String,
-        unique:true
+        type:String
     },
     chats:{
         type:Array
