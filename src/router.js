@@ -424,10 +424,9 @@ router.post("/saveMsg", async (req, res) => {
         const { data, Info } = req.body;
         const userId = Info.uid;
         const FriendId = Info.Fid;
-        // console.log(data)
+        
         // Find the chat document that matches userId and FriendId
            const chatData= await Chats.findOne({ userId: userId, friendId: FriendId });
-           
            if(chatData){
                 const chats=chatData.chats;
                 if(chats.length>0 && chats[chats.length-1].date!=data.date){
@@ -443,11 +442,12 @@ router.post("/saveMsg", async (req, res) => {
            else {
 
             const newChatDoc = new Chats({ userId: userId, friendId: FriendId, chats: [data]});
-            const saveData=await newChatDoc.save();
+            const saveData= await newChatDoc.save();
             return res.status(200).json({msg:saveData})
            }
     }
     catch (e) {
+        console.log(e)
         return res.send("error");
     }
 

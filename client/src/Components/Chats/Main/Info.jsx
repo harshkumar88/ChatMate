@@ -1,20 +1,33 @@
 import React, { useEffect,useState} from 'react'
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import './info.css'
 
 const Info = ({userdata}) => { 
     const navigate = useNavigate();
     const logout=async()=>{
-        const data= await fetch("/logout", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want's to Logout.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, do it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.clear("userId");
+              Swal.fire(
+                'Logout!',
+                'You are Logout.',
+                'success'
+              ).then(()=>{
+                navigate("/Form")
+              })
+             
             }
-
-        });
-        const res=await data.json();
-        localStorage.clear("userId");
-        navigate("/Form")
+          })
     }
 
     return (
@@ -27,7 +40,10 @@ const Info = ({userdata}) => {
                      let's chat
                 </div>
             </div>
-            <div className='mt-3 d-flex'> <div className='mx-2'> <i className="bi bi-box-arrow-right pointer " onClick={logout}></i></div> </div>
+           
+            <div className='mt-3 d-flex log'> <div className='mx-2'> <i className="bi bi-box-arrow-right pointer " onClick={logout}></i></div>
+           
+             </div>
         </div>
     )
 }
