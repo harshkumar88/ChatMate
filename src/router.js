@@ -468,6 +468,38 @@ router.post("/getChat", async (req, res) => {
     }
 
 })
+router.post("/deleteFriend",async(req,res)=>{
+    try {
+        const {userId,friend}=req.body
+        console.log(userId+friend)
+        let getuserFriend = await FriendList.findOne({ userId: userId});
+        let userFriend=getuserFriend.Friends;
+        let newuserFriend=userFriend.filter((ele)=>{
+            return ele!==friend
+        })
+        // console.log(newuserFriend)
+        // console.log(getuserFriend)
+        let getFriendFriend=await FriendList.findOne({ userId: friend});
+        let friendfriend=getFriendFriend.Friends;
+        let newFriendFriend=friendfriend.filter((ele)=>{
+            return ele!==userId
+        })
+        // console.log(newFriendFriend)
+       const updatefriendsofuser=await FriendList.updateOne(
+            { userId: userId },
+            { $set: { Friends: newuserFriend } }
+          )
+          const updatefriendsooffriend=await FriendList.updateOne(
+            { userId:friend},
+            {
+                $set: { Friends: newFriendFriend } 
+            }
+          )
+        return res.status(401).json({msg:newuserFriend})
+    } catch (error) {
+        return res.status(401).json({msg:"x"})
+    }
+})
 
 
 module.exports = router;

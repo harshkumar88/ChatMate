@@ -6,29 +6,7 @@ import './info.css'
 
 const Info = ({userdata}) => { 
     const navigate = useNavigate();
-    const logout=async()=>{
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You want's to Logout.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, do it!'
-          }).then((result) => {
-            if (result.isConfirmed) {
-                localStorage.clear("userId");
-              Swal.fire(
-                'Logout!',
-                'You are Logout.',
-                'success'
-              ).then(()=>{
-                navigate("/Form")
-              })
-             
-            }
-          })
-    }
+   
 
     return (
         <div className='p-3 mx-2 d-flex justify-content-between'>
@@ -41,9 +19,6 @@ const Info = ({userdata}) => {
                 </div>
             </div>
            
-            <div className='mt-3 d-flex log'> <div className='mx-2'> <i className="bi bi-box-arrow-right pointer " onClick={logout}></i></div>
-           
-             </div>
         </div>
     )
 }

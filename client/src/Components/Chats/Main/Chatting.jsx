@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Display from './Display'
 import Info from './Info'
+import Swal from 'sweetalert2'
 import io from 'socket.io-client'
 import './Main.css'
 import { UserID, uId } from '../../../App'
@@ -248,6 +249,62 @@ const Chatting = ({ change, user }) => {
     })
     setList(newUserList)
   }
+  const logout=async()=>{
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want's to Logout.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, do it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.clear("userId");
+          Swal.fire(
+            'Logout!',
+            'You are Logout.',
+            'success'
+          ).then(()=>{
+            navigate("/Form")
+          })
+         
+        }
+      })
+}
+  const deleteFriend=async (friend)=>{
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You want to remove ${friend} from your friends.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, do it!'
+    }).then(async(result) => {
+      if (result.isConfirmed) {
+        const res = await fetch("/deleteFriend", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            userId, friend
+          })
+        });
+        const data=await res.json();
+        
+        setList(data.msg)
+        Swal.fire(
+           `${friend} removed from friend list`
+        )
+       
+      }
+    })
+    
+    
+
+  }
 
   const showPic = (ele) => {
     if (!ele.pic) ele.pic = 'https://img.icons8.com/ultraviolet/512/user.png'
@@ -270,6 +327,7 @@ const Chatting = ({ change, user }) => {
 
                     <div className='bi bi-bell ms-4' onClick={() => { navigate('/Notifications') }}></div>
                     <div className='bi bi-plus-circle-fill sizeIcon bg-light ms-3' onClick={showPage}></div>
+                    <div className='bi bi-box-arrow-right pointer ms-3'onClick={logout}></div>
                   </div>
                 </div>
 
@@ -314,9 +372,11 @@ const Chatting = ({ change, user }) => {
                             <div className='mx-3 pointer' onClick={() => showChat(ele)}>
                               <span style={{ display: "block" }}>{ele.username}</span>
                               <span className='text-muted'>Text me fast</span>
+
                             </div>
                           </div>
-                          <div className='text-muted me-2'> {msgCount.indexOf(ele.username) != -1 ? <span className='text-success'><i className="bi bi-bell"></i></span> : <span>Let's chat</span>}</div>
+                          <div className='text-muted me-2'> {msgCount.indexOf(ele.username) != -1 ? <span className='text-success'><i className="bi bi-bell"></i></span> : <span>
+                                                          <i class="bi bi-trash" style={{cursor:"pointer"}} onClick={()=>deleteFriend(ele.username)}> </i></span>}</div>
                         </div>
                       )
                     })}
