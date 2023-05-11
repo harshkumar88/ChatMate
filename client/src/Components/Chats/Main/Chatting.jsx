@@ -40,6 +40,14 @@ const Chatting = ({ change, user }) => {
   const [chatPage, setChatPage] = useState(false);
   const [showColor,setColor]=useState("");
 
+  const handleBackButton = () => {
+    // This function will be called when the user navigates back to this page
+    console.log("back")
+    setChatPage(false)
+    // Do something else here
+  };
+ 
+ 
 
   const setWidth = () => {
     const w = window.innerWidth
@@ -99,7 +107,7 @@ const Chatting = ({ change, user }) => {
   }
 
   useEffect(() => {
-    
+    window.addEventListener('popstate', handleBackButton);
     setColor("")
     setWidth();
     if (change) {
@@ -156,7 +164,6 @@ const Chatting = ({ change, user }) => {
    
     return info
   }
-   
 
   useEffect(() => {
 
@@ -171,9 +178,11 @@ const Chatting = ({ change, user }) => {
     socket.on("getMessage", async (data) => {
       if (data.sender == userId) {
            const res = await saveMsg(data, { uid: data.sender, Fid: data.reciever });
+           console.log(res)
            if(res){
-             getMsg(data.sender, data.reciever);
              const response=await saveMsg(data, { uid: data.reciever, Fid: data.sender });
+             console.log("msg")
+             await getMsg(data.sender, data.reciever);
             }
        }
 

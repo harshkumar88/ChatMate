@@ -139,6 +139,7 @@ router.post("/verifyEmail", async (req, res) => {
         console.log("error")
     }
 })
+
 router.post("/changepassword", async (req, res) => {
 
     const { password, confirmpassword, email } = req.body

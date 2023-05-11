@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './Main.css'
 import io from 'socket.io-client'
 const socket = io('https://chatmate-backend.onrender.com', { autoConnect: false, transports: ['websocket'] });
@@ -12,6 +12,10 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
   const [loader, setLoader] = useState(true);
   const [msg, setmsg] = useState(false);
   const [emoji, showEmoji] = useState(false);
+  const inputRef = useRef(null);
+  const containerRef = useRef(null);
+  
+
 
   if (len < arr.length) {
     setmsg(false);
@@ -25,15 +29,14 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
 
     }
 
+
     let objDiv = document.getElementById("scrollDiv");
     objDiv.scrollTop = objDiv.scrollHeight;
     socket.connect();
     console.log("connet")
     socket.emit('AddRoom');
-    return () => {
-      socket.disconnect();
-    };
-  }, [])
+   
+  }, [arr])
 
   const sendMsg = (e) => {
     setmsg(true)
@@ -51,7 +54,7 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
     if(emojiArr.indexOf(ele)!=-1){
       setText(text+ele)
     }
-    ;showEmoji(false)
+    showEmoji(false)
   }
 
 
@@ -88,13 +91,13 @@ const Display = ({ change, userId, FriendId, arr, check, chatload }) => {
          </div> 
        : 
        ""}
-          <div className={change == false ? 'd-flex fixedPos1 mt-5 mb-2 ' : 'd-flex fixedPos2 mt-5 mb-2'}>
+          <div className={change == false ? 'd-flex fixedPos1 mt-5 mb-2 ' : 'd-flex fixedPos2 mt-5 mb-2'} ref={containerRef}>
             <div className='bi bi-plus-circle-fill sizeIcon ms-5 mx-1 bg-light borderR'></div>
             <div className='w-75'>
               <form onSubmit={sendMsg} className="d-flex heightSet">
                 <div className='inp w-100'>
                   {loader == true || msg==true ? <input className='form-control bg-light' placeholder='wait ....' onChange={(e) => setText(e.target.value)} value={text} readOnly /> :
-                    <input className='form-control bg-light' placeholder='send Message' onChange={(e) => setText(e.target.value)} value={text} />}
+                    <input className='form-control bg-light' ref={inputRef} placeholder='send Message' onChange={(e) => setText(e.target.value)} value={text} />}
                   <span className='tooltiptxt'>Send Msgx </span>
                 </div>
                 
