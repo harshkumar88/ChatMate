@@ -191,6 +191,7 @@ router.post("/getAllUsers", async (req, res) => {
             return ele.username != uniqueId && list.indexOf(ele.username) == "-1" && FriendArr.indexOf(ele.username) == "-1" && NotiArr.indexOf(ele.username) == "-1"
 
         })
+        
         return res.status(201).json({ users: allUsers })
     }
     catch (e) {
@@ -428,7 +429,7 @@ router.post("/saveMsg", async (req, res) => {
            const chatData= await Chats.findOne({ userId: userId, friendId: FriendId });
            if(chatData){
                 const chats=chatData.chats;
-                if(chats.length>0 && chats[chats.length-1].date!=data.date){
+                if(chats.length>0 && chats[chats.length-1].miliTime!=data.miliTime){
                     chatData.chats.push(data);
                     const saveData=await chatData.save();
                     return res.status(200).json({msg:saveData})
