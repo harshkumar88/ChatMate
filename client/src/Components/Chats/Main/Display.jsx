@@ -87,8 +87,10 @@ const Display = ({ change, userId, FriendId, arr = [], check, chatload }) => {
     const month=monthName[d.getMonth()];
    const senddate=day+"/"+month
 
+   const miliTime = Date.now();
+   console.log(miliTime);
   
-    socket.emit("msgInfo", { text, sender: userId, reciever: FriendId, date, time,senddate});
+    socket.emit("msgInfo", { text, sender: userId, reciever: FriendId, miliTime, time,senddate});
     setText("");
    
     let objDiv = document.getElementById("scrollDiv");

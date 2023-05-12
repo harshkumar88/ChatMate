@@ -214,6 +214,15 @@ const Chatting = ({ change, user }) => {
         }
       }
     })
+
+    socket.on("FriendRemove",async({friendId,deleteId})=>{
+         if(userId==friendId){
+             await getFriends(friendId);
+             Swal.fire(
+              `${deleteId} and you are no longer friend`,
+             )
+         }
+    })
   }, [socket])
 
   const showChat = (ele) => {
@@ -294,7 +303,8 @@ const Chatting = ({ change, user }) => {
         });
         const data=await res.json();
         
-        setList(data.msg)
+        setList(data.msg);
+        socket.emit("removefriend",friend,userId);
         Swal.fire(
            `${friend} removed from friend list`
         )
@@ -327,7 +337,7 @@ const Chatting = ({ change, user }) => {
 
                     <div className='bi bi-bell ms-4' onClick={() => { navigate('/Notifications') }}></div>
                     <div className='bi bi-plus-circle-fill sizeIcon bg-light ms-3' onClick={showPage}></div>
-                    <div className='bi bi-box-arrow-right pointer ms-3'onClick={logout}></div>
+                    <div className='bi bi-box-arrow-right pointer ms-3 me-5'onClick={logout}></div>
                   </div>
                 </div>
 
@@ -376,7 +386,7 @@ const Chatting = ({ change, user }) => {
                             </div>
                           </div>
                           <div className='text-muted me-2'> {msgCount.indexOf(ele.username) != -1 ? <span className='text-success'><i className="bi bi-bell"></i></span> : <span>
-                                                          <i class="bi bi-trash" style={{cursor:"pointer"}} onClick={()=>deleteFriend(ele.username)}> </i></span>}</div>
+                                 <i class="bi bi-trash" style={{cursor:"pointer"}} onClick={()=>deleteFriend(ele.username)}> </i></span>}</div>
                         </div>
                       )
                     })}

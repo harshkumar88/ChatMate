@@ -51,6 +51,9 @@ io.on("connection",(socket)=>{
   socket.on("msgSaved",(data)=>{
     socket.to("Chat").emit("showMsg",data);
   })
+  socket.on("removefriend",(friendId,deleteId)=>{
+    socket.to("Chat").emit("FriendRemove",{friendId,deleteId});
+  })
   socket.on("disconnect",()=>{
     console.log("user disconnected")
   })
