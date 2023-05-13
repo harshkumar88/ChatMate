@@ -149,6 +149,17 @@ const Chatting = ({ change, user }) => {
   }
 
 
+  const deleteDupli=async(sender,reciever)=>{
+    const res = await fetch("/DeleteDuplicateChat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        sender, reciever
+      })
+    });
+  }
   const getMsg = async (sender, reciever) => {
     console.log(sender, reciever)
     const res = await fetch("/getChat", {
@@ -162,7 +173,31 @@ const Chatting = ({ change, user }) => {
     });
 
     const info = await res.json();
-    contentList = info.msg
+    let checkArr=[];
+    let dupli=false;
+    let doc='';
+    for(let i of info.msg){
+      if(doc==''){
+        doc=i;
+        checkArr.push(i);
+      }
+      else if(doc.text==i.text  && doc.sender==i.sender && 
+        doc.reciever==i.reciever && doc.miliTime==i.miliTime && doc.time==i.time && doc.senddate==i.senddate){
+          dupli=true;
+        }
+      else {
+        checkArr.push(i);
+        doc=i;
+      }
+      
+    }
+    if(dupli){
+      deleteDupli(sender,reciever);
+      deleteDupli(reciever,sender)
+    }
+   
+    
+    contentList = checkArr;
     console.log("check change ")
     ch = true;
     setCheck(true);
@@ -386,7 +421,7 @@ const Chatting = ({ change, user }) => {
                             </div>
                           </div>
                           <div className='text-muted me-2'> {msgCount.indexOf(ele.username) != -1 ? <span className='text-success'><i className="bi bi-bell"></i></span> : <span>
-                                 <i class="bi bi-trash" style={{cursor:"pointer"}} onClick={()=>deleteFriend(ele.username)}> </i></span>}</div>
+                                 <i className="bi bi-trash" style={{cursor:"pointer"}} onClick={()=>deleteFriend(ele.username)}> </i></span>}</div>
                         </div>
                       )
                     })}
