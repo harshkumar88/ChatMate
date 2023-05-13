@@ -453,6 +453,42 @@ router.post("/saveMsg", async (req, res) => {
 
 })
 
+router.post("/DeleteDuplicateChat",async(req,res)=>{
+     try{
+        const {sender,reciever}=req.body;
+        const getChat = await Chats.findOne({ userId: sender, friendId: reciever });
+         if(getChat){
+            let checkArr=[];
+            let doc='';
+            for(let i of getChat.chats){
+                if(doc==''){
+                  doc=i;
+                  checkArr.push(i);
+                }
+                else if(doc.text==i.text  && doc.sender==i.sender && 
+                  doc.reciever==i.reciever && doc.miliTime==i.miliTime && doc.time==i.time && doc.senddate==i.senddate){
+                    dupli=true;
+                  }
+                else {
+                  checkArr.push(i);
+                  doc=i;
+                }
+                
+              }
+
+            getChat.chats=checkArr;
+            const saveData=await getChat.save();
+            return res.status(200).json({msg:saveData})
+         }
+         else{
+            return res.json({msg:"notFound"})
+         }
+     }
+     catch(e){
+        console.log("kyuerror")
+     }
+})
+
 router.post("/getChat", async (req, res) => {
 
     try {
