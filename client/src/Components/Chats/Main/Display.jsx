@@ -5,7 +5,7 @@ import io from 'socket.io-client'
 const socket = io('https://chatmate-backend.onrender.com', { autoConnect: false, transports: ['websocket'] });
 
 let len = 0;
-let emojiArr = ['😎', '😭', '🥲', '🫡', '🧐', '😆', '😍', '😆', '🙊'];
+let emojiArr = ['😎', '😭', '🥲', '🫡', '🧐', '😆', '😍', '😆', '🙊','😨','🥳','🥱','✌🏻','👍🏻','😡','🥶'];
 
 const Display = ({ change, userId, FriendId, arr = [], check, chatload }) => {
   const [text, setText] = useState("");
@@ -130,8 +130,8 @@ const Display = ({ change, userId, FriendId, arr = [], check, chatload }) => {
           }
           {/*SEnd Msg*/}
 
-          {emoji == true ? <div className={change == false ? 'd-flex fixedPos3 mt-5 bg-light w-50 ms-5' : 'd-flex fixedPos4 mt-5 mb-2 bg-danger w-75 ms-5'}>
-            <div className='ms-auto d-flex w-25 designEmoji flex-wrap'>
+          {emoji == true ? <div className={change == false ? 'd-flex fixedPos3 mt-5 bg-light w-50 ms-5' : 'd-flex fixedPos4 mt-5 mb-2 bg-danger '}>
+            <div className='ms-auto d-flex w-50 designEmoji flex-wrap'>
               {emojiArr.map((ele, id) => {
                 return (
                   <div key={id} className='ms-3 pointerCursor' onClick={() => setEmoji(ele)}  >{ele}</div>

@@ -7,6 +7,7 @@
     cursor: pointer;
     background-color: white;
     height: auto;
+    margin-top: -6px;
 }
 
 .sidebarWidth1{
@@ -180,7 +181,7 @@
 .fixedPos4{
   position: fixed;
   bottom: 8%;
-  width: 95%;
+  width: 92%;
   z-index: 2;
 }
 
