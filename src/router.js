@@ -521,6 +521,10 @@ router.post("/deleteFriend",async(req,res)=>{
         let newFriendFriend=friendfriend.filter((ele)=>{
             return ele!==userId
         })
+
+        //delete Chat between them
+        await Chats.findOneAndDelete({ userId: userId, friendId: friend });
+        await Chats.findOneAndDelete({ userId: friend, friendId: userId });
         // console.log(newFriendFriend)
        const updatefriendsofuser=await FriendList.updateOne(
             { userId: userId },
@@ -532,6 +536,7 @@ router.post("/deleteFriend",async(req,res)=>{
                 $set: { Friends: newFriendFriend } 
             }
           )
+
         return res.status(401).json({msg:newuserFriend})
     } catch (error) {
         return res.status(401).json({msg:"x"})

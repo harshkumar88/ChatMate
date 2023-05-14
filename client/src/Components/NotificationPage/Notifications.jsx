@@ -16,6 +16,7 @@ const Notifications = () => {
     const [change, setChange] = useState(false);
     const [loading, setLoading] = useState(true);
     const [user,setUid]=useState("");
+    const [notifi,setNotifi]=useState(false);
 
     const [list, setlist] = useState([]);
     const [users, setUsers] = useState([]);
@@ -96,11 +97,13 @@ const Notifications = () => {
         //  console.log(FixeduserList);
         setUsers(users);
         //  console.log(users)
+        
+        setNotifi(false);
     }
 
 //Accepted Notifications
 const Accepted=async(Id)=>{
-   
+    setNotifi(true);
     const Accepted= await fetch("/Accepted", {
         method: "POST",
         headers: {
@@ -112,6 +115,7 @@ const Accepted=async(Id)=>{
         })
     });
     const info=await Accepted.json();
+  
     getAllNotifications(userId);
     toast('User Added', {
         position: 'top-right',
@@ -122,7 +126,7 @@ const Accepted=async(Id)=>{
 
 }
 const Rejected=async(Id)=>{
-    
+    setNotifi(true);
   const Rejected= await fetch("/Rejected", {
       method: "POST",
       headers: {
@@ -134,12 +138,14 @@ const Rejected=async(Id)=>{
       })
   });
   const info=await Rejected.json();
+  
   getAllNotifications(userId);
   toast('Request Deleted', {
       position: 'top-right',
       autoClose: 2000,
      
     })
+ 
     socket.emit('message', Id);
 
 }
@@ -174,7 +180,7 @@ const Rejected=async(Id)=>{
                         <h2 className='ForgetHeader pt-3  border-bottom border-dark'>Notifications</h2>
                         {/* <div className='mx-auto w-100 text-center bg-light p-1' style={{ zIndex: 2 }}><input className='form-control w-75 mx-auto' placeholder='Search User' onChange={(e) => changeUserList(e.target.value)} /></div> */}
                         {loading==false?<div style={{ height: "auto", maxHeight: "400px", overflow: "scroll" }} >
-                            {users.length>0?users.map((ele, id) => {
+                            {users.length>0 && notifi==false?users.map((ele, id) => {
                                 return (
                                     <div className='d-flex mt-3 bg-light p-3' key={id} style={{ cursor: 'pointer' }}>
                                         <div className='setImage ms-2'>
@@ -191,7 +197,7 @@ const Rejected=async(Id)=>{
                                         </div>
                                     
                                 )
-                            }):<p className='text-dark pt-3'>No Notifications yet.</p>}
+                            }):notifi?<p className='text-dark pt-3'>Wait pls ...</p>:<p className='text-dark pt-3'>No Notifications yet</p>}
                         </div>:
                         <div className='p-3'>
                         <div className="loader">

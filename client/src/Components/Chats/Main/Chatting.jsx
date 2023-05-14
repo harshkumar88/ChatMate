@@ -41,6 +41,7 @@ const Chatting = ({ change, user }) => {
   const [chatPage, setChatPage] = useState(false);
   const [showColor, setColor] = useState("");
   const [msgCount, setMsgCount] = useState([]);
+  const [infonoti,setinfonoti]=useState("");
 
   const handleBackButton = () => {
     // This function will be called when the user navigates back to this page
@@ -195,8 +196,7 @@ const Chatting = ({ change, user }) => {
       deleteDupli(sender,reciever);
       deleteDupli(reciever,sender)
     }
-   
-    
+      
     contentList = checkArr;
     console.log("check change ")
     ch = true;
@@ -256,6 +256,7 @@ const Chatting = ({ change, user }) => {
              Swal.fire(
               `${deleteId} and you are no longer friend`,
              )
+             setChatPage(false)
          }
     })
   }, [socket])
@@ -327,7 +328,7 @@ const Chatting = ({ change, user }) => {
       confirmButtonText: 'Yes, do it!'
     }).then(async(result) => {
       if (result.isConfirmed) {
-        const res = await fetch("/deleteFriend", {
+        const res = await fetch("http://localhost:5000/deleteFriend", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -367,12 +368,18 @@ const Chatting = ({ change, user }) => {
                 {/*Adduserpage*/}
                 <div className='w-100 bg-light d-flex justify-content-between p-3'>
                   <div><h2>Chats</h2><p className='text-muted'>Recents Chats</p></div>
+                <div className='w-25'>
+                  <div className='d-flex justify-content-evenly w-100 bellICon mt-2  ' >
 
-                  <div className='d-flex justify-content-evenly w-25 bellICon mt-2 ms-5 ' >
-
-                    <div className='bi bi-bell ms-4' onClick={() => { navigate('/Notifications') }}></div>
-                    <div className='bi bi-plus-circle-fill sizeIcon bg-light ms-3' onClick={showPage}></div>
-                    <div className='bi bi-box-arrow-right pointer ms-3 me-5'onClick={logout}></div>
+                    <div className='bi bi-bell ms-4' onClick={() => { navigate('/Notifications') }} onMouseOver={()=>setinfonoti("Notifications")} onMouseLeave={()=>setinfonoti("")}></div>
+                    <div className='bi bi-plus-circle-fill sizeIcon  ms-3 bg-light' onClick={showPage} onMouseOver={()=>setinfonoti("Add Friends")} onMouseLeave={()=>setinfonoti("")}></div>
+                    <div className='bi bi-box-arrow-right pointer ms-3 me-5'onClick={logout} onMouseOver={()=>setinfonoti("Logout")} onMouseLeave={()=>setinfonoti("")}></div>
+                
+                  </div>
+                 
+                  {infonoti=="Notifications"?<div style={{marginLeft:"-13px",marginTop:"-10px"}}> <span style={{fontSize:"10px",fontWeight:"bold"}}>{infonoti}</span></div>:""}
+                  {infonoti=="Add Friends"?<div style={{marginLeft:"25px",marginTop:"-10px"}}> <span style={{fontSize:"10px",fontWeight:"bold"}}>{infonoti}</span></div>:""}
+                  {infonoti=="Logout"?<div style={{marginLeft:"65px",marginTop:"-10px"}}> <span style={{fontSize:"10px",fontWeight:"bold"}}>{infonoti}</span></div>:""}
                   </div>
                 </div>
 
