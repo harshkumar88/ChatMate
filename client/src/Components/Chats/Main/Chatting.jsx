@@ -328,7 +328,7 @@ const Chatting = ({ change, user }) => {
       confirmButtonText: 'Yes, do it!'
     }).then(async(result) => {
       if (result.isConfirmed) {
-        const res = await fetch("http://localhost:5000/deleteFriend", {
+        const res = await fetch("/deleteFriend", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
