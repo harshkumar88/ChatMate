@@ -15,18 +15,18 @@ router.use(cookieParser());
 router.use(cors());
 
 router.post("/", (req, res) => {
-  
+
     return res.json({ cookies: req.cookies.jwt })
 })
 
 router.post("/getID", (req, res) => {
     return res.json({ cookies: req.cookies.jwt })
 })
-router.post('/logout',(req, res) => {
+router.post('/logout', (req, res) => {
     res.clearCookie('jwt');
-    return res.status(201).json({msg:"hello"});
-  });
-  
+    return res.status(201).json({ msg: "hello" });
+});
+
 
 router.post("/registerData", async (req, res) => {
     const { username, email, password, confirmpass, pic } = req.body;
@@ -90,11 +90,11 @@ router.post("/LoginData", async (req, res) => {
                     const uniqueId = finduser.username;
                     res.cookie("jwt", { token, uniqueId }, {
                         expires: new Date(Date.now() + 60000000000),
-                        secure:true,
-                        sameSite:"strict",
-                        path:"/"
+                        secure: true,
+                        sameSite: "strict",
+                        path: "/"
                     });
-                    
+
 
                     return res.status(201).json({ message: "Success", userId: uniqueId });
                 }
@@ -191,7 +191,7 @@ router.post("/getAllUsers", async (req, res) => {
             return ele.username != uniqueId && list.indexOf(ele.username) == "-1" && FriendArr.indexOf(ele.username) == "-1" && NotiArr.indexOf(ele.username) == "-1"
 
         })
-        
+
         return res.status(201).json({ users: allUsers })
     }
     catch (e) {
@@ -424,27 +424,27 @@ router.post("/saveMsg", async (req, res) => {
         const { data, Info } = req.body;
         const userId = Info.uid;
         const FriendId = Info.Fid;
-        
+
         // Find the chat document that matches userId and FriendId
-           const chatData= await Chats.findOne({ userId: userId, friendId: FriendId });
-           if(chatData){
-                const chats=chatData.chats;
-                if(chats.length>0 && chats[chats.length-1].miliTime!=data.miliTime){
-                    chatData.chats.push(data);
-                    const saveData=await chatData.save();
-                    return res.status(200).json({msg:saveData})
-                }
-                else{
-                    return res.status(200).json({msg:chatData})
-                }
-           }
+        const chatData = await Chats.findOne({ userId: userId, friendId: FriendId });
+        if (chatData) {
+            const chats = chatData.chats;
+            if (chats.length > 0 && chats[chats.length - 1].miliTime != data.miliTime) {
+                chatData.chats.push(data);
+                const saveData = await chatData.save();
+                return res.status(200).json({ msg: saveData })
+            }
+            else {
+                return res.status(200).json({ msg: chatData })
+            }
+        }
 
-           else {
+        else {
 
-            const newChatDoc = new Chats({ userId: userId, friendId: FriendId, chats: [data]});
-            const saveData= await newChatDoc.save();
-            return res.status(200).json({msg:saveData})
-           }
+            const newChatDoc = new Chats({ userId: userId, friendId: FriendId, chats: [data] });
+            const saveData = await newChatDoc.save();
+            return res.status(200).json({ msg: saveData })
+        }
     }
     catch (e) {
         console.log(e)
@@ -453,40 +453,40 @@ router.post("/saveMsg", async (req, res) => {
 
 })
 
-router.post("/DeleteDuplicateChat",async(req,res)=>{
-     try{
-        const {sender,reciever}=req.body;
+router.post("/DeleteDuplicateChat", async (req, res) => {
+    try {
+        const { sender, reciever } = req.body;
         const getChat = await Chats.findOne({ userId: sender, friendId: reciever });
-         if(getChat){
-            let checkArr=[];
-            let doc='';
-            for(let i of getChat.chats){
-                if(doc==''){
-                  doc=i;
-                  checkArr.push(i);
+        if (getChat) {
+            let checkArr = [];
+            let doc = '';
+            for (let i of getChat.chats) {
+                if (doc == '') {
+                    doc = i;
+                    checkArr.push(i);
                 }
-                else if(doc.text==i.text  && doc.sender==i.sender && 
-                  doc.reciever==i.reciever && doc.miliTime==i.miliTime && doc.time==i.time && doc.senddate==i.senddate){
-                    dupli=true;
-                  }
+                else if (doc.text == i.text && doc.sender == i.sender &&
+                    doc.reciever == i.reciever && doc.miliTime == i.miliTime && doc.time == i.time && doc.senddate == i.senddate) {
+                    dupli = true;
+                }
                 else {
-                  checkArr.push(i);
-                  doc=i;
+                    checkArr.push(i);
+                    doc = i;
                 }
-                
-              }
 
-            getChat.chats=checkArr;
-            const saveData=await getChat.save();
-            return res.status(200).json({msg:saveData})
-         }
-         else{
-            return res.json({msg:"notFound"})
-         }
-     }
-     catch(e){
+            }
+
+            getChat.chats = checkArr;
+            const saveData = await getChat.save();
+            return res.status(200).json({ msg: saveData })
+        }
+        else {
+            return res.json({ msg: "notFound" })
+        }
+    }
+    catch (e) {
         console.log("kyuerror")
-     }
+    }
 })
 
 router.post("/getChat", async (req, res) => {
@@ -505,42 +505,78 @@ router.post("/getChat", async (req, res) => {
     }
 
 })
-router.post("/deleteFriend",async(req,res)=>{
+router.post("/deleteFriend", async (req, res) => {
     try {
-        const {userId,friend}=req.body
-        console.log(userId+friend)
-        let getuserFriend = await FriendList.findOne({ userId: userId});
-        let userFriend=getuserFriend.Friends;
-        let newuserFriend=userFriend.filter((ele)=>{
-            return ele!==friend
+        const { userId, friend } = req.body
+        console.log(userId + friend)
+        let getuserFriend = await FriendList.findOne({ userId: userId });
+        let userFriend = getuserFriend.Friends;
+        let newuserFriend = userFriend.filter((ele) => {
+            return ele !== friend
         })
         // console.log(newuserFriend)
         // console.log(getuserFriend)
-        let getFriendFriend=await FriendList.findOne({ userId: friend});
-        let friendfriend=getFriendFriend.Friends;
-        let newFriendFriend=friendfriend.filter((ele)=>{
-            return ele!==userId
+        let getFriendFriend = await FriendList.findOne({ userId: friend });
+        let friendfriend = getFriendFriend.Friends;
+        let newFriendFriend = friendfriend.filter((ele) => {
+            return ele !== userId
         })
 
         //delete Chat between them
         await Chats.findOneAndDelete({ userId: userId, friendId: friend });
         await Chats.findOneAndDelete({ userId: friend, friendId: userId });
         // console.log(newFriendFriend)
-       const updatefriendsofuser=await FriendList.updateOne(
+        const updatefriendsofuser = await FriendList.updateOne(
             { userId: userId },
             { $set: { Friends: newuserFriend } }
-          )
-          const updatefriendsooffriend=await FriendList.updateOne(
-            { userId:friend},
+        )
+        const updatefriendsooffriend = await FriendList.updateOne(
+            { userId: friend },
             {
-                $set: { Friends: newFriendFriend } 
+                $set: { Friends: newFriendFriend }
             }
-          )
+        )
 
-        return res.status(401).json({msg:newuserFriend})
+        return res.status(401).json({ msg: newuserFriend })
     } catch (error) {
-        return res.status(401).json({msg:"x"})
+        return res.status(401).json({ msg: "x" })
     }
+})
+
+router.post("/deleteChat", async (req, res) => {
+    const { sender, chat, text } = req.body;
+    let reciever=chat.reciever;
+    if(chat.sender!=sender){
+        reciever=chat.sender;
+    }
+
+    if (text == "Delete for me") {
+        const chatData = await Chats.findOneAndUpdate(
+            { userId: sender, friendId: reciever },
+            { $pull: { chats: { $eq: chat } } },
+            { new: true }
+        );
+        console.log(chatData)
+        return res.status(200).json({ msg: chatData.chats });
+    }
+
+    else{
+        const chatData = await Chats.findOneAndUpdate(
+            { userId: sender, friendId: chat.reciever, chats: { $elemMatch: chat } },
+            { $set: { "chats.$.text": "You deleted this message" } },
+            { new: true }
+          );
+
+        const chatData2 = await Chats.findOneAndUpdate(
+            { userId: chat.reciever, friendId: chat.sender, chats: { $elemMatch: chat } },
+            { $set: { "chats.$.text": "This message was deleted"} },
+            { new: true }
+          );
+          
+          return res.status(200).json({ msg: chatData.chats });
+    }
+
+
 })
 
 
