@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './Main.css'
 import io from 'socket.io-client'
-
+import Swal from 'sweetalert2'
 const socket = io('https://chatmate-backend.onrender.com', { autoConnect: false, transports: ['websocket'] });
 
 let len = 0;
@@ -14,7 +14,8 @@ const Display = ({ change, userId, FriendId, arr = [], check, chatload }) => {
   const [emoji, showEmoji] = useState(false);
   const inputRef = useRef(null);
   const containerRef = useRef(null);
-  
+  const [showDelete,setDelete]=useState(false);
+  const [chat,setChat]=useState({});
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.addEventListener('focus', handleInputFocus);
@@ -105,9 +106,16 @@ const Display = ({ change, userId, FriendId, arr = [], check, chatload }) => {
     }
     showEmoji(false)
   }
+  const DeleteChat=(ele)=>{
+    setChat(ele);
+    setDelete(true)
+  }
+  const DeleteChatting=(text)=>{
+        socket.emit("deleteChat",{text,sender:userId,reciever:FriendId,chat:chat});
+  }
 
   return (
-    <div className='flex-grow-1 border-top scroll mb-5'>
+    <div className='flex-grow-1 border-top scroll mb-5' onClick={showDelete?()=>setDelete(false):()=>{}}>
       {chatload == true ? <div className='chatLoad d-flex justify-content-center align-items-center'><div className='loader2'></div></div> :
         <div className={loader == true ? 'flex-grow-1 border-top scroll mb-5 centerLoader' : 'flex-grow-1 border-top scroll mb-5'} >
           {loader == true ?
@@ -117,13 +125,28 @@ const Display = ({ change, userId, FriendId, arr = [], check, chatload }) => {
               {arr.map((ele, id) => {
                 return (
                   <div key={id}>
-                    {ele.sender != userId ? <div key={id} className="ms-5 bg-light"><div className='text-break leftStyle mb-2 d-flex'><div className='textChata'>{ele.text} </div><div className='d-flex flex-column justify-content-center align-items-center mt-1'>
-                    <div style={{ fontSize: "10px", marginTop: "25%" }} className='ms-2'>{ele.time}</div></div></div></div> 
+                    {ele.sender != userId ? <div key={id} className="ms-5 bg-light"><div className='text-break leftStyle mb-2 d-flex'><div className='textChata'>{ele.text} </div>
+                    <div className='d-flex flex-column justify-content-center align-items-center mt-1'>
+                    <div className='bi bi-trash ms-auto pointer' style={{ fontSize: "10px"}} onClick={()=>DeleteChat(ele)}></div>
+                    <div style={{ fontSize: "10px",marginTop:'-5%'}} className='ms-2'>{ele.time}</div></div></div></div> 
                     : <div key={id} className=" text-break me-5 w-100 bg-light "><div className='ms-auto me-5 rightStyle mb-2 d-flex'> 
-                    <div className='textChata'>{ele.text} </div> <div style={{ fontSize: "10px", marginTop: "17%" }} className='ms-2'>{ele.time}</div></div></div>}
+                    <div className={ele.text=="You deleted this message"?'text-muted text-chata':"text-chata"}>{ele.text} </div> 
+                    <div className='d-flex flex-column justify-content-center align-items-center mt-1'>
+                    <div className='bi bi-trash ms-auto pointer' style={{ fontSize: "10px"}} onClick={()=>DeleteChat(ele)}></div>
+                    <div style={{ fontSize: "10px", marginTop: "-5%" }} className='ms-2'>{ele.time}</div></div></div>
+                  </div>}
                   </div>
                 )
               })}
+              {showDelete?
+              <div className='mx-auto deletediv' style={{width:"30%"}}>
+              <p className='ms-3 pt-2 text-muted' >Delete message?</p>
+              <div className='text-end me-3 pb-2'>
+              {chat.text!="You deleted this message" && chat.sender==userId?<p className='pointer' onClick={()=>DeleteChatting("Delete for everyone")}>Delete for everyone</p>:""}
+
+              <p className='pointer' onClick={()=>DeleteChatting("Delete for me")}>Delete for me</p>
+              <p className='pointer'>Cancel</p></div>
+              </div>:""}
               {msg == true ? <div className='chatLoad ms-auto me-5 rightstyle'><div className='loader3'></div></div> :
                 ""}
             </div>

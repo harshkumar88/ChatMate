@@ -10,6 +10,14 @@
     margin-top: -6px;
 }
 
+.deletediv{
+  background-color: rgba(6, 0, 0, 0.799);
+  color:aquamarine;
+  position:fixed;
+  z-index: 4;
+  top:30%;
+  right:17%;
+}
 .sidebarWidth1{
   width:50vw;
   min-height: 100vh;
@@ -348,6 +356,21 @@
   }
 
 
+/* Custom Toast Animation Speed */
+.Toastify__toast-container {
+  -webkit-transition: 0.1s; /* Increase the duration to match the display duration */
+  -moz-transition: 0.1s;
+  -o-transition: 0.1s;
+  transition: 0.1s;
+}
+
+/* Optional: Custom Toast Close Button Animation Speed */
+.Toastify__close-button {
+  -webkit-transition: 0.5s; /* Increase the duration to match the display duration */
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+  transition: 0.5s;
+}
 
 
 

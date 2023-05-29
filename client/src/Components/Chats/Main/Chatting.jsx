@@ -4,6 +4,11 @@ import Info from './Info'
 import Swal from 'sweetalert2'
 import io from 'socket.io-client'
 import './Main.css'
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 import { UserID, uId } from '../../../App'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Users from '../SideBar/Users'
@@ -207,6 +212,30 @@ const Chatting = ({ change, user }) => {
     return info
   }
 
+  const deleteChat = async (sender,chat,text) => {
+    const res = await fetch("/deleteChat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        sender, chat,text
+      })
+    });
+
+    const data=await res.json();
+    contentList = data.msg
+    ch = true;
+    setCheck(true);
+    setLoad(false);
+    setChats(contentList);
+    toast.success('Msg Deleted!', {
+      position: toast.POSITION.TOP_RIGHT,
+      autoClose: 500, 
+    });
+  }
+
+
   useEffect(() => {
 
     socket.on('NotificationSent', function (message) {
@@ -258,6 +287,10 @@ const Chatting = ({ change, user }) => {
              )
              setChatPage(false)
          }
+    })
+
+    socket.on("chatDelete",(ele)=>{
+        deleteChat(ele.sender,ele.chat,ele.text);
     })
   }, [socket])
 
@@ -455,6 +488,7 @@ const Chatting = ({ change, user }) => {
             </div>
           </div>
         </div>}
+        <ToastContainer />
     </div>
   )
 }
