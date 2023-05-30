@@ -429,7 +429,7 @@ router.post("/saveMsg", async (req, res) => {
         const chatData = await Chats.findOne({ userId: userId, friendId: FriendId });
         if (chatData) {
             const chats = chatData.chats;
-            if (chats.length > 0 && chats[chats.length - 1].miliTime != data.miliTime) {
+            if (chats.length==0 || (chats.length > 0 && chats[chats.length - 1].miliTime != data.miliTime)) {
                 chatData.chats.push(data);
                 const saveData = await chatData.save();
                 return res.status(200).json({ msg: saveData })
@@ -578,7 +578,7 @@ router.post("/deleteChat", async (req, res) => {
 
 
 })
-router.post("/deleteMyChat", async (req, res) => {
+router.post("/deleteAllChat", async (req, res) => {
     try {
         const { userId, friendid } = req.body
 
@@ -588,13 +588,11 @@ router.post("/deleteMyChat", async (req, res) => {
                 $set: { chats: [] }
             }
         )
-        return res.status(201).json({ msg: updatechat })
+        return res.status(201).json({ msg: [] })
 
     } catch (error) {
         return error
     }
-
-
 
 })
 
