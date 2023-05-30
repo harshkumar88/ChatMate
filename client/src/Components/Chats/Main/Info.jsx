@@ -2,11 +2,58 @@ import React, { useEffect,useState} from 'react'
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import io from 'socket.io-client'
 import './info.css'
-
+let userId;
 const Info = ({userdata}) => { 
+    const socket = io('https://chatmate-backend.onrender.com', { autoConnect: true, transports: ['websocket'] });
+
     const navigate = useNavigate();
-   
+    
+    const getID = async () => {
+        const res = await fetch("/getID", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+    
+        const data = await res.json();
+        let check = false;
+        if (data.cookies) {
+          check = true;
+        }
+    
+        if (check) {
+          userId = data.cookies.uniqueId;
+        }
+      }
+    
+    const deleteChat= (friendid)=>{
+        Swal.fire({
+            title: 'Are you sure?',
+            text: `You want to delete chats?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, do it!'
+          }).then(async(result) => {
+            if (result.isConfirmed) {
+              socket.emit("deleteAllChat",userId,friendid);
+              Swal.fire(
+                 "Chats deleted Successfully"
+              )
+            }
+          })
+        
+        
+      
+    }
+    useEffect(()=>{
+        getID();
+    })
+    
 
     return (
         <div className='p-3 mx-2 d-flex justify-content-between'>
@@ -18,6 +65,7 @@ const Info = ({userdata}) => {
                      let's chat
                 </div>
             </div>
+            <div onClick={()=>{deleteChat(userdata.username)}} style={{cursor:"pointer"}}><i class="bi bi-trash"></i></div>
            
         </div>
     )
