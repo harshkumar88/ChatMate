@@ -289,8 +289,20 @@ const Chatting = ({ change, user }) => {
          }
     })
 
-    socket.on("chatDelete",(ele)=>{
-        deleteChat(ele.sender,ele.chat,ele.text);
+    socket.on("chatDelete",async(ele)=>{
+        if(ele.text=="Delete for me" && ele.sender==userId){
+             deleteChat(ele.sender,ele.chat,ele.text);
+        }
+        else if(ele.text=="Delete for everyone"){
+             await deleteChat(ele.sender,ele.chat,ele.text);
+             socket.emit("deletefromFriend",ele);
+        }
+    })
+
+    socket.on("delete1",(ele)=>{
+         if(ele.reciever==userId){
+              getMsg(ele.reciever,ele.sender)
+         }
     })
   }, [socket])
 
