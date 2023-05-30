@@ -5,9 +5,8 @@ import Swal from 'sweetalert2'
 import io from 'socket.io-client'
 import './info.css'
 let userId;
+const socket = io('https://chatmate-backend.onrender.com', { autoConnect: true, transports: ['websocket'] });
 const Info = ({userdata}) => { 
-    const socket = io('https://chatmate-backend.onrender.com', { autoConnect: true, transports: ['websocket'] });
-
     const navigate = useNavigate();
     
     const getID = async () => {
@@ -41,9 +40,6 @@ const Info = ({userdata}) => {
           }).then(async(result) => {
             if (result.isConfirmed) {
               socket.emit("deleteAllChat",userId,friendid);
-              Swal.fire(
-                 "Chats deleted Successfully"
-              )
             }
           })
         
@@ -65,7 +61,7 @@ const Info = ({userdata}) => {
                      let's chat
                 </div>
             </div>
-            <div onClick={()=>{deleteChat(userdata.username)}} style={{cursor:"pointer"}}><i class="bi bi-trash"></i></div>
+            <div onClick={()=>{deleteChat(userdata.username)}} style={{cursor:"pointer",paddingTop:"10px",fontSize:'20px'}}><i className="bi bi-trash"></i></div>
            
         </div>
     )

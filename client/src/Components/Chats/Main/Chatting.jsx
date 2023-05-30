@@ -325,8 +325,15 @@ const Chatting = ({ change, user }) => {
         userId: myid,
         friendid: friendkiid
       })
-    })
-    await getMsg(myid,friendkiid)
+    });
+    const data=await res.json();
+    const checkArr=data.msg;
+    contentList = checkArr;
+    ch = true;
+    setCheck(true);
+    setLoad(false);
+    setChats(contentList);
+    Swal.fire("Chats deleted Successfully")
   }
 
   const showChat = (ele) => {
