@@ -545,9 +545,9 @@ router.post("/deleteFriend", async (req, res) => {
 
 router.post("/deleteChat", async (req, res) => {
     const { sender, chat, text } = req.body;
-    let reciever=chat.reciever;
-    if(chat.sender!=sender){
-        reciever=chat.sender;
+    let reciever = chat.reciever;
+    if (chat.sender != sender) {
+        reciever = chat.sender;
     }
 
     if (text == "Delete for me") {
@@ -560,24 +560,42 @@ router.post("/deleteChat", async (req, res) => {
         return res.status(200).json({ msg: chatData.chats });
     }
 
-    else{
+    else {
         const chatData = await Chats.findOneAndUpdate(
             { userId: sender, friendId: chat.reciever, chats: { $elemMatch: chat } },
             { $set: { "chats.$.text": "You deleted this message" } },
             { new: true }
-          );
+        );
 
         const chatData2 = await Chats.findOneAndUpdate(
             { userId: chat.reciever, friendId: chat.sender, chats: { $elemMatch: chat } },
-            { $set: { "chats.$.text": "This message was deleted"} },
+            { $set: { "chats.$.text": "This message was deleted" } },
             { new: true }
-          );
-          
-          return res.status(200).json({ msg: chatData.chats });
+        );
+
+        return res.status(200).json({ msg: chatData.chats });
     }
 
 
 })
+router.post("/deleteMyChat", async (req, res) => {
+    try {
+        const { userId, friendid } = req.body
 
+        const updatechat = await Chats.updateOne(
+            { userId: userId, friendId: friendid },
+            {
+                $set: { chats: [] }
+            }
+        )
+        return res.status(201).json({ msg: updatechat })
+
+    } catch (error) {
+        return error
+    }
+
+
+
+})
 
 module.exports = router;

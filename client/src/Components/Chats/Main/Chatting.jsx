@@ -46,7 +46,7 @@ const Chatting = ({ change, user }) => {
   const [chatPage, setChatPage] = useState(false);
   const [showColor, setColor] = useState("");
   const [msgCount, setMsgCount] = useState([]);
-  const [infonoti,setinfonoti]=useState("");
+  const [infonoti, setinfonoti] = useState("");
 
   const handleBackButton = () => {
     // This function will be called when the user navigates back to this page
@@ -103,6 +103,7 @@ const Chatting = ({ change, user }) => {
         userId: Id
       })
     });
+
     const data = await Friends.json();
     setLoader(false);
     console.log(data.Friends);
@@ -155,7 +156,7 @@ const Chatting = ({ change, user }) => {
   }
 
 
-  const deleteDupli=async(sender,reciever)=>{
+  const deleteDupli = async (sender, reciever) => {
     const res = await fetch("/DeleteDuplicateChat", {
       method: "POST",
       headers: {
@@ -179,29 +180,29 @@ const Chatting = ({ change, user }) => {
     });
 
     const info = await res.json();
-    let checkArr=[];
-    let dupli=false;
-    let doc='';
-    for(let i of info.msg){
-      if(doc==''){
-        doc=i;
+    let checkArr = [];
+    let dupli = false;
+    let doc = '';
+    for (let i of info.msg) {
+      if (doc == '') {
+        doc = i;
         checkArr.push(i);
       }
-      else if(doc.text==i.text  && doc.sender==i.sender && 
-        doc.reciever==i.reciever && doc.miliTime==i.miliTime && doc.time==i.time && doc.senddate==i.senddate){
-          dupli=true;
-        }
+      else if (doc.text == i.text && doc.sender == i.sender &&
+        doc.reciever == i.reciever && doc.miliTime == i.miliTime && doc.time == i.time && doc.senddate == i.senddate) {
+        dupli = true;
+      }
       else {
         checkArr.push(i);
-        doc=i;
+        doc = i;
       }
-      
+
     }
-    if(dupli){
-      deleteDupli(sender,reciever);
-      deleteDupli(reciever,sender)
+    if (dupli) {
+      deleteDupli(sender, reciever);
+      deleteDupli(reciever, sender)
     }
-      
+
     contentList = checkArr;
     console.log("check change ")
     ch = true;
@@ -212,18 +213,18 @@ const Chatting = ({ change, user }) => {
     return info
   }
 
-  const deleteChat = async (sender,chat,text) => {
+  const deleteChat = async (sender, chat, text) => {
     const res = await fetch("/deleteChat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        sender, chat,text
+        sender, chat, text
       })
     });
 
-    const data=await res.json();
+    const data = await res.json();
     contentList = data.msg
     ch = true;
     setCheck(true);
@@ -231,7 +232,7 @@ const Chatting = ({ change, user }) => {
     setChats(contentList);
     toast.success('Msg Deleted!', {
       position: toast.POSITION.TOP_RIGHT,
-      autoClose: 500, 
+      autoClose: 500,
     });
   }
 
@@ -262,6 +263,7 @@ const Chatting = ({ change, user }) => {
       }
     })
 
+
     socket.on("showMsg", (data) => {
       if (data.reciever == userId && data.sender == userdata.username) {
         let Count = msgCount.filter((el) => {
@@ -279,32 +281,53 @@ const Chatting = ({ change, user }) => {
       }
     })
 
-    socket.on("FriendRemove",async({friendId,deleteId})=>{
-         if(userId==friendId){
-             await getFriends(friendId);
-             Swal.fire(
-              `${deleteId} and you are no longer friend`,
-             )
-             setChatPage(false)
-         }
+    socket.on("FriendRemove", async ({ friendId, deleteId }) => {
+      if (userId == friendId) {
+        await getFriends(friendId);
+        Swal.fire(
+          `${deleteId} and you are no longer friend`,
+        )
+        setChatPage(false)
+      }
     })
 
-    socket.on("chatDelete",async(ele)=>{
-        if(ele.text=="Delete for me" && ele.sender==userId){
-             deleteChat(ele.sender,ele.chat,ele.text);
-        }
-        else if(ele.text=="Delete for everyone"){
-             await deleteChat(ele.sender,ele.chat,ele.text);
-             socket.emit("deletefromFriend",ele);
-        }
+    socket.on("chatDelete", async (ele) => {
+      if (ele.text == "Delete for me" && ele.sender == userId) {
+        deleteChat(ele.sender, ele.chat, ele.text);
+      }
+      else if (ele.text == "Delete for everyone") {
+        await deleteChat(ele.sender, ele.chat, ele.text);
+        socket.emit("deletefromFriend", ele);
+      }
     })
 
-    socket.on("delete1",(ele)=>{
-         if(ele.reciever==userId){
-              getMsg(ele.reciever,ele.sender)
-         }
+    socket.on("delete1", (ele) => {
+      if (ele.reciever == userId) {
+        getMsg(ele.reciever, ele.sender)
+      }
+    })
+
+    socket.on("deleteMyChat", (myid, friendkiid) => {
+      if (userId === myid) {
+          DeleteAllChat(myid,friendkiid)
+      }
+
     })
   }, [socket])
+
+  const DeleteAllChat=async(myid,friendkiid)=>{
+    const res = await fetch("/deleteAllChat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userId: myid,
+        friendid: friendkiid
+      })
+    })
+    await getMsg(myid,friendkiid)
+  }
 
   const showChat = (ele) => {
     let Count = msgCount.filter((el) => {
@@ -339,30 +362,30 @@ const Chatting = ({ change, user }) => {
     })
     setList(newUserList)
   }
-  const logout=async()=>{
+  const logout = async () => {
     Swal.fire({
-        title: 'Are you sure?',
-        text: "You want's to Logout.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, do it!'
-      }).then((result) => {
-        if (result.isConfirmed) {
-            localStorage.clear("userId");
-          Swal.fire(
-            'Logout!',
-            'You are Logout.',
-            'success'
-          ).then(()=>{
-            navigate("/Form")
-          })
-         
-        }
-      })
-}
-  const deleteFriend=async (friend)=>{
+      title: 'Are you sure?',
+      text: "You want's to Logout.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, do it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.clear("userId");
+        Swal.fire(
+          'Logout!',
+          'You are Logout.',
+          'success'
+        ).then(() => {
+          navigate("/Form")
+        })
+
+      }
+    })
+  }
+  const deleteFriend = async (friend) => {
     Swal.fire({
       title: 'Are you sure?',
       text: `You want to remove ${friend} from your friends.`,
@@ -371,7 +394,7 @@ const Chatting = ({ change, user }) => {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, do it!'
-    }).then(async(result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch("/deleteFriend", {
           method: "POST",
@@ -382,18 +405,18 @@ const Chatting = ({ change, user }) => {
             userId, friend
           })
         });
-        const data=await res.json();
-        
+        const data = await res.json();
+
         setList(data.msg);
-        socket.emit("removefriend",friend,userId);
+        socket.emit("removefriend", friend, userId);
         Swal.fire(
-           `${friend} removed from friend list`
+          `${friend} removed from friend list`
         )
-       
+
       }
     })
-    
-    
+
+
 
   }
 
@@ -408,45 +431,45 @@ const Chatting = ({ change, user }) => {
       {picChange == false ? <div className='d-flex w-100 ' style={{ minHeight: "100vh", overflow: 'hidden' }}>
         {chatPage == false ?
           <div className={changePage == true & picChange == false ? 'sideWidth2 bg-light' : (changePage == true & picChange == true) || userlist.length == 0 ? 'sideWidth2' : picChange == true ? "sidebarWidth1 " : "sidebarWidth1 bg-light"} style={{ minHeight: "100vh" }}>
-           
-              <div className={picChange == true? 'heightSide1 opacityChange d-flex flex-column bg-light' : userlist.length==0 ? 'heightSide3  d-flex flex-column bg-light':'heightSide1  d-flex flex-column bg-light'}>
-                {/*Adduserpage*/}
-                <div className='w-100 bg-light d-flex justify-content-between p-3'>
-                  <div><h2>Chats</h2><p className='text-muted'>Recents Chats</p></div>
+
+            <div className={picChange == true ? 'heightSide1 opacityChange d-flex flex-column bg-light' : userlist.length == 0 ? 'heightSide3  d-flex flex-column bg-light' : 'heightSide1  d-flex flex-column bg-light'}>
+              {/*Adduserpage*/}
+              <div className='w-100 bg-light d-flex justify-content-between p-3'>
+                <div><h2>Chats</h2><p className='text-muted'>Recents Chats</p></div>
                 <div className='w-25'>
                   <div className='d-flex justify-content-evenly w-100 bellICon mt-2  ' >
 
-                    <div className='bi bi-bell ms-4' onClick={() => { navigate('/Notifications') }} onMouseOver={()=>setinfonoti("Notifications")} onMouseLeave={()=>setinfonoti("")}></div>
-                    <div className='bi bi-plus-circle-fill sizeIcon  ms-3 bg-light' onClick={showPage} onMouseOver={()=>setinfonoti("Add Friends")} onMouseLeave={()=>setinfonoti("")}></div>
-                    <div className='bi bi-box-arrow-right pointer ms-3 me-5'onClick={logout} onMouseOver={()=>setinfonoti("Logout")} onMouseLeave={()=>setinfonoti("")}></div>
-                
+                    <div className='bi bi-bell ms-4' onClick={() => { navigate('/Notifications') }} onMouseOver={() => setinfonoti("Notifications")} onMouseLeave={() => setinfonoti("")}></div>
+                    <div className='bi bi-plus-circle-fill sizeIcon  ms-3 bg-light' onClick={showPage} onMouseOver={() => setinfonoti("Add Friends")} onMouseLeave={() => setinfonoti("")}></div>
+                    <div className='bi bi-box-arrow-right pointer ms-3 me-5' onClick={logout} onMouseOver={() => setinfonoti("Logout")} onMouseLeave={() => setinfonoti("")}></div>
+
                   </div>
-                 
-                  {infonoti=="Notifications"?<div style={{marginLeft:"-13px",marginTop:"-10px"}}> <span style={{fontSize:"10px",fontWeight:"bold"}}>{infonoti}</span></div>:""}
-                  {infonoti=="Add Friends"?<div style={{marginLeft:"25px",marginTop:"-10px"}}> <span style={{fontSize:"10px",fontWeight:"bold"}}>{infonoti}</span></div>:""}
-                  {infonoti=="Logout"?<div style={{marginLeft:"65px",marginTop:"-10px"}}> <span style={{fontSize:"10px",fontWeight:"bold"}}>{infonoti}</span></div>:""}
-                  </div>
-                </div>
 
-                <div className=' mb-5 bg-light'>
-
-                  <InputGroup className="mb-3 mx-auto bg-light inputWidth ">
-                    <Form.Control
-                      placeholder="Search Chat"
-                      aria-label="Search Chat"
-                      aria-describedby="basic-addon2"
-                      className='formWidth bg-light'
-                      onChange={(e) => { changeUserList(e.target.value) }} />
-
-                    <span className='tooltiptxt'>Search</span>
-
-                    <Button id="button-addon2" className='searchWidth bg-outline-none'>
-                      <i className="bi bi-search"></i>
-                    </Button>
-
-                  </InputGroup>
+                  {infonoti == "Notifications" ? <div style={{ marginLeft: "-13px", marginTop: "-10px" }}> <span style={{ fontSize: "10px", fontWeight: "bold" }}>{infonoti}</span></div> : ""}
+                  {infonoti == "Add Friends" ? <div style={{ marginLeft: "25px", marginTop: "-10px" }}> <span style={{ fontSize: "10px", fontWeight: "bold" }}>{infonoti}</span></div> : ""}
+                  {infonoti == "Logout" ? <div style={{ marginLeft: "65px", marginTop: "-10px" }}> <span style={{ fontSize: "10px", fontWeight: "bold" }}>{infonoti}</span></div> : ""}
                 </div>
               </div>
+
+              <div className=' mb-5 bg-light'>
+
+                <InputGroup className="mb-3 mx-auto bg-light inputWidth ">
+                  <Form.Control
+                    placeholder="Search Chat"
+                    aria-label="Search Chat"
+                    aria-describedby="basic-addon2"
+                    className='formWidth bg-light'
+                    onChange={(e) => { changeUserList(e.target.value) }} />
+
+                  <span className='tooltiptxt'>Search</span>
+
+                  <Button id="button-addon2" className='searchWidth bg-outline-none'>
+                    <i className="bi bi-search"></i>
+                  </Button>
+
+                </InputGroup>
+              </div>
+            </div>
             <div className={picChange == true ? 'heightSide2 opacityChange mt-5' : 'heightSide2 mt-5'} >
               {/*userspage*/}
               <div className={change == true ? 'scrollChats1 bg-light p-4' : "scrollChats2 bg-light p-4"}>
@@ -473,7 +496,7 @@ const Chatting = ({ change, user }) => {
                             </div>
                           </div>
                           <div className='text-muted me-2'> {msgCount.indexOf(ele.username) != -1 ? <span className='text-success'><i className="bi bi-bell"></i></span> : <span>
-                                 <i className="bi bi-trash" style={{cursor:"pointer"}} onClick={()=>deleteFriend(ele.username)}> </i></span>}</div>
+                            <i className="bi bi-trash" style={{ cursor: "pointer" }} onClick={() => deleteFriend(ele.username)}> </i></span>}</div>
                         </div>
                       )
                     })}
@@ -500,7 +523,7 @@ const Chatting = ({ change, user }) => {
             </div>
           </div>
         </div>}
-        <ToastContainer />
+      <ToastContainer />
     </div>
   )
 }
