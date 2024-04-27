@@ -24,8 +24,8 @@ const Razorpay = require("razorpay");
 router.post("/order", async (req, res) => {
   // initializing razorpay
   const razorpay = new Razorpay({
-    key_id: "rzp_test_DqO9ie254lXL7i",
-    key_secret: "T0Ze2HVd5xoULATjdl1TVwLP",
+    key_id: process.env.KEY_PAYMENT,
+    key_secret: process.env.SECRET_PAYMENT,
   });
 
   // setting up options for razorpay order.
